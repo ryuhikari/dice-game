@@ -10,13 +10,17 @@ closeNavSidebarButton.addEventListener("click", closeNav);
 var showLogInElements = document.getElementsByClassName("show-log-in");
 var showLogOutElements = document.getElementsByClassName("show-log-out");
 
-function openNav() {
+function openNav(event) {
+    event.preventDefault();
+
     nav.style.display = "none";
     navSidebar.style.width = "100%";
     navSidebar.style.display = "block";
 }
 
-function closeNav() {
+function closeNav(event) {
+    event.preventDefault();
+
     nav.style.display = "initial";
     navSidebar.style.display = "none";
 }
