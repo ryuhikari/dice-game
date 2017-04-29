@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dice Game</title>
 
+    <!-- Theme Color for browsers -->
+    <meta name="theme-color" content="#519430">
+
     <!-- W3.CSS Framework -->
     <link rel="stylesheet" href="css/w3.css">
     <link rel="stylesheet" href="css/w3-theme.css">
@@ -13,7 +16,291 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Dice Game</h1>
+    <!-- Navigation Sidebar -->
+    <nav id="nav-sidebar" class="w3-sidebar w3-bar-block w3-theme-d2 w3-xlarge">
+        <div class="w3-cell-row">
+            <a id="close-nav-sidebar" class="w3-cell w3-bar-item w3-button w3-xxlarge w3-right-align w3-right">&times;</a>
+        </div>
+
+        <!-- Navigation sidebar links -->
+        <!-- They must be the same as the main navigation bellow -->
+        <a href="#" class="w3-bar-item w3-button" onclick="showLogIn()">1</a>
+        <a href="#" class="w3-bar-item w3-button" onclick="showLogOut()">2</a>
+
+        <!-- Show Log in links -->
+        <div class="show-log-in">
+            <a href="#" class="w3-bar-item w3-button">Play</a>
+            <a href="#" class="w3-bar-item w3-button">Scores</a>
+            <a href="#" class="w3-bar-item w3-button">Top 10 scores</a>
+            <a href="#" class="w3-bar-item w3-button">Log out</a>
+            <a href="#" class="w3-bar-item w3-button">Profile</a>
+        </div>
+
+        <!-- Show Log out links -->
+        <div class="show-log-out">
+            <a href="#" class="w3-bar-item w3-button w3-right">Sign up</a>
+            <a href="#" class="w3-bar-item w3-button w3-right">Log in</a>
+        </div>
+    </nav>
+
+    <!-- Navigation -->
+    <nav id="nav" class="w3-bar w3-card-2 w3-theme-d2 w3-top w3-xlarge">
+        <div class="w3-content">
+            <!-- Navigation links -->
+            <a href="#" class="w3-bar-item w3-button">Dice Game</a>
+            <a href="#" class="w3-bar-item w3-button w3-hide-small" onclick="showLogIn()">1</a>
+            <a href="#" class="w3-bar-item w3-button w3-hide-small" onclick="showLogOut()">2</a>
+
+            <!-- Show Log in links -->
+            <div class="show-log-in">
+                <a href="#" class="w3-bar-item w3-button w3-hide-small">Play</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small">Scores</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small">Top 10 scores</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Log out</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Profile</a>
+            </div>
+
+            <!-- Show Log out links -->
+            <div class="show-log-out">
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Sign up</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Log in</a>
+            </div>
+
+            <!-- Open navigation sidebar -->
+            <a href="#" id="open-nav-sidebar" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium">&#9776;</a>
+        </div>
+    </nav>
+
+    <br><br>
+    <main class="w3-content">
+        <div class="w3-container w3-center w3-padding">
+            <h1>Dice Game</h1>
+        </div>
+
+        <!-- Sign up section -->
+        <section class="sign-up-section w3-container w3-padding">
+            <div class="w3-card-4">
+                <div class="w3-container w3-theme">
+                    <h2>Sign Up</h2>
+                </div>
+                <form class="w3-container">
+                    <p>
+                        <label class="w3-text-grey">First Name</label>
+                        <input class="w3-input w3-border" type="text" required="required">
+                    </p>
+                    <p>
+                        <label class="w3-text-grey">Last Name</label>
+                        <input class="w3-input w3-border" type="text" required="required">
+                    </p>
+                    <p>
+                        <label class="w3-text-grey">Email</label>
+                        <input class="w3-input w3-border" type="text" required="required">
+                    </p>
+                    <hr>
+                    <p>
+                        <label class="w3-text-grey">Username</label>
+                        <input class="w3-input w3-border" type="text" required="required">
+                    </p>
+                    <p>
+                        <label class="w3-text-grey">Password</label>
+                        <input class="w3-input w3-border" type="text" required="required">
+                    </p>
+                    <p>
+                        <label class="w3-text-grey">Repite Password</label>
+                        <input class="w3-input w3-border" type="text" required="required">
+                    </p>
+                    <p>
+                        <button type="button" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
+                    </p>
+                </form>
+            </div>
+        </section><!-- /sign-up-section -->
+
+        <!-- Sign in section -->
+        <section class="sign-in-section w3-container w3-padding">
+            <div class="w3-card-4">
+                <div class="w3-container w3-theme">
+                    <h2>Log In</h2>
+                </div>
+                <form class="w3-container">
+                    <p>
+                        <label class="w3-text-grey">Email</label>
+                        <input class="w3-input w3-border" type="text" required="required">
+                    </p>
+                    <p>
+                        <label class="w3-text-grey">Password</label>
+                        <input class="w3-input w3-border" type="text" required="required">
+                    </p>
+                    <p>
+                        <button type="button" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
+                    </p>
+                </form>
+            </div>
+        </section><!-- /sign-in-section -->
+
+        <!-- Top ten section -->
+        <section class="top-ten-section w3-container w3-padding">
+            <h2>Top 10 highscores</h2>
+            <div class="w3-responsive">
+                <table class="w3-table-all w3-hoverable w3-centered">
+                    <thead>
+                        <tr class="w3-light-grey">
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Jill</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Eve</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Adam</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Bo</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Duilius</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Osher</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Gafar</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Johannes</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Gregorios</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section><!-- /top-ten-section -->
+
+        <!-- User's scores section -->
+        <section class="user-scores-section w3-container w3-padding">
+            <h2>User's highscores</h2>
+            <div class="w3-responsive">
+                <table class="w3-table-all w3-hoverable w3-centered">
+                    <thead>
+                        <tr class="w3-light-grey">
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>v</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>Leilah</td>
+                            <td>1000</td>
+                            <td>2017-04-29</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section><!-- /user-scores-section -->
+
+        <!-- Game section -->
+        <section class="game-section w3-container w3-padding">
+            <h2>Game</h2>
+        </section><!-- /game-section -->
+    </main>
 
     <!-- Game scripts -->
     <script src="js/game-logic.js" charset="utf-8"></script>
