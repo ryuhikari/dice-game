@@ -1,0 +1,17 @@
+/* Navigation
+============================================================================= */
+#nav-sidebar {
+    display: none;
+}
+
+#close-nav-sidebar {
+    display: inline-block;
+    width: auto;
+}
+
+/* Navigation links */
+
+/*Get rid of this*/
+.show-log-in {
+    display: none;
+}
