@@ -16,16 +16,6 @@ var DiceGame = function() {
     };
 
     this.play = function(guess) {
-        if (isNaN(guess)) {
-            console.log("Guess is not a number");
-            return true;
-        }
-
-        if (guess < 3 || guess > 18) {
-            console.log("Guess out of range");
-            return true;
-        }
-
         console.log("Round:", this.round);
         var sum = 0;
         this.lastDice = [];

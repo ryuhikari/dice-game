@@ -59,8 +59,10 @@ var playRoundButton = $("#play-round-button")
 playRoundButton.on("click", function(event) {
     event.preventDefault();
 
-    playing = diceGame.play(inputGuess.val());
-    updateGUI();
+    if (gameValidation(Number(inputGuess.val()))) {
+        playing = diceGame.play(Number(inputGuess.val()));
+        updateGUI();
+    }
 });
 
 /**
@@ -82,8 +84,8 @@ function closeNav() {
 }
 
 /**
-* Show elements depending on the user is logged in or not
-*/
+ * Show elements depending on the user is logged in or not
+ */
 function showLoggedIn() {
     showLoggedInElements.show();
     showLoggedOutElements.hide();
