@@ -1,6 +1,6 @@
 var DiceGame = function() {
     this.numDice = 3;
-    this.numRounds = 3;
+    this.numRounds = 10;
     this.score = 0;
     this.round = 0;
     this.lastSum = 0;
