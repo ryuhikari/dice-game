@@ -302,16 +302,19 @@
         <section id="game-section" class="w3-container w3-padding">
             <h2>Play</h2>
             <p>
-                <button type="button" id="newGameButton" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
+                <button type="button" id="new-game-button" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
+                <div id="game-over-show" class="w3-panel w3-red">
+                    <h3>Game Over</h3>
+                </div>
             </p>
             <div class="game-info w3-panel w3-border">
-                <p>Round: <span>0</span></p>
-                <p>Score: <span>0</span></p>
+                <p>Round: <span id="round-show"></span></p>
+                <p>Score: <span id="score-show"></span></p>
             </div>
             <div class="game-board w3-panel w3-border">
                 <p>
                     <label class="w3-text-grey">Guess</label>
-                    <input class="w3-input w3-border" type="number" value="Leilah">
+                    <input id="input-guess" class="w3-input w3-border" type="number">
                 </p>
                 <div class="w3-panel w3-border">
                     <p>
@@ -324,7 +327,7 @@
                     </p>
                 </div>
                 <p>
-                    <button type="button" id="playButton" name="playButton" class="w3-btn w3-padding w3-theme-d5">Play round</button>
+                    <button type="button" id="play-round-button" name="playRoundButton" class="w3-btn w3-padding w3-theme-d5">Play round</button>
                 </p>
             </div>
         </section><!-- /game-section -->

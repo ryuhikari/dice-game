@@ -23,6 +23,7 @@ var showLoggedOutElements = $(".show-logged-out");
 
 // GUI control
 var userLoggedIn = false;
+var playing = false;
 
 // Game
 var sumDice = $("#sum-dice");
@@ -36,6 +37,31 @@ var diceSrc = [
     "img/dice5.png",
     "img/dice6.png",
 ];
+
+var gameOverShow = $("#game-over-show");
+gameOverShow.hide();
+var roundShow = $("#round-show");
+roundShow.html(0);
+var scoreShow = $("#score-show");
+scoreShow.html(0);
+var inputGuess = $("#input-guess");
+
+var newGameButton = $("#new-game-button")
+newGameButton.on("click", function(event) {
+    event.preventDefault();
+
+    diceGame = new DiceGame();
+    playing = true;
+    updateGUI();
+});
+
+var playRoundButton = $("#play-round-button")
+playRoundButton.on("click", function(event) {
+    event.preventDefault();
+
+    playing = diceGame.play(inputGuess.val());
+    updateGUI();
+});
 
 /**
 * Functions
@@ -115,14 +141,18 @@ function createDice(number) {
 
     return img;
 }
-function renderGame(dice = [1,2,3], bonus = 4) {
+function renderGame(diceGame) {
     sumDice.empty();
     bonusDice.empty();
 
-    for (var i = 0; i < dice.length; i++) {
-        sumDice.append(createDice(dice[i]));
+    for (var i = 0; i < diceGame.lastDice.length; i++) {
+        sumDice.append(createDice(diceGame.lastDice[i]));
     }
-    bonusDice.append(createDice(bonus));
+    if (diceGame.lastBonus) {
+        bonusDice.append(createDice(diceGame.lastBonus));
+    }
+    roundShow.html(diceGame.round);
+    scoreShow.html(diceGame.score);
 }
 
 /**
@@ -135,5 +165,19 @@ function updateGUI() {
         showLoggedOut();
     }
 
-    renderGame();
+    if (playing) {
+        renderGame(diceGame);
+        gameOverShow.hide();
+        inputGuess.prop("disabled", false);
+        playRoundButton.prop("disabled", false);
+    } else {
+        renderGame(diceGame);
+        if (diceGame.finished) {
+            gameOverShow.show();
+        }
+        inputGuess.prop("disabled", true);
+        playRoundButton.prop("disabled", true);
+    }
+
+
 }
