@@ -1,46 +1,129 @@
-var nav = document.getElementById("nav");
-var navSidebar = document.getElementById("nav-sidebar");
+/**
+* Variables
+* =============================================================================
+*/
 
-var openNavSidebarButton = document.getElementById("open-nav-sidebar");
-openNavSidebarButton.addEventListener("click", openNav);
+// Navigation bar
+var navigation = $("#navigation");
+var navigationSidebar = $("#nav-sidebar");
 
-var closeNavSidebarButton = document.getElementById("close-nav-sidebar");
-closeNavSidebarButton.addEventListener("click", closeNav);
-
-var showLogInElements = document.getElementsByClassName("show-log-in");
-var showLogOutElements = document.getElementsByClassName("show-log-out");
-
-function openNav(event) {
+// Open and close navigation sidebar
+var openNavButton = $("#open-nav-sidebar").on("click", function(event) {
     event.preventDefault();
-
-    nav.style.display = "none";
-    navSidebar.style.width = "100%";
-    navSidebar.style.display = "block";
-}
-
-function closeNav(event) {
+    openNav();
+});
+var closeNavButton = $("#close-nav-sidebar").on("click", function(event) {
     event.preventDefault();
+    closeNav();
+});
 
-    nav.style.display = "initial";
-    navSidebar.style.display = "none";
+//Show elements depending on the user is logged in or not
+var showLoggedInElements = $(".show-logged-in");
+var showLoggedOutElements = $(".show-logged-out");
+
+// GUI control
+var userLoggedIn = false;
+
+/**
+* Functions
+* =============================================================================
+*/
+
+/**
+* Open and close navigation sidebar
+*/
+function openNav() {
+    navigation.hide();
+    navigationSidebar.css({"width": "100%", "display": "block"});
+    /*
+    navigation.style.display = "none";
+    navigationSidebar.style.width = "100%";
+    navigationSidebar.style.display = "block";
+    */
 }
 
-function showLogIn() {
-    for (var i = 0; i < showLogInElements.length; i++) {
-        showLogInElements[i].style.display = "initial";
-    }
-
-    for (var i = 0; i < showLogOutElements.length; i++) {
-        showLogOutElements[i].style.display = "none";
-    }
+function closeNav() {
+    navigation.show();
+    navigationSidebar.hide();
+    /*
+    navigation.style.display = "initial";
+    navigationSidebar.style.display = "none";
+    */
 }
 
-function showLogOut() {
-    for (var i = 0; i < showLogInElements.length; i++) {
-        showLogInElements[i].style.display = "none";
-    }
+/**
+* Show elements depending on the user is logged in or not
+*/
+function showLoggedIn() {
+    showLoggedInElements.show();
+    showLoggedOutElements.hide();
+    /*
+    for (var i = 0; i < showLoggedInElements.length; i++) {
+    showLoggedInElements[i].style.display = "initial";
+}
 
-    for (var i = 0; i < showLogOutElements.length; i++) {
-        showLogOutElements[i].style.display = "initial";
+for (var i = 0; i < showLoggedOutElements.length; i++) {
+showLoggedOutElements[i].style.display = "none";
+}
+*/
+}
+
+function showLoggedOut() {
+    showLoggedInElements.hide();
+    showLoggedOutElements.show();
+    /*
+    for (var i = 0; i < showLoggedInElements.length; i++) {
+    showLoggedInElements[i].style.display = "none";
+}
+
+for (var i = 0; i < showLoggedOutElements.length; i++) {
+showLoggedOutElements[i].style.display = "initial";
+}
+*/
+}
+
+/**
+* Smooth scroll
+*
+* The following code was adapted from a post:
+* Add smooth scrolling to page anchors
+* at:
+* https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_eff_animate_smoothscroll
+* Accessed: 2017-04-30
+*/
+$(document).ready(function(){
+    // Add smooth scrolling to all links
+    $(".smooth").on('click', function(event) {
+
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+            // Prevent default anchor click behavior
+            event.preventDefault();
+
+            // Store hash
+            var hash = this.hash;
+
+            // Using jQuery's animate() method to add smooth page scroll
+            // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top - 50
+            }, 800, function(){
+
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+            });
+        } // End if
+        closeNav();
+    });
+});
+
+/**
+* Update GUI
+*/
+function updateGUI() {
+    if (userLoggedIn) {
+        showLoggedIn();
+    } else {
+        showLoggedOut();
     }
 }
