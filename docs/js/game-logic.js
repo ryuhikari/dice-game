@@ -48,7 +48,7 @@ var DiceGame = function() {
         console.log("Bonus", bonus);
         console.log("Score:", this.score);
 
-        if (this.round == this.numRounds - 1) {
+        if (this.round == this.numRounds) {
             this.gameOver();
             return false;
         } else {
