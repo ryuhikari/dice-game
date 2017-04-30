@@ -35,20 +35,11 @@ var userLoggedIn = false;
 function openNav() {
     navigation.hide();
     navigationSidebar.css({"width": "100%", "display": "block"});
-    /*
-    navigation.style.display = "none";
-    navigationSidebar.style.width = "100%";
-    navigationSidebar.style.display = "block";
-    */
 }
 
 function closeNav() {
     navigation.show();
     navigationSidebar.hide();
-    /*
-    navigation.style.display = "initial";
-    navigationSidebar.style.display = "none";
-    */
 }
 
 /**
@@ -57,29 +48,11 @@ function closeNav() {
 function showLoggedIn() {
     showLoggedInElements.show();
     showLoggedOutElements.hide();
-    /*
-    for (var i = 0; i < showLoggedInElements.length; i++) {
-    showLoggedInElements[i].style.display = "initial";
-}
-
-for (var i = 0; i < showLoggedOutElements.length; i++) {
-showLoggedOutElements[i].style.display = "none";
-}
-*/
 }
 
 function showLoggedOut() {
     showLoggedInElements.hide();
     showLoggedOutElements.show();
-    /*
-    for (var i = 0; i < showLoggedInElements.length; i++) {
-    showLoggedInElements[i].style.display = "none";
-}
-
-for (var i = 0; i < showLoggedOutElements.length; i++) {
-showLoggedOutElements[i].style.display = "initial";
-}
-*/
 }
 
 /**
