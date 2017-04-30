@@ -19,60 +19,58 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Navigation Sidebar -->
-    <nav id="nav-sidebar" class="w3-sidebar w3-bar-block w3-theme-d2 w3-xlarge">
-        <div class="w3-cell-row">
-            <a id="close-nav-sidebar" class="w3-cell w3-bar-item w3-button w3-xxlarge w3-right-align w3-right">&times;</a>
-        </div>
-
-        <!-- Navigation sidebar links -->
-        <!-- They must be the same as the main navigation bellow -->
-        <a href="#" class="w3-bar-item w3-button" onclick="showLogIn()">1</a>
-        <a href="#" class="w3-bar-item w3-button" onclick="showLogOut()">2</a>
-
-        <!-- Show Log in links -->
-        <div class="show-log-in">
-            <a href="#" class="w3-bar-item w3-button">Play</a>
-            <a href="#" class="w3-bar-item w3-button">Scores</a>
-            <a href="#" class="w3-bar-item w3-button">Top 10 scores</a>
-            <a href="#" class="w3-bar-item w3-button">Log out</a>
-            <a href="#" class="w3-bar-item w3-button">Profile</a>
-        </div>
-
-        <!-- Show Log out links -->
-        <div class="show-log-out">
-            <a href="#" class="w3-bar-item w3-button w3-right">Sign up</a>
-            <a href="#" class="w3-bar-item w3-button w3-right">Log in</a>
-        </div>
-    </nav>
-
-    <!-- Navigation -->
-    <nav id="nav" class="w3-bar w3-card-2 w3-theme-d2 w3-top w3-xlarge">
-        <div class="w3-content">
-            <!-- Navigation links -->
-            <a href="#" class="w3-bar-item w3-button">Dice Game</a>
-            <a href="#" class="w3-bar-item w3-button w3-hide-small" onclick="showLogIn()">1</a>
-            <a href="#" class="w3-bar-item w3-button w3-hide-small" onclick="showLogOut()">2</a>
-
-            <!-- Show Log in links -->
-            <div class="show-log-in">
-                <a href="#" class="w3-bar-item w3-button w3-hide-small">Play</a>
-                <a href="#" class="w3-bar-item w3-button w3-hide-small">Scores</a>
-                <a href="#" class="w3-bar-item w3-button w3-hide-small">Top 10 scores</a>
-                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Log out</a>
-                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Profile</a>
+    <header>
+        <!-- Navigation Sidebar -->
+        <nav id="nav-sidebar" class="w3-sidebar w3-bar-block w3-theme-d2 w3-xlarge">
+            <div class="w3-cell-row">
+                <a id="close-nav-sidebar" class="w3-cell w3-bar-item w3-button w3-xxlarge w3-right-align w3-right">&times;</a>
             </div>
 
-            <!-- Show Log out links -->
-            <div class="show-log-out">
-                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Sign up</a>
-                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Log in</a>
+            <!-- Navigation sidebar links -->
+            <!-- They must be the same as the main navigation bellow -->
+
+            <!-- Show Logged in links -->
+            <div class="show-logged-in">
+                <a href="#game-section" class="w3-bar-item w3-button">Play</a>
+                <a href="#user-scores-section" class="w3-bar-item w3-button">My scores</a>
+                <a href="#top-ten-section" class="w3-bar-item w3-button">Top 10 scores</a>
+                <a href="#" class="w3-bar-item w3-button">Log out</a>
+                <a href="#profile-section" class="w3-bar-item w3-button">Profile</a>
             </div>
 
-            <!-- Open navigation sidebar -->
-            <a href="#" id="open-nav-sidebar" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium">&#9776;</a>
-        </div>
-    </nav>
+            <!-- Show Logged out links -->
+            <div class="show-logged-out">
+                <a href="#log-in-section" class="w3-bar-item w3-button w3-right">Log in</a>
+                <a href="#sign-up-section" class="w3-bar-item w3-button w3-right">Sign up</a>
+            </div>
+        </nav>
+
+        <!-- Navigation -->
+        <nav id="navigation" class="w3-bar w3-card-2 w3-theme-d2 w3-top w3-xlarge">
+            <div class="w3-content">
+                <!-- Navigation links -->
+                <a href="#" class="w3-bar-item w3-button">Dice Game</a>
+
+                <!-- Show Logged in links -->
+                <div class="show-logged-in">
+                    <a href="#game-section" class="w3-bar-item w3-button w3-hide-small">Play</a>
+                    <a href="#user-scores-section" class="w3-bar-item w3-button w3-hide-small">My scores</a>
+                    <a href="#top-ten-section" class="w3-bar-item w3-button w3-hide-small">Top 10 scores</a>
+                    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right">Log out</a>
+                    <a href="#profile-section" class="w3-bar-item w3-button w3-hide-small w3-right">Profile</a>
+                </div>
+
+                <!-- Show Logged out links -->
+                <div class="show-logged-out">
+                    <a href="#sign-up-section" class="w3-bar-item w3-button w3-hide-small w3-right">Sign up</a>
+                    <a href="#log-in-section" class="w3-bar-item w3-button w3-hide-small w3-right">Log in</a>
+                </div>
+
+                <!-- Open navigation sidebar -->
+                <a href="#" id="open-nav-sidebar" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium">&#9776;</a>
+            </div>
+        </nav>
+    </header>
 
     <br><br>
     <main class="w3-content">
@@ -81,7 +79,7 @@
         </div>
 
         <!-- Sign up section -->
-        <section class="sign-up-section w3-container w3-padding">
+        <section id="sign-up-section" class="w3-container w3-padding">
             <div class="w3-card-4">
                 <div class="w3-container w3-theme">
                     <h2>Sign Up</h2>
@@ -119,8 +117,8 @@
             </div>
         </section><!-- /sign-up-section -->
 
-        <!-- Sign in section -->
-        <section class="sign-in-section w3-container w3-padding">
+        <!-- Log in section -->
+        <section id="log-in-section" class="w3-container w3-padding">
             <div class="w3-card-4">
                 <div class="w3-container w3-theme">
                     <h2>Log In</h2>
@@ -139,10 +137,10 @@
                     </p>
                 </form>
             </div>
-        </section><!-- /sign-in-section -->
+        </section><!-- /log-in-section -->
 
         <!-- Top ten section -->
-        <section class="top-ten-section w3-container w3-padding">
+        <section id="top-ten-section" class="w3-container w3-padding">
             <h2>Top 10 highscores</h2>
             <div class="w3-responsive">
                 <table class="w3-table-all w3-hoverable w3-centered">
@@ -221,7 +219,7 @@
         </section><!-- /top-ten-section -->
 
         <!-- User's scores section -->
-        <section class="user-scores-section w3-container w3-padding">
+        <section id="user-scores-section" class="user-scores-section w3-container w3-padding">
             <h2>User's highscores</h2>
             <div class="w3-responsive">
                 <table class="w3-table-all w3-hoverable w3-centered">
@@ -278,7 +276,7 @@
                         </tr>
                         <tr>
                             <td>8</td>
-                            <td>v</td>
+                            <td>Leilah</td>
                             <td>1000</td>
                             <td>2017-04-29</td>
                         </tr>
@@ -300,7 +298,7 @@
         </section><!-- /user-scores-section -->
 
         <!-- Game section -->
-        <section class="game-section w3-container w3-padding">
+        <section id="game-section" class="w3-container w3-padding">
             <h2>Game</h2>
         </section><!-- /game-section -->
 
@@ -347,7 +345,7 @@
 
     <!-- jQuery -->
     <script src="js/jquery-3.2.1.min.js" charset="utf-8"></script>
-
+    
     <!-- Game scripts -->
     <script src="js/game-logic.js" charset="utf-8"></script>
     <script src="js/server-logic.js" charset="utf-8"></script>
