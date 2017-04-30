@@ -24,6 +24,19 @@ var showLoggedOutElements = $(".show-logged-out");
 // GUI control
 var userLoggedIn = false;
 
+// Game
+var sumDice = $("#sum-dice");
+var bonusDice = $("#bonus-dice");
+var diceSize = 50;
+var diceSrc = [
+    "img/dice1.png",
+    "img/dice2.png",
+    "img/dice3.png",
+    "img/dice4.png",
+    "img/dice5.png",
+    "img/dice6.png",
+];
+
 /**
 * Functions
 * =============================================================================
@@ -91,6 +104,28 @@ $(document).ready(function(){
 });
 
 /**
+* Show dice in game board
+*/
+function createDice(number) {
+    var img = $("<img>");
+    img.attr("src", diceSrc[number-1]);
+    img.attr("width", diceSize);
+    img.attr("height", diceSize);
+    img.attr("alt", "Dice");
+
+    return img;
+}
+function renderGame(dice = [1,2,3], bonus = 4) {
+    sumDice.empty();
+    bonusDice.empty();
+
+    for (var i = 0; i < dice.length; i++) {
+        sumDice.append(createDice(dice[i]));
+    }
+    bonusDice.append(createDice(bonus));
+}
+
+/**
 * Update GUI
 */
 function updateGUI() {
@@ -99,4 +134,6 @@ function updateGUI() {
     } else {
         showLoggedOut();
     }
+
+    renderGame();
 }

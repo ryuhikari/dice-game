@@ -301,6 +301,9 @@
         <!-- Game section -->
         <section id="game-section" class="w3-container w3-padding">
             <h2>Play</h2>
+            <p>
+                <button type="button" id="newGameButton" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
+            </p>
             <div class="game-info w3-panel w3-border">
                 <p>Round: <span>0</span></p>
                 <p>Score: <span>0</span></p>
@@ -308,15 +311,20 @@
             <div class="game-board w3-panel w3-border">
                 <p>
                     <label class="w3-text-grey">Guess</label>
-                    <input class="w3-input w3-border" type="text" value="Leilah" disabled="disabled">
+                    <input class="w3-input w3-border" type="number" value="Leilah">
                 </p>
                 <div class="w3-panel w3-border">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur quos inventore, adipisci iure neque vel dignissimos nostrum natus itaque. A sint, architecto iusto sunt ex laborum voluptatem itaque voluptatum odio.</p>
-                    <div class="sum-dice"></div>
-                    <div class="bonus-dice"></div>
+                    <p>
+                        <label class="w3-text-grey">Sum</label>
+                        <div id="sum-dice"></div>
+                    </p>
+                    <p>
+                        <label class="w3-text-grey">Bonus</label>
+                        <div id="bonus-dice"></div>
+                    </p>
                 </div>
                 <p>
-                    <button type="button" id="playButton" name="playButton" class="w3-btn w3-padding w3-theme-d5">Play</button>
+                    <button type="button" id="playButton" name="playButton" class="w3-btn w3-padding w3-theme-d5">Play round</button>
                 </p>
             </div>
         </section><!-- /game-section -->
