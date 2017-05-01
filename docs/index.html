@@ -78,73 +78,88 @@
 
     <br><br>
     <main class="w3-content">
+        <!-- Title -->
         <div class="w3-container w3-center w3-padding">
             <h1>Dice Game</h1>
         </div>
 
         <!-- Sign up section -->
-        <section id="sign-up-section" class="w3-container w3-padding">
+        <section id="sign-up-section" class="show-logged-out w3-container w3-padding">
             <div class="w3-card-4">
                 <div class="w3-container w3-theme">
                     <h2>Sign Up</h2>
                 </div>
+                <div id="sign-up-errors-panel" class="w3-container w3-red w3-display-container">
+                    <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
+                    <h3>Errors</h3>
+                    <ul id="sign-up-errors-list">
+                        <li w3-repeat="signUpErrors">{{}}</li>
+                    </ul>
+                </div>
                 <form class="w3-container">
                     <p>
-                        <label class="w3-text-grey">First Name</label>
-                        <input class="w3-input w3-border" type="text" required="required">
+                        <label for="sign-up-first-name" class="w3-text-grey">First Name</label>
+                        <input id="sign-up-first-name" class="w3-input w3-border" type="text" required="required">
                     </p>
                     <p>
-                        <label class="w3-text-grey">Last Name</label>
-                        <input class="w3-input w3-border" type="text" required="required">
+                        <label for="sign-up-last-name" class="w3-text-grey">Last Name</label>
+                        <input id="sign-up-last-name" class="w3-input w3-border" type="text" required="required">
                     </p>
                     <p>
-                        <label class="w3-text-grey">Email</label>
-                        <input class="w3-input w3-border" type="text" required="required">
+                        <label for="sign-up-email" class="w3-text-grey">Email</label>
+                        <input id="sign-up-email" class="w3-input w3-border" type="text" required="required">
                     </p>
                     <hr>
                     <p>
-                        <label class="w3-text-grey">Username</label>
-                        <input class="w3-input w3-border" type="text" required="required">
+                        <label for="sign-up-username" class="w3-text-grey">Username</label>
+                        <input id="sign-up-username" class="w3-input w3-border" type="text" required="required">
                     </p>
                     <p>
-                        <label class="w3-text-grey">Password</label>
-                        <input class="w3-input w3-border" type="text" required="required">
+                        <label for="sign-up-password" class="w3-text-grey">Password</label>
+                        <input id="sign-up-password" class="w3-input w3-border" type="text" required="required">
                     </p>
                     <p>
-                        <label class="w3-text-grey">Repeat Password</label>
-                        <input class="w3-input w3-border" type="text" required="required">
+                        <label for="sign-up-repeat-password" class="w3-text-grey">Repeat Password</label>
+                        <input id="sign-up-repeat-password" class="w3-input w3-border" type="text" required="required">
                     </p>
                     <p>
-                        <button type="button" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
+                        <button id="sign-up-button" type="button" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
                     </p>
                 </form>
             </div>
         </section><!-- /sign-up-section -->
 
         <!-- Log in section -->
-        <section id="log-in-section" class="w3-container w3-padding">
+        <section id="log-in-section" class="show-logged-out w3-container w3-padding">
             <div class="w3-card-4">
                 <div class="w3-container w3-theme">
                     <h2>Log In</h2>
                 </div>
+                <div id="log-in-errors-panel" class="w3-container w3-red w3-display-container">
+                    <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
+                    <h3>Errors</h3>
+                    <ul id="log-in-errors-list">
+                        <li w3-repeat="logInErrors">{{}}</li>
+                    </ul>
+                </div>
                 <form class="w3-container">
                     <p>
-                        <label class="w3-text-grey">Email</label>
-                        <input class="w3-input w3-border" type="text" required="required">
+                        <label for="log-in-email" class="w3-text-grey">Email</label>
+                        <input id="log-in-email" class="w3-input w3-border" type="text" required="required">
                     </p>
                     <p>
-                        <label class="w3-text-grey">Password</label>
-                        <input class="w3-input w3-border" type="text" required="required">
+                        <label for="log-in-password" class="w3-text-grey">Password</label>
+                        <input id="log-in-password" class="w3-input w3-border" type="text" required="required">
                     </p>
                     <p>
-                        <button type="button" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
+                        <button id="log-in-button" type="button" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
                     </p>
                 </form>
             </div>
         </section><!-- /log-in-section -->
 
         <!-- Top ten section -->
-        <section id="top-ten-section" class="w3-container w3-padding">
+        <section id="top-ten-section" class="show-logged-in w3-container w3-padding">
             <h2>Top 10 highscores</h2>
             <div class="w3-responsive">
                 <table class="w3-table-all w3-hoverable w3-centered">
@@ -223,7 +238,7 @@
         </section><!-- /top-ten-section -->
 
         <!-- User's scores section -->
-        <section id="user-scores-section" class="user-scores-section w3-container w3-padding">
+        <section id="user-scores-section" class="show-logged-in w3-container w3-padding">
             <h2>User's highscores</h2>
             <div class="w3-responsive">
                 <table class="w3-table-all w3-hoverable w3-centered">
@@ -302,17 +317,25 @@
         </section><!-- /user-scores-section -->
 
         <!-- Game section -->
-        <section id="game-section" class="w3-container w3-padding">
+        <section id="game-section" class="show-logged-in w3-container w3-padding">
             <h2>Play</h2>
             <p>
                 <button type="button" id="new-game-button" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
-                <div id="game-over-show" class="w3-panel w3-red">
+                <div id="game-over-show" class="w3-container w3-red w3-display-container">
+                    <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
                     <h3>Game Over</h3>
                 </div>
             </p>
             <div class="game-info w3-panel w3-border">
                 <p>Round: <span id="round-show"></span></p>
                 <p>Score: <span id="score-show"></span></p>
+            </div>
+            <div id="game-errors-panel" class="w3-container w3-red w3-display-container">
+                <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
+                <h3>Errors</h3>
+                <ul id="game-errors-list">
+                    <li w3-repeat="gameErrors">{{}}</li>
+                </ul>
             </div>
             <div class="game-board w3-panel w3-border">
                 <p>
@@ -336,7 +359,7 @@
         </section><!-- /game-section -->
 
         <!-- Profile section -->
-        <section id="profile-section" class=" w3-container w3-padding">
+        <section id="profile-section" class="show-logged-in w3-container w3-padding">
             <div class="w3-card-4">
                 <div class="w3-container w3-theme">
                     <h2>Profile</h2>
@@ -378,6 +401,9 @@
 
     <!-- jQuery -->
     <script src="js/jquery-3.2.1.min.js" charset="utf-8"></script>
+
+    <!-- W3 Data -->
+    <script src="js/w3/w3data.js" charset="utf-8"></script>
 
     <!-- Game scripts -->
     <script src="js/game-logic.js" charset="utf-8"></script>

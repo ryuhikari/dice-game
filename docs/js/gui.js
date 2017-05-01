@@ -25,6 +25,51 @@ var showLoggedOutElements = $(".show-logged-out");
 var userLoggedIn = false;
 var playing = false;
 
+// Sign up
+var signUpInputs = {
+    firstName : $("#sign-up-first-name"),
+    lastName : $("#sign-up-last-name"),
+    email : $("#sign-up-email"),
+    username : $("#sign-up-username"),
+    password : $("#sign-up-password"),
+    repeatPassword : $("#sign-up-repeat-password"),
+};
+var signUpButton = $("#sign-up-button");
+signUpButton.on("click", function(event) {
+    event.preventDefault();
+
+    if (signUpValidation(signUpInputs)) {
+        renderErrors("sign-up", false)
+        // Server function call
+        console.log("Sign up user");
+
+        userLoggedIn = true;
+    } else {
+        renderErrors("sign-up");
+    }
+
+});
+
+// Log in
+var logInInputs = {
+    email : $("#log-in-email"),
+    password : $("#log-in-password"),
+};
+var logInButton = $("#log-in-button");
+logInButton.on("click", function(event) {
+    event.preventDefault();
+
+    if (logInValidation(logInInputs)) {
+        renderErrors("log-in", false)
+        // Server function call
+        console.log("Log in user");
+
+        userLoggedIn = true;
+    } else {
+        renderErrors("log-in");
+    }
+});
+
 // Game
 var sumDice = $("#sum-dice");
 var bonusDice = $("#bonus-dice");
@@ -61,8 +106,31 @@ playRoundButton.on("click", function(event) {
 
     if (gameValidation(Number(inputGuess.val()))) {
         playing = diceGame.play(Number(inputGuess.val()));
-        updateGUI();
+    } else {
+        renderErrors("game");
     }
+
+    updateGUI();
+});
+
+// Errors
+var signUpErrorsPanel = $("#sign-up-errors-panel");
+signUpErrorsPanel.hide();
+var logInErrorsPanel = $("#log-in-errors-panel");
+logInErrorsPanel.hide();
+var gameErrorsPanel = $("#game-errors-panel");
+gameErrorsPanel.hide();
+
+var signUpErrorsList = $("#sign-up-errors-list");
+var logInErrorsList = $("#log-in-errors-list");
+var gameErrorsList = $("#game-errors-list");
+
+// Close error messages
+var closeParents = $(".close-parent");
+closeParents.on("click", function(event) {
+    event.preventDefault();
+
+    $(this).parent().hide();
 });
 
 /**
@@ -155,6 +223,37 @@ function renderGame(diceGame) {
     }
     roundShow.html(diceGame.round);
     scoreShow.html(diceGame.score);
+}
+
+function renderErrors(errorType, show = true) {
+    switch (errorType) {
+        case "sign-up":
+            if (show) {
+                w3DisplayData(signUpErrorsList.attr('id'), errors);
+                signUpErrorsPanel.show();
+            } else {
+                signUpErrorsPanel.hide();
+            }
+            break;
+        case "log-in":
+            if (show) {
+                w3DisplayData(logInErrorsList.attr('id'), errors);
+                logInErrorsPanel.show();
+            } else{
+                logInErrorsPanel.hide();
+            }
+            break;
+        case "game":
+            if (show) {
+                w3DisplayData(gameErrorsList.attr('id'), errors);
+                gameErrorsPanel.show();
+            } else {
+                gameErrorsPanel.hide();
+            }
+            break;
+        default:
+
+    }
 }
 
 /**
