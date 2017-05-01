@@ -7,6 +7,7 @@ var errors = {
     gameErrors : [],
     logInErrors : [],
     signUpErrors : [],
+    serverErrors : [],
 }
 
 
