@@ -21,3 +21,13 @@
     right: 30px;
     opacity: .6;
 }
+
+/* Sections
+============================================================================= */
+#sign-up-content,
+#log-in-content,
+#top-ten-content,
+#user-scores-content,
+#profile-content {
+    display: none;
+}

@@ -17,6 +17,16 @@ var closeNavButton = $("#close-nav-sidebar").on("click", function(event) {
     closeNav();
 });
 
+// Open and close sections
+var openSectionButtons = $(".open-section");
+openSectionButtons.on("click", function(event) {
+    event.preventDefault();
+
+    var openSection = "#" + $(this).attr("data-open");
+    var openSection = $(openSection);
+    openSection.slideToggle();
+});
+
 //Show elements depending on the user is logged in or not
 var showLoggedInElements = $(".show-logged-in");
 var showLoggedOutElements = $(".show-logged-out");
