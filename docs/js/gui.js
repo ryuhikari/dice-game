@@ -303,12 +303,40 @@ $(".smooth").on('click', function(event) {
 * Show top highscores
 */
 function renderTopScores(data) {
-    w3DisplayData("top-ten-table", data);
+    if (data != null) {
+        w3DisplayData("top-ten-table", data);
+    } else {
+        var dataEmpty = {
+            scores : [
+                {
+                    position: "-",
+                    username: "-",
+                    score: "-",
+                    addedAt: "-",
+                },
+            ],
+        };
+        w3DisplayData("top-ten-table", dataEmpty);
+    }
 }
 
 /**
 * Show user's scores
 */
 function renderUserScores(data) {
-    w3DisplayData("user-scores-table", data);
+    if (data != null) {
+        w3DisplayData("user-scores-table", data);
+    else {
+        var dataEmpty = {
+            scores : [
+                {
+                    position: "-",
+                    username: "-",
+                    score: "-",
+                    addedAt: "-",
+                },
+            ],
+        };
+        w3DisplayData("user-scores-table", dataEmpty);
+    }
 }

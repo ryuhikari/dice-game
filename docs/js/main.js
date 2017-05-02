@@ -67,8 +67,9 @@ function logOut() {
 
 function processLogOut(data) {
     if (data.status === 200) {
-        showLoggedOut();
+        deleteScores();
         renderErrors(false);
+        showLoggedOut();
         showInfo(data);
     } else {
         showInfo(data);
@@ -178,6 +179,14 @@ function processUserScores(response) {
         console.log("Data:", response.data);
         return;
     }
+}
+
+/**
+* Delete scores: top and user's highscores
+*/
+function deleteScores() {
+    renderTopScores();
+    renderUserScores();
 }
 
 /**
