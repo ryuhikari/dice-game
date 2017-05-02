@@ -37,7 +37,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["Account created"],
                     };
                     callback(data);
@@ -50,7 +50,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["Something is wrong with the request"],
                     };
                     callback(data);
@@ -64,7 +64,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
                     callback(data);
@@ -95,7 +95,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: errors,
                     };
                     callback(data);
@@ -124,7 +124,7 @@ var User = function() {
                     that.info = JSON.parse(this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["User logged in"],
                     };
                     callback(data);
@@ -137,7 +137,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["Something is wrong with the request sent to the server"],
                     };
                     callback(data);
@@ -164,7 +164,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: errors,
                     };
                     callback(data);
@@ -177,7 +177,7 @@ var User = function() {
                     console.log("Body: ", request.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
                     callback(data);
@@ -208,7 +208,7 @@ var User = function() {
                     that.info = new UserInfo();
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["User logged out"],
                     };
                     callback(data);
@@ -221,7 +221,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["Something is wrong with the request sent to the server"],
                     };
                     callback(data);
@@ -234,7 +234,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
                     callback(data);
@@ -262,7 +262,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["The score has been added to your account"],
                     };
                     callback(data);
@@ -275,7 +275,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["The score has been added to the account"],
                     };
                     callback(data);
@@ -288,7 +288,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["The session id passed and the request is no longer valid"],
                     };
                     callback(data);
@@ -301,7 +301,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["There does not exist a user with the given"+this.info.username],
                     };
                     callback(data);
@@ -314,7 +314,7 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
-                        code: this.status,
+                        status: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
                     callback(data);
@@ -330,7 +330,7 @@ var User = function() {
     this.getTopScores = function(callback) {
         var script = document.createElement("script");
         script.src = this.serverURL+this.scoresURL+"?callback="+callback+"&session="+this.info.session;
-        document.head.appendChild(script)
+        document.head.appendChild(script);
     };
 
     /**
