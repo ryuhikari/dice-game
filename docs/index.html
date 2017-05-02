@@ -87,14 +87,14 @@
         <section id="sign-up-section" class="show-logged-out w3-container w3-padding">
             <div class="w3-card-4">
                 <div class="w3-container w3-theme">
-                    <h2>Sign Up <span class="open-section w3-button w3-small" data-open="sign-up-content">&#9660;</span></h2>
+                    <h2>Sign Up <span class="open-section w3-button w3-small" data-open="#sign-up-content">&#9660;</span></h2>
                 </div>
                 <div id="sign-up-content">
                     <div id="sign-up-errors-panel" class="w3-container w3-red w3-display-container">
                         <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
                         <h3>Errors</h3>
                         <ul id="sign-up-errors-list">
-                            <li w3-repeat="signUpErrors">{{}}</li>
+                            <li w3-repeat="errors">{{}}</li>
                         </ul>
                     </div>
                     <form class="w3-container">
@@ -135,14 +135,14 @@
         <section id="log-in-section" class="show-logged-out w3-container w3-padding">
             <div class="w3-card-4">
                 <div class="w3-container w3-theme">
-                    <h2>Log In <span class="open-section w3-button w3-small" data-open="log-in-content">&#9660;</span></h2>
+                    <h2>Log In <span class="open-section w3-button w3-small" data-open="#log-in-content">&#9660;</span></h2>
                 </div>
                 <div id="log-in-content">
                     <div id="log-in-errors-panel" class="w3-container w3-red w3-display-container">
                         <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
                         <h3>Errors</h3>
                         <ul id="log-in-errors-list">
-                            <li w3-repeat="logInErrors">{{}}</li>
+                            <li w3-repeat="errors">{{}}</li>
                         </ul>
                     </div>
                     <form class="w3-container">
@@ -164,7 +164,7 @@
 
         <!-- Top ten section -->
         <section id="top-ten-section" class="show-logged-in w3-container w3-padding">
-            <h2>Top 10 highscores <span class="open-section w3-button w3-small" data-open="top-ten-content">&#9660;</span></h2>
+            <h2>Top 10 highscores <span class="open-section w3-button w3-small" data-open="#top-ten-content">&#9660;</span></h2>
             <div id="top-ten-content" class="w3-responsive">
                 <table class="w3-table-all w3-hoverable w3-centered">
                     <thead>
@@ -243,7 +243,7 @@
 
         <!-- User's scores section -->
         <section id="user-scores-section" class="show-logged-in w3-container w3-padding">
-            <h2>User's highscores <span class="open-section w3-button w3-small" data-open="user-scores-content">&#9660;</span></h2>
+            <h2>User's highscores <span class="open-section w3-button w3-small" data-open="#user-scores-content">&#9660;</span></h2>
             <div id="user-scores-content" class="w3-responsive">
                 <table class="w3-table-all w3-hoverable w3-centered">
                     <thead>
@@ -325,26 +325,26 @@
             <h2>Play</h2>
             <p>
                 <button type="button" id="new-game-button" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
-                <div id="game-over-show" class="w3-container w3-red w3-display-container">
+                <div id="game-over-message" class="w3-container w3-red w3-display-container">
                     <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
                     <h3>Game Over</h3>
                 </div>
             </p>
             <div class="game-info w3-panel w3-border">
-                <p>Round: <span id="round-show"></span></p>
-                <p>Score: <span id="score-show"></span></p>
+                <p>Round: <span id="game-round"></span></p>
+                <p>Score: <span id="game-score"></span></p>
             </div>
             <div id="game-errors-panel" class="w3-container w3-red w3-display-container">
                 <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
                 <h3>Errors</h3>
                 <ul id="game-errors-list">
-                    <li w3-repeat="gameErrors">{{}}</li>
+                    <li w3-repeat="errors">{{}}</li>
                 </ul>
             </div>
             <div class="game-board w3-panel w3-border">
                 <p>
                     <label class="w3-text-grey">Guess</label>
-                    <input id="input-guess" class="w3-input w3-border" type="number">
+                    <input id="game-guess" class="w3-input w3-border" type="number" disabled="disabled">
                 </p>
                 <div class="w3-panel w3-border">
                     <p>
@@ -366,7 +366,7 @@
         <section id="profile-section" class="show-logged-in w3-container w3-padding">
             <div class="w3-card-4">
                 <div class="w3-container w3-theme">
-                    <h2>Profile <span class="open-section w3-button w3-small" data-open="profile-content">&#9660;</span></h2>
+                    <h2>Profile <span class="open-section w3-button w3-small" data-open="#profile-content">&#9660;</span></h2>
                 </div>
                 <div id="profile-content">
                     <form id="profile-info" class="w3-container">
@@ -412,9 +412,9 @@
     <script src="js/w3/w3data.js" charset="utf-8"></script>
 
     <!-- Game scripts -->
-    <script src="js/validation-logic.js" charset="utf-8"></script>
     <script src="js/game-logic.js" charset="utf-8"></script>
     <script src="js/server-logic.js" charset="utf-8"></script>
+    <script src="js/validation-logic.js" charset="utf-8"></script>
     <script src="js/gui.js" charset="utf-8"></script>
     <script src="js/main.js" charset="utf-8"></script>
 </body>
