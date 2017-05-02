@@ -68,6 +68,8 @@ function logOut() {
 function processLogOut(data) {
     if (data.status === 200) {
         deleteScores();
+        resetGameGUI();
+        stopGameGUI();
         renderErrors(false);
         showLoggedOut();
         showInfo(data);
