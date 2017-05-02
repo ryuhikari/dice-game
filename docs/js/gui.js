@@ -235,6 +235,9 @@ function renderGame(diceGame) {
     scoreShow.html(diceGame.score);
 }
 
+/**
+* Show errors
+*/
 function renderErrors(errorType, show = true) {
     switch (errorType) {
         case "sign-up":
@@ -263,6 +266,74 @@ function renderErrors(errorType, show = true) {
             break;
         default:
 
+    }
+}
+
+/**
+* Show top highscores
+*/
+function renderTopScores(response) {
+    if (response.status == 200) {
+        console.log("Got 10 top scores");
+        console.log("Status code:", response.status);
+        console.log("Data:", response.data);
+
+        console.log(response.data.scores);
+        return true;
+    }
+
+    if (response.status == 400) {
+        console.log("Something is wrong with the request sent to the server");
+        console.log("Status code:", response.status);
+        console.log("Data:", response.data);
+
+        return false;
+    }
+
+    if (response.status == 401) {
+        console.log("The session id passed in the request is no longer valid");
+        console.log("Status code:", response.status);
+        console.log("Data:", response.data);
+
+        return false;
+    }
+}
+
+/**
+* Show user's scores
+*/
+function renderUserScores(response) {
+    if (response.status == 200) {
+        console.log("Got user's scores");
+        console.log("Status code:", response.status);
+        console.log("Data:", response.data);
+
+        console.log(response.data.scores);
+        return true;
+    }
+
+    if (response.status == 400) {
+        console.log("Something is wrong with the request sent to the server");
+        console.log("Status code:", response.status);
+        console.log("Data:", response.data);
+
+        return false;
+    }
+
+    if (response.status == 401) {
+        console.log("The session id passed in the request is no longer valid");
+        console.log("Status code:", response.status);
+        console.log("Data:", response.data);
+
+        return false;
+    }
+
+    if (response.status == 404) {
+        console.log("There does not exist a user with the given username");
+        console.log("Status code:", response.status);
+        console.log("Data:", response.data);
+
+        return false;
     }
 }
 

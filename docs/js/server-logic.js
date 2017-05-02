@@ -3,12 +3,10 @@ var UserInfo = function() {
     this.lastName = "";
     this.email = "";
     this.username = "";
-    this.password = "";
     this.session = "";
-    this.scores = [];
 }
 
-var Session = function() {
+var User = function() {
     this.serverURL = "http://193.10.30.163/";
     this.signUpURL = "users";
     this.logInURL = "users/login";
@@ -17,20 +15,14 @@ var Session = function() {
 
     this.info = new UserInfo();
 
-    this.topscores = [];
-
-    this.isLogIn = function() {
-        if (this.info.session !== "") {
-            return true;
-        } else {
-            return false;
-        }
+    this.getInfo = function() {
+        return this.info;
     };
 
     /**
      * Create a new account
      */
-    this.createAccount = function(signUpInputs) {
+    this.createAccount = function(signUpInputs, callback) {
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.signUpURL, true);
         request.setRequestHeader("Content-Type", "application/json");
@@ -42,20 +34,25 @@ var Session = function() {
                     console.log("Account created");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+
+                    var data = {
                         code: this.status,
                         info: ["Account created"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 400) {
                     console.log("Something is wrong with the request");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["Something is wrong with the request"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 415) {
@@ -63,10 +60,12 @@ var Session = function() {
                     console.log("The Content-Type header is wrong");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 422) {
@@ -91,10 +90,12 @@ var Session = function() {
 
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: errors,
                     };
+                    callback(data);
+                    return;
                 }
             }
         };
@@ -103,7 +104,7 @@ var Session = function() {
     /**
      * Log in user
      */
-    this.logIn = function(logInInputs, that = this) {
+    this.logIn = function(logInInputs, callback, that = this) {
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.logInURL, true);
         request.setRequestHeader("Content-Type", "application/json");
@@ -116,20 +117,24 @@ var Session = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     that.info = JSON.parse(this.responseText);
-                    return {
-                        code: this.status,
-                        info: ["User logged in"],
+                    var data = {
+                        code: that.status,
+                        info: this.info,
                     };
+                    //callback(data);
+                    return;
                 }
 
                 if (this.status == 400) {
                     console.log("Something is wrong with the request sent to the server");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["Something is wrong with the request sent to the server"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 401) {
@@ -150,20 +155,24 @@ var Session = function() {
 
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: errors,
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 415) {
                     console.log("The Content-Type header is wrong");
                     console.log("Status code: ", request.status);
                     console.log("Body: ", request.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
+                    callback(data);
+                    return;
                 }
             }
         };
@@ -173,7 +182,7 @@ var Session = function() {
      * Sign out
      * Log out
      */
-    this.signOut = function(that = this) {
+    this.signOut = function(callback, that = this) {
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.logOutURL, true);
         request.setRequestHeader("Content-Type", "application/xml");
@@ -187,30 +196,36 @@ var Session = function() {
                     console.log("Body: ", this.responseText);
 
                     that.info = new UserInfo();
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["User logged out"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 400) {
                     console.log("Something is wrong with the request sent to the server");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["Something is wrong with the request sent to the server"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 415) {
                     console.log("The Content-Type header is wrong");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
+                    callback(data);
+                    return;
                 }
             }
         };
@@ -231,50 +246,60 @@ var Session = function() {
                     console.log("The score has been added to your account");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["The score has been added to your account"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 400) {
                     console.log("The score has been added to the account");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["The score has been added to the account"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 401) {
                     console.log("The session id passed and the request is no longer valid");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["The session id passed and the request is no longer valid"],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 404) {
                     console.log("There does not exist a user with the given"+this.info.username);
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["There does not exist a user with the given"+this.info.username],
                     };
+                    callback(data);
+                    return;
                 }
 
                 if (this.status == 415) {
                     console.log("The Content-Type header is wrong");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-                    return {
+                    var data = {
                         code: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
+                    callback(data);
+                    return;
                 }
             }
         };
@@ -283,94 +308,18 @@ var Session = function() {
     /**
      * Get top 10 high scores
      */
-    this.getTopScores = function(that = this) {
+    this.getTopScores = function(callback) {
         var script = document.createElement("script");
-        script.src = this.serverURL+this.scoresURL+"?callback=myCallback&session="+this.info.session;
-        function myCallback(response) {
-            if (response.status == 200) {
-                console.log("Got 10 top scores");
-                console.log("Status code:", response.status);
-                console.log("Data:", response.data);
-
-                that.topScores = response.data.scores;
-                return {
-                    code: response.status,
-                    info: ["Got 10 top scores"],
-                };
-            }
-
-            if (response.status == 400) {
-                console.log("Something is wrong with the request sent to the server");
-                console.log("Status code:", response.status);
-                console.log("Data:", response.data);
-                return {
-                    code: response.status,
-                    info: ["Something is wrong with the request sent to the server"],
-                };
-            }
-
-            if (response.status == 401) {
-                console.log("The session id passed in the request is no longer valid");
-                console.log("Status code:", response.status);
-                console.log("Data:", response.data);
-                return {
-                    code: response.status,
-                    info: ["The session id passed in the request is no longer valid"],
-                };
-            }
-        }
+        script.src = this.serverURL+this.scoresURL+"?callback="+callback+"&session="+this.info.session;
         document.head.appendChild(script)
     };
 
     /**
      * Get user's scores
      */
-    this.getUserScores = function(that = this) {
+    this.getUserScores = function(callback) {
         var script = document.createElement("script");
-        script.src = this.serverURL+this.scoresURL+"/"+this.info.username+"?callback=myCallback&session="+this.info.session;
-        function myCallback(response) {
-            if (response.status == 200) {
-                console.log("Got user's scores");
-                console.log("Status code:", response.status);
-                console.log("Data:", response.data);
-
-                that.info.scores = response.data.scores;
-                return {
-                    code: response.status,
-                    info: ["Got user's scores"],
-                };
-            }
-
-            if (response.status == 400) {
-                console.log("Something is wrong with the request sent to the server");
-                console.log("Status code:", response.status);
-                console.log("Data:", response.data);
-                return {
-                    code: response.status,
-                    info: ["Something is wrong with the request sent to the server"],
-                };
-            }
-
-            if (response.status == 401) {
-                console.log("The session id passed in the request is no longer valid");
-                console.log("Status code:", response.status);
-                console.log("Data:", response.data);
-                return {
-                    code: response.status,
-                    info: ["The session id passed in the request is no longer valid"],
-                };
-            }
-
-            if (response.status == 404) {
-                console.log("There does not exist a user with the given"+this.info.username);
-                console.log("Status code:", response.status);
-                console.log("Data:", response.data);
-                return {
-                    code: response.status,
-                    info: ["There does not exist a user with the given"+this.info.username],
-                };
-            }
-        }
+        script.src = this.serverURL+this.scoresURL+"/"+this.info.username+"?callback="+callback+"&session="+this.info.session;
         document.head.appendChild(script);
     };
 };
