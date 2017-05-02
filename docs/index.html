@@ -38,8 +38,8 @@
                 <a href="#game-section" class="smooth w3-bar-item w3-button">Play</a>
                 <a href="#user-scores-section" class="smooth w3-bar-item w3-button">My scores</a>
                 <a href="#top-ten-section" class="smooth w3-bar-item w3-button">Top 10 scores</a>
-                <a href="#" class="smooth w3-bar-item w3-button">Log out</a>
                 <a href="#profile-section" class="smooth w3-bar-item w3-button">Profile</a>
+                <a href="#" class="log-out-button smooth w3-bar-item w3-button">Log out</a>
             </div>
 
             <!-- Show Logged out links -->
@@ -60,7 +60,7 @@
                     <a href="#game-section" class="smooth w3-bar-item w3-button w3-hide-small">Play</a>
                     <a href="#user-scores-section" class="smooth w3-bar-item w3-button w3-hide-small">My scores</a>
                     <a href="#top-ten-section" class="smooth w3-bar-item w3-button w3-hide-small">Top 10 scores</a>
-                    <a href="#" class="smooth w3-bar-item w3-button w3-hide-small w3-right">Log out</a>
+                    <a href="#" class="log-out-button smooth w3-bar-item w3-button w3-hide-small w3-right">Log out</a>
                     <a href="#profile-section" class="smooth w3-bar-item w3-button w3-hide-small w3-right">Profile</a>
                 </div>
 
@@ -175,66 +175,12 @@
                             <th>Date</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Jill</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Eve</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Adam</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Bo</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Duilius</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Osher</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Gafar</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Johannes</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td>Gregorios</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>10</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
+                    <tbody id="top-ten-table">
+                        <tr w3-repeat="scores">
+                            <td>{{position}}</td>
+                            <td>{{username}}</td>
+                            <td>{{score}}</td>
+                            <td>{{addedAt}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -254,66 +200,12 @@
                             <th>Date</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
-                        </tr>
-                        <tr>
-                            <td>10</td>
-                            <td>Leilah</td>
-                            <td>1000</td>
-                            <td>2017-04-29</td>
+                    <tbody id="user-scores-table">
+                        <tr w3-repeat="scores">
+                            <td>{{position}}</td>
+                            <td>{{username}}</td>
+                            <td>{{score}}</td>
+                            <td>{{addedAt}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -371,25 +263,25 @@
                 <div id="profile-content">
                     <form id="profile-info" class="w3-container">
                         <p>
-                            <label class="w3-text-grey">First Name</label>
-                            <input class="w3-input w3-border" type="text" value="Leilah" disabled="disabled">
+                            <label for="profile-first-name" class="w3-text-grey">First Name</label>
+                            <input id="profile-first-name" class="w3-input w3-border" type="text" value="Leilah" disabled="disabled">
                         </p>
                         <p>
-                            <label class="w3-text-grey">Last Name</label>
-                            <input class="w3-input w3-border" type="text" value="Reed" disabled="disabled">
+                            <label for="profile-last-name" class="w3-text-grey">Last Name</label>
+                            <input id="profile-last-name" class="w3-input w3-border" type="text" value="Reed" disabled="disabled">
                         </p>
                         <p>
-                            <label class="w3-text-grey">Email</label>
-                            <input class="w3-input w3-border" type="text" value="leilah.reed@example.com" disabled="disabled">
+                            <label for="profile-email" class="w3-text-grey">Email</label>
+                            <input id="profile-email" class="w3-input w3-border" type="text" value="leilah.reed@example.com" disabled="disabled">
                         </p>
                         <hr>
                         <p>
-                            <label class="w3-text-grey">Username</label>
-                            <input class="w3-input w3-border" type="text" value="SuperLeilah" disabled="disabled">
+                            <label for="profile-username" class="w3-text-grey">Username</label>
+                            <input id="profile-username" class="w3-input w3-border" type="text" value="SuperLeilah" disabled="disabled">
                         </p>
                         <p>
-                            <label class="w3-text-grey">Session</label>
-                            <input class="w3-input w3-border" type="text" value="54ed1a65fcb7ef9d89312adfceff617d" disabled="disabled">
+                            <label for="profile-session" class="w3-text-grey">Session</label>
+                            <input id="profile-session" class="w3-input w3-border" type="text" value="54ed1a65fcb7ef9d89312adfceff617d" disabled="disabled">
                         </p>
                     </form>
                 </div>

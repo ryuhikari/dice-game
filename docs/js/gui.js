@@ -7,17 +7,23 @@ var navigationSidebar = $("#nav-sidebar");
 /**
 * Open and close navigation sidebar
 */
-var openNavButton = $("#open-nav-sidebar").on("click", function(event) {
-    event.preventDefault();
-
+function openNav() {
     navigation.hide();
     navigationSidebar.css({"width": "100%", "display": "block"});
+}
+
+function closeNav() {
+    navigation.show();
+    navigationSidebar.hide();
+}
+
+var openNavButton = $("#open-nav-sidebar").on("click", function(event) {
+    event.preventDefault();
+    openNav();
 });
 var closeNavButton = $("#close-nav-sidebar").on("click", function(event) {
     event.preventDefault();
-
-    navigation.show();
-    navigationSidebar.hide();
+    closeNav();
 });
 
 /**
@@ -69,10 +75,7 @@ var signUpButton = $("#sign-up-button").on("click", function(event) {
     var errors = signUpValidation(signUpInputs);
 
     if (errors.lenght === 0) {
-        renderErrors("sign-up", false);
-        showLoggedIn();
-        // Server function call
-        console.log("Sign up user");
+        signUp(signUpInputs);
     } else {
         renderErrors("sign-up", errors);
     }
@@ -91,13 +94,18 @@ var logInButton = $("#log-in-button").on("click", function(event) {
 
     var errors = logInValidation(logInInputs);
     if (errors.length === 0) {
-        renderErrors("log-in", false)
-        showLoggedIn();
-        // Server function call
-        console.log("Log in user");
+        logIn(logInInputs);
     } else {
         renderErrors("log-in", errors);
     }
+});
+
+/**
+* Log out
+*/
+var logOutButton = $(".log-out-button").on("click", function(event) {
+    event.preventDefault();
+    logOut();
 });
 
 /**
@@ -204,7 +212,7 @@ var errorsGUI = {
     gameErrorsList : $("#game-errors-list"),
 }
 
-function renderErrors(errorType, errors) {
+function renderErrors(errorType, errors = true) {
     switch (errorType) {
         case "sign-up":
             if (errors) {
@@ -234,7 +242,10 @@ function renderErrors(errorType, errors) {
             }
             break;
         default:
-            console.log("No error type of: sign-up, log-in or game has been provided" );
+            console.log("Hide all errors" );
+            errorsGUI.signUpErrorsPanel.hide();
+            errorsGUI.logInErrorsPanel.hide();
+            errorsGUI.gameErrorsPanel.hide();
     }
 }
 
@@ -246,6 +257,15 @@ var closeParents = $(".close-parent").on("click", function(event) {
 
     $(this).parent().hide();
 });
+
+/**
+* Show info messages
+*/
+function showInfo(data) {
+    // TODO: complete showInfo
+    console.log("showInfo");
+    console.log(data.info);
+}
 
 /**
 * Smooth scroll
@@ -282,67 +302,41 @@ $(".smooth").on('click', function(event) {
 /**
 * Show top highscores
 */
-function renderTopScores(response) {
-    if (response.status == 200) {
-        console.log("Got 10 top scores");
-        console.log("Status code:", response.status);
-        console.log("Data:", response.data);
-
-        console.log(response.data.scores);
-        return true;
-    }
-
-    if (response.status == 400) {
-        console.log("Something is wrong with the request sent to the server");
-        console.log("Status code:", response.status);
-        console.log("Data:", response.data);
-
-        return false;
-    }
-
-    if (response.status == 401) {
-        console.log("The session id passed in the request is no longer valid");
-        console.log("Status code:", response.status);
-        console.log("Data:", response.data);
-
-        return false;
+function renderTopScores(data) {
+    if (data != null) {
+        w3DisplayData("top-ten-table", data);
+    } else {
+        var dataEmpty = {
+            scores : [
+                {
+                    position: "-",
+                    username: "-",
+                    score: "-",
+                    addedAt: "-",
+                },
+            ],
+        };
+        w3DisplayData("top-ten-table", dataEmpty);
     }
 }
 
 /**
 * Show user's scores
 */
-function renderUserScores(response) {
-    if (response.status == 200) {
-        console.log("Got user's scores");
-        console.log("Status code:", response.status);
-        console.log("Data:", response.data);
-
-        console.log(response.data.scores);
-        return true;
-    }
-
-    if (response.status == 400) {
-        console.log("Something is wrong with the request sent to the server");
-        console.log("Status code:", response.status);
-        console.log("Data:", response.data);
-
-        return false;
-    }
-
-    if (response.status == 401) {
-        console.log("The session id passed in the request is no longer valid");
-        console.log("Status code:", response.status);
-        console.log("Data:", response.data);
-
-        return false;
-    }
-
-    if (response.status == 404) {
-        console.log("There does not exist a user with the given username");
-        console.log("Status code:", response.status);
-        console.log("Data:", response.data);
-
-        return false;
+function renderUserScores(data) {
+    if (data != null) {
+        w3DisplayData("user-scores-table", data);
+    } else {
+        var dataEmpty = {
+            scores : [
+                {
+                    position: "-",
+                    username: "-",
+                    score: "-",
+                    addedAt: "-",
+                },
+            ],
+        };
+        w3DisplayData("user-scores-table", dataEmpty);
     }
 }
