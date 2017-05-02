@@ -70,6 +70,7 @@ function processLogOut(data) {
         deleteScores();
         resetGameGUI();
         stopGameGUI();
+        deleteProfile();
         renderErrors(false);
         showLoggedOut();
         showInfo(data);
@@ -200,4 +201,15 @@ function showProfile() {
     var email = $("#profile-email").val(user.info.email);
     var username = $("#profile-username").val(user.info.username);
     var session = $("#profile-session").val(user.info.session);
+}
+
+/**
+* Delete profile
+*/
+function deleteProfile() {
+    var firstName = $("#profile-first-name").val("");
+    var lastName = $("#profile-last-name").val("");
+    var email = $("#profile-email").val("");
+    var username = $("#profile-username").val("");
+    var session = $("#profile-session").val("");
 }

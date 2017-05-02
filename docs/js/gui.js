@@ -326,7 +326,7 @@ function renderTopScores(data) {
 function renderUserScores(data) {
     if (data != null) {
         w3DisplayData("user-scores-table", data);
-    else {
+    } else {
         var dataEmpty = {
             scores : [
                 {
