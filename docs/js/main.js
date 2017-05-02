@@ -50,6 +50,7 @@ function processLogIn(data) {
     if (data.status === 200) {
         renderErrors("log-in", false)
         getScores();
+        showProfile();
         showLoggedIn();
         showInfo(data);
     } else {
@@ -87,6 +88,7 @@ function getDate(seconds) {
     var stringDate = year+"-"+month+"-"+day;
     return stringDate;
 }
+
 /**
 * Get scores: top and user's highscores
 */
@@ -176,4 +178,15 @@ function processUserScores(response) {
         console.log("Data:", response.data);
         return;
     }
+}
+
+/**
+* Show profile
+*/
+function showProfile() {
+    var firstName = $("#profile-first-name").val(user.info.firstName);
+    var lastName = $("#profile-last-name").val(user.info.lastName);
+    var email = $("#profile-email").val(user.info.email);
+    var username = $("#profile-username").val(user.info.username);
+    var session = $("#profile-session").val(user.info.session);
 }
