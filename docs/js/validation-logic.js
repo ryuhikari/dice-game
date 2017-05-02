@@ -73,6 +73,11 @@ function logInValidation(logInInputs) {
         console.log("The password is empty");
     }
 
+    if (password.length < 3) {
+        errors.push("The password must be at least 3 characters long");
+        console.log("The password must be at least 3 characters long");
+    }
+
     return errors;
 }
 
@@ -107,12 +112,12 @@ function signUpValidation(signUpInputs) {
 
     // First Name
     if (firstName === null || firstName === "") {
-        errors.push("The First Name is empty")
+        errors.push("The First Name is empty");
         console.log("The First Name is empty");
     }
 
     if (!checkOnlyLetters(firstName)) {
-        errors.push("The First Name can contain only letters")
+        errors.push("The First Name can contain only letters");
         console.log("The First Name can contain only letters");
     }
 
@@ -150,9 +155,19 @@ function signUpValidation(signUpInputs) {
     }
 
     // Password
+    if (password.length === 0) {
+        errors.push("The password is empty");
+        console.log("The password is empty");
+    }
+
+    if (repeatPassword.length === 0) {
+        errors.push("The repeated password is empty");
+        console.log("The repeated password is empty");
+    }
+
     if (password !== repeatPassword) {
-        errors.push("The passwords do not match");
-        console.log("The passwords do not match");
+        errors.push("Passwords do not match");
+        console.log("Passwords do not match");
     }
 
     if (password.length < 3) {

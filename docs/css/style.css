@@ -30,3 +30,12 @@
 #profile-content {
     display: none;
 }
+
+/* Errors
+============================================================================= */
+#sign-up-errors-panel,
+#log-in-errors-panel,
+#game-errors-panel,
+#game-over-message {
+    display: none;
+}
