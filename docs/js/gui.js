@@ -7,17 +7,23 @@ var navigationSidebar = $("#nav-sidebar");
 /**
 * Open and close navigation sidebar
 */
-var openNavButton = $("#open-nav-sidebar").on("click", function(event) {
-    event.preventDefault();
-
+function openNav() {
     navigation.hide();
     navigationSidebar.css({"width": "100%", "display": "block"});
+}
+
+function closeNav() {
+    navigation.show();
+    navigationSidebar.hide();
+}
+
+var openNavButton = $("#open-nav-sidebar").on("click", function(event) {
+    event.preventDefault();
+    openNav();
 });
 var closeNavButton = $("#close-nav-sidebar").on("click", function(event) {
     event.preventDefault();
-
-    navigation.show();
-    navigationSidebar.hide();
+    closeNav();
 });
 
 /**
@@ -69,10 +75,7 @@ var signUpButton = $("#sign-up-button").on("click", function(event) {
     var errors = signUpValidation(signUpInputs);
 
     if (errors.lenght === 0) {
-        renderErrors("sign-up", false);
-        showLoggedIn();
-        // Server function call
-        console.log("Sign up user");
+        signUp(signUpInputs);
     } else {
         renderErrors("sign-up", errors);
     }
@@ -91,13 +94,18 @@ var logInButton = $("#log-in-button").on("click", function(event) {
 
     var errors = logInValidation(logInInputs);
     if (errors.length === 0) {
-        renderErrors("log-in", false)
-        showLoggedIn();
-        // Server function call
-        console.log("Log in user");
+        logIn(logInInputs);
     } else {
         renderErrors("log-in", errors);
     }
+});
+
+/**
+* Log out
+*/
+var logOutButton = $(".log-out-button").on("click", function(event) {
+    event.preventDefault();
+    logOut();
 });
 
 /**
@@ -204,7 +212,7 @@ var errorsGUI = {
     gameErrorsList : $("#game-errors-list"),
 }
 
-function renderErrors(errorType, errors) {
+function renderErrors(errorType, errors = true) {
     switch (errorType) {
         case "sign-up":
             if (errors) {
@@ -234,7 +242,10 @@ function renderErrors(errorType, errors) {
             }
             break;
         default:
-            console.log("No error type of: sign-up, log-in or game has been provided" );
+            console.log("Hide all errors" );
+            errorsGUI.signUpErrorsPanel.hide();
+            errorsGUI.logInErrorsPanel.hide();
+            errorsGUI.gameErrorsPanel.hide();
     }
 }
 
@@ -246,6 +257,15 @@ var closeParents = $(".close-parent").on("click", function(event) {
 
     $(this).parent().hide();
 });
+
+/**
+* Show info messages
+*/
+function showInfo(data) {
+    // TODO: complete showInfo
+    console.log("showInfo");
+    console.log(data.info);
+}
 
 /**
 * Smooth scroll

@@ -22,7 +22,8 @@ var User = function() {
     /**
      * Create a new account
      */
-    this.createAccount = function(signUpInputs, callback) {
+    this.createAccount = function(signUpInputs, callback, that = this) {
+        var name = "createAccount";
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.signUpURL, true);
         request.setRequestHeader("Content-Type", "application/json");
@@ -34,8 +35,8 @@ var User = function() {
                     console.log("Account created");
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
-
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["Account created"],
                     };
@@ -48,6 +49,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["Something is wrong with the request"],
                     };
@@ -61,6 +63,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
@@ -91,6 +94,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: errors,
                     };
@@ -105,6 +109,7 @@ var User = function() {
      * Log in user
      */
     this.logIn = function(logInInputs, callback, that = this) {
+        var name = "logIn";
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.logInURL, true);
         request.setRequestHeader("Content-Type", "application/json");
@@ -118,10 +123,11 @@ var User = function() {
                     console.log("Body: ", this.responseText);
                     that.info = JSON.parse(this.responseText);
                     var data = {
-                        code: that.status,
-                        info: this.info,
+                        from: name,
+                        code: this.status,
+                        info: ["User logged in"],
                     };
-                    //callback(data);
+                    callback(data);
                     return;
                 }
 
@@ -130,6 +136,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["Something is wrong with the request sent to the server"],
                     };
@@ -156,6 +163,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: errors,
                     };
@@ -168,6 +176,7 @@ var User = function() {
                     console.log("Status code: ", request.status);
                     console.log("Body: ", request.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
@@ -183,6 +192,7 @@ var User = function() {
      * Log out
      */
     this.signOut = function(callback, that = this) {
+        var name = "signOut";
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.logOutURL, true);
         request.setRequestHeader("Content-Type", "application/xml");
@@ -197,6 +207,7 @@ var User = function() {
 
                     that.info = new UserInfo();
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["User logged out"],
                     };
@@ -209,6 +220,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["Something is wrong with the request sent to the server"],
                     };
@@ -221,6 +233,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
@@ -234,7 +247,8 @@ var User = function() {
     /**
      * Add user score
      */
-    this.addScore = function(score) {
+    this.addScore = function(score, callback) {
+        var name = "addScore";
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.scoresURL+"/"+this.info.username, true);
         request.setRequestHeader("Content-Type", "application/xml");
@@ -247,6 +261,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["The score has been added to your account"],
                     };
@@ -259,6 +274,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["The score has been added to the account"],
                     };
@@ -271,6 +287,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["The session id passed and the request is no longer valid"],
                     };
@@ -283,6 +300,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["There does not exist a user with the given"+this.info.username],
                     };
@@ -295,6 +313,7 @@ var User = function() {
                     console.log("Status code: ", this.status);
                     console.log("Body: ", this.responseText);
                     var data = {
+                        from: name,
                         code: this.status,
                         info: ["The Content-Type header is wrong"],
                     };
