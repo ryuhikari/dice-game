@@ -26,13 +26,14 @@ var DiceGame = function() {
         }
         var bonus = Math.floor((Math.random() * 6) + 1);
 
+        this.round++;
+        this.lastSum = sum;
+        this.lastBonus = bonus;
+
         if (guess > sum) {
             console.log("Guess failed. You guessed", guess, "and the sum was", sum);
         } else {
             this.score += guess * bonus;
-            this.round++;
-            this.lastSum = sum;
-            this.lastBonus = bonus;
             console.log("Good. You guessed", guess, "and the sum was", sum)
         }
         console.log("Bonus", bonus);
