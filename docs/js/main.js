@@ -19,6 +19,7 @@ function playRound(guess) {
     renderGame(diceGame);
     if (!continuePlaying) {
         showGameOver();
+        uploadScore();
     }
 }
 
@@ -190,6 +191,22 @@ function processUserScores(response) {
 function deleteScores() {
     renderTopScores();
     renderUserScores();
+}
+
+/**
+* Upload score
+*/
+function uploadScore() {
+    user.addScore(diceGame.score, processAddScore);
+}
+
+function processAddScore(data) {
+    if (data.status === 200) {
+        showInfo(data);
+        getScores();
+    } else {
+        showInfo(data);
+    }
 }
 
 /**
