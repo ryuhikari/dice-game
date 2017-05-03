@@ -299,13 +299,12 @@
 
     <div id="show-info-modal" class="w3-modal w3-animate-opacity">
         <div class="w3-modal-content w3-card-4">
-            <header class="w3-container">
+            <header id="show-info-modal__header" class="w3-container">
                 <span class="close-panel w3-button w3-large w3-display-topright" data-close="#show-info-modal">&times;</span>
-                <h2 id="show-info-modal__header">Modal Header</h2>
+                <h2 id="show-info-modal__title">Server info</h2>
             </header>
             <div id="show-info-modal__content" class="w3-container">
-                <p>Some text..</p>
-                <p>Some text..</p>
+                <p w3-repeat="info">{{}}</p>
             </div>
             <footer id="show-info-modal__footer" class="w3-container w3-green"></footer>
         </div>

@@ -145,7 +145,6 @@ var User = function() {
                 }
 
                 if (this.status == 401) {
-                    errors.signUpErrors.push("No account with the given email and password were found");
                     console.log("No account with the given email and password were found");
                     var requestErrors = JSON.parse(this.responseText);
 
