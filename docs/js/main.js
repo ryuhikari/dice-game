@@ -27,7 +27,8 @@ function playRound(guess) {
 * Sign up
 */
 function signUp(signUpInputs) {
-    var data = user.createAccount(signUpInputs, processSignUp);
+    user = new User();
+    user.createAccount(signUpInputs, processSignUp);
 }
 
 function processSignUp(data) {

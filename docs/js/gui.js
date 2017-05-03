@@ -83,7 +83,7 @@ var signUpButton = $("#sign-up-button").on("click", function(event) {
 
     var errors = signUpValidation(signUpInputs);
 
-    if (errors.lenght === 0) {
+    if (errors.length === 0) {
         signUp(signUpInputs);
     } else {
         renderErrors("sign-up", errors);
