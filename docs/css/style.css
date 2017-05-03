@@ -24,9 +24,11 @@
 
 /* Sections
 ============================================================================= */
+.open-section {
+    cursor: pointer;
+}
+
 #sign-up-content,
-#top-ten-content,
-#user-scores-content,
 #profile-content {
     display: none;
 }
