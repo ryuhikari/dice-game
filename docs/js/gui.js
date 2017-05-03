@@ -280,10 +280,12 @@ function renderErrors(errorType, errors = true) {
 /**
 * Close panels
 */
-var closeParents = $(".close-parent").on("click", function(event) {
+var closePanel = $(".close-panel").on("click", function(event) {
     event.preventDefault();
 
-    $(this).parent().hide();
+    var closeElement = $(this).attr("data-close");
+    var closeElement = $(closeElement);
+    closeElement.hide();
 });
 
 /**
