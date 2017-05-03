@@ -32,7 +32,8 @@ function signUp(signUpInputs) {
 
 function processSignUp(data) {
     if (data.status === 200) {
-        renderErrors("sign-up", false)
+        renderErrors("sign-up", false);
+        clearSignUpIn();
         showInfo(data);
     } else {
         showInfo(data);
@@ -50,6 +51,8 @@ function logIn(logInInputs) {
 function processLogIn(data) {
     if (data.status === 200) {
         renderErrors("log-in", false)
+        clearSignUpIn();
+        clearLogIn();
         getScores();
         showProfile();
         showLoggedIn();
@@ -71,7 +74,7 @@ function processLogOut(data) {
         deleteScores();
         resetGameGUI();
         stopGameGUI();
-        deleteProfile();
+        clearProfile();
         renderErrors(false);
         showLoggedOut();
         showInfo(data);
@@ -223,7 +226,7 @@ function showProfile() {
 /**
 * Delete profile
 */
-function deleteProfile() {
+function clearProfile() {
     var firstName = $("#profile-first-name").val("");
     var lastName = $("#profile-last-name").val("");
     var email = $("#profile-email").val("");

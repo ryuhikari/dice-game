@@ -60,16 +60,25 @@ function showLoggedOut() {
 /**
 * Sign up
 */
+var signUpReference = {
+    firstName : $("#sign-up-first-name"),
+    lastName : $("#sign-up-last-name"),
+    email : $("#sign-up-email"),
+    username : $("#sign-up-username"),
+    password : $("#sign-up-password"),
+    repeatPassword : $("#sign-up-repeat-password"),
+};
+
 var signUpButton = $("#sign-up-button").on("click", function(event) {
     event.preventDefault();
 
     var signUpInputs = {
-        firstName : $("#sign-up-first-name").val(),
-        lastName : $("#sign-up-last-name").val(),
-        email : $("#sign-up-email").val(),
-        username : $("#sign-up-username").val(),
-        password : $("#sign-up-password").val(),
-        repeatPassword : $("#sign-up-repeat-password").val(),
+        firstName : signUpReference.firstName.val(),
+        lastName : signUpReference.lastName.val(),
+        email : signUpReference.email.val(),
+        username : signUpReference.username.val(),
+        password : signUpReference.password.val(),
+        repeatPassword : signUpReference.repeatPassword.val(),
     };
 
     var errors = signUpValidation(signUpInputs);
@@ -81,15 +90,29 @@ var signUpButton = $("#sign-up-button").on("click", function(event) {
     }
 });
 
+function clearSignUp() {
+    signUpReference.firstName.val("");
+    signUpReference.lastName.val("");
+    signUpReference.email.val("");
+    signUpReference.username.val("");
+    signUpReference.password.val("");
+    signUpReference.repeatPassword.val("");
+}
+
 /**
 * Log in
 */
+var logInReference = {
+    email : $("#log-in-email"),
+    password : $("#log-in-password"),
+};
+
 var logInButton = $("#log-in-button").on("click", function(event) {
     event.preventDefault();
 
     var logInInputs = {
-        email : $("#log-in-email").val(),
-        password : $("#log-in-password").val(),
+        email : logInReference.email.val(),
+        password : logInReference.password.val(),
     };
 
     var errors = logInValidation(logInInputs);
@@ -99,6 +122,11 @@ var logInButton = $("#log-in-button").on("click", function(event) {
         renderErrors("log-in", errors);
     }
 });
+
+function clearLogIn() {
+    logInReference.email.val("");
+    logInReference.password.val("");
+}
 
 /**
 * Log out
