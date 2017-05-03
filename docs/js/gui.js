@@ -368,3 +368,25 @@ function renderUserScores(data) {
         w3DisplayData("user-scores-table", dataEmpty);
     }
 }
+
+/**
+* Render profile
+*/
+function renderProfile(user) {
+    var firstName = $("#profile-first-name").val(user.info.firstName);
+    var lastName = $("#profile-last-name").val(user.info.lastName);
+    var email = $("#profile-email").val(user.info.email);
+    var username = $("#profile-username").val(user.info.username);
+    var session = $("#profile-session").val(user.info.session);
+}
+
+/**
+* Clear profile
+*/
+function clearProfile() {
+    var firstName = $("#profile-first-name").val("");
+    var lastName = $("#profile-last-name").val("");
+    var email = $("#profile-email").val("");
+    var username = $("#profile-username").val("");
+    var session = $("#profile-session").val("");
+}
