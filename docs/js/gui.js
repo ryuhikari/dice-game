@@ -35,6 +35,7 @@ var openSectionButtons = $(".open-section").on("click", function(event) {
     var openSection = $(this).attr("data-open");
     var openSection = $(openSection);
     openSection.slideToggle();
+    openSection.toogleClass("w3-show")
 });
 
 /**
