@@ -280,19 +280,57 @@ function renderErrors(errorType, errors = true) {
 /**
 * Close panels
 */
-var closeParents = $(".close-parent").on("click", function(event) {
+var closePanel = $(".close-panel").on("click", function(event) {
     event.preventDefault();
 
-    $(this).parent().hide();
+    var closeElement = $(this).attr("data-close");
+    var closeElement = $(closeElement);
+    closeElement.hide();
 });
 
 /**
 * Show info messages
 */
 function showInfo(data) {
-    // TODO: complete showInfo
-    console.log("showInfo");
-    console.log(data.info);
+    var modal = $("#show-info-modal");
+    var modalHeader = $("#show-info-modal__header");
+    var modalTitle = $("#show-info-modal__title");
+    var modalContent = $("#show-info-modal__content");
+    var modalFooter = $("#show-info-modal__footer");
+
+    var title = data.from;
+    console.log(title);
+    switch (title) {
+        case "createAccount":
+            modalTitle.html("Create account information");
+            break;
+        case "logIn":
+            modalTitle.html("Log in information");
+            break;
+        case "signOut":
+            modalTitle.html("Sign out information");
+            break;
+        case "addScore":
+            modalTitle.html("Add score information");
+            break;
+        default:
+            return;
+    }
+
+    if (data.status === 200) {
+        modalHeader.css({"background-color": "green", "color": "white"});
+        modalFooter.css({"background-color": "green", "color": "white"});
+    } else {
+        modalHeader.css({"background-color": "red", "color": "white"});
+        modalFooter.css({"background-color": "red", "color": "white"});
+    }
+    w3DisplayData("show-info-modal__content", data);
+
+    modal.show();
+
+    setTimeout(function() {
+        modal.fadeOut();
+    }, 2000);
 }
 
 /**

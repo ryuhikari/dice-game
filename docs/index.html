@@ -91,7 +91,7 @@
                 </div>
                 <div id="sign-up-content">
                     <div id="sign-up-errors-panel" class="w3-container w3-red w3-display-container">
-                        <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
+                        <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#sign-up-errors-panel">&times;</span>
                         <h3>Errors</h3>
                         <ul id="sign-up-errors-list">
                             <li w3-repeat="errors">{{}}</li>
@@ -139,7 +139,7 @@
                 </div>
                 <div id="log-in-content">
                     <div id="log-in-errors-panel" class="w3-container w3-red w3-display-container">
-                        <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
+                        <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#log-in-errors-panel">&times;</span>
                         <h3>Errors</h3>
                         <ul id="log-in-errors-list">
                             <li w3-repeat="errors">{{}}</li>
@@ -218,7 +218,7 @@
             <p>
                 <button type="button" id="new-game-button" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
                 <div id="game-over-message" class="w3-container w3-red w3-display-container">
-                    <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
+                    <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#game-over-message">&times;</span>
                     <h3>Game Over</h3>
                 </div>
             </p>
@@ -227,7 +227,7 @@
                 <p>Score: <span id="game-score"></span></p>
             </div>
             <div id="game-errors-panel" class="w3-container w3-red w3-display-container">
-                <span class="close-parent w3-button w3-red w3-large w3-display-topright">&times;</span>
+                <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#game-errors-panel">&times;</span>
                 <h3>Errors</h3>
                 <ul id="game-errors-list">
                     <li w3-repeat="errors">{{}}</li>
@@ -296,6 +296,19 @@
             </div>
         </div>
     </footer>
+
+    <div id="show-info-modal" class="w3-modal w3-animate-opacity">
+        <div class="w3-modal-content w3-card-4">
+            <header id="show-info-modal__header" class="w3-container">
+                <span class="close-panel w3-button w3-large w3-display-topright" data-close="#show-info-modal">&times;</span>
+                <h2 id="show-info-modal__title">Server info</h2>
+            </header>
+            <div id="show-info-modal__content" class="w3-container">
+                <p w3-repeat="info">{{}}</p>
+            </div>
+            <footer id="show-info-modal__footer" class="w3-container w3-green"></footer>
+        </div>
+    </div>
 
     <!-- jQuery -->
     <script src="js/jquery-3.2.1.min.js" charset="utf-8"></script>
