@@ -124,7 +124,7 @@
                             <input id="sign-up-repeat-password" class="w3-input w3-border" type="password" required="required">
                         </p>
                         <p>
-                            <button id="sign-up-button" type="button" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
+                            <button id="sign-up-button" type="submit" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
                         </p>
                     </form>
                 </div>
@@ -155,7 +155,7 @@
                             <input id="log-in-password" class="w3-input w3-border" type="password" required="required">
                         </p>
                         <p>
-                            <button id="log-in-button" type="button" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
+                            <button id="log-in-button" type="submit" class="w3-btn w3-padding w3-theme-d5">Send &nbsp; ❯</button>
                         </p>
                     </form>
                 </div>
@@ -233,7 +233,7 @@
                     <li w3-repeat="errors">{{}}</li>
                 </ul>
             </div>
-            <div class="game-board w3-panel w3-border">
+            <form class="game-board w3-panel w3-border">
                 <p>
                     <label class="w3-text-grey">Guess</label>
                     <input id="game-guess" class="w3-input w3-border" type="number" disabled="disabled">
@@ -249,9 +249,9 @@
                     </p>
                 </div>
                 <p>
-                    <button type="button" id="play-round-button" name="playRoundButton" class="w3-btn w3-padding w3-theme-d5">Play round</button>
+                    <button type="submit" id="play-round-button" name="playRoundButton" class="w3-btn w3-padding w3-theme-d5">Play round</button>
                 </p>
-            </div>
+            </form>
         </section><!-- /game-section -->
 
         <!-- Profile section -->
