@@ -8,15 +8,15 @@ showLoggedOut();
 * Start new game
 */
 function newGame() {
-    diceGame = new DiceGame();
+    DiceGame.newGame();
 }
 
 /**
 * Play game round
 */
 function playRound(guess) {
-    var continuePlaying = diceGame.play(guess);
-    renderGame(diceGame);
+    var continuePlaying = DiceGame.play(guess);
+    renderGame(DiceGame);
     if (!continuePlaying) {
         showGameOver();
         uploadScore();
@@ -201,7 +201,7 @@ function deleteScores() {
 * Upload score
 */
 function uploadScore() {
-    user.addScore(diceGame.score, processAddScore);
+    user.addScore(DiceGame.getScore(), processAddScore);
 }
 
 function processAddScore(data) {

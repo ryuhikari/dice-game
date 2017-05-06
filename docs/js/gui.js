@@ -213,18 +213,22 @@ function createDice(number) {
     return img;
 }
 
-function renderGame(diceGame) {
+function renderGame(DiceGame) {
     diceGameGUI.sumDice.empty();
     diceGameGUI.bonusDice.empty();
+    var dice = DiceGame.getDice();
+    var bonus = DiceGame.getBonus();
+    var round = DiceGame.getRound();
+    var score = DiceGame.getScore();
 
-    for (var i = 0; i < diceGame.lastDice.length; i++) {
-        diceGameGUI.sumDice.append(createDice(diceGame.lastDice[i]));
+    for (var i = 0; i < dice.length; i++) {
+        diceGameGUI.sumDice.append(createDice(dice[i]));
     }
-    if (diceGame.lastBonus) {
-        diceGameGUI.bonusDice.append(createDice(diceGame.lastBonus));
+    if (bonus) {
+        diceGameGUI.bonusDice.append(createDice(bonus));
     }
-    diceGameGUI.round.html(diceGame.round);
-    diceGameGUI.score.html(diceGame.score);
+    diceGameGUI.round.html(round);
+    diceGameGUI.score.html(score);
 }
 
 /**
