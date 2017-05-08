@@ -1,6 +1,7 @@
 /* Navigation
 ============================================================================= */
 #nav-sidebar {
+    width: 100%;
     display: none;
 }
 
@@ -41,6 +42,13 @@
     display: none;
 }
 
+/* Game
+============================================================================= */
+#sum-dice,
+#bonus-dice {
+    height: 50px;
+}
+
 /* Errors
 ============================================================================= */
 #sign-up-errors-panel,
@@ -48,4 +56,15 @@
 #game-errors-panel,
 #game-over-message {
     display: none;
+}
+
+/* Info
+============================================================================= */
+.info-correct {
+    color: white;
+    background-color: green,
+}
+.info-error {
+    color: white,inherit;
+    background-color: red;
 }

@@ -1,434 +1,382 @@
-/**
-* Navigation
-*/
-var navigation = $("#navigation");
-var navigationSidebar = $("#nav-sidebar");
+var GUI = (function() {
+    var showLoggedInElements = $(".show-logged-in");
+    var showLoggedOutElements = $(".show-logged-out");
 
-/**
-* Open and close navigation sidebar
-*/
-function openNav() {
-    navigation.hide();
-    navigationSidebar.css({"width": "100%", "display": "block"});
-}
-
-function closeNav() {
-    navigation.show();
-    navigationSidebar.hide();
-}
-
-var openNavButton = $("#open-nav-sidebar").on("click", function(event) {
-    event.preventDefault();
-    openNav();
-});
-var closeNavButton = $("#close-nav-sidebar").on("click", function(event) {
-    event.preventDefault();
-    closeNav();
-});
-
-/**
-* Open and close sections
-*/
-var openSectionButtons = $(".open-section").on("click", function(event) {
-    event.preventDefault();
-
-    var openSection = $(this).attr("data-open");
-    var openSection = $(openSection);
-    openSection.slideToggle();
-});
-
-/**
- * Show elements depending on the user is logged in or not
- */
-var showLoggedInElements = $(".show-logged-in");
-var showLoggedOutElements = $(".show-logged-out");
-
-function showLoggedIn() {
-    resetGameGUI();
-    stopGameGUI();
-    showLoggedInElements.show();
-    showLoggedOutElements.hide();
-}
-
-function showLoggedOut() {
-    resetGameGUI();
-    stopGameGUI();
-    showLoggedInElements.hide();
-    showLoggedOutElements.show();
-}
-
-/**
-* Sign up
-*/
-var signUpReference = {
-    firstName : $("#sign-up-first-name"),
-    lastName : $("#sign-up-last-name"),
-    email : $("#sign-up-email"),
-    username : $("#sign-up-username"),
-    password : $("#sign-up-password"),
-    repeatPassword : $("#sign-up-repeat-password"),
-};
-
-var signUpButton = $("#sign-up-button").on("click", function(event) {
-    event.preventDefault();
-
-    var signUpInputs = {
-        firstName : signUpReference.firstName.val(),
-        lastName : signUpReference.lastName.val(),
-        email : signUpReference.email.val(),
-        username : signUpReference.username.val(),
-        password : signUpReference.password.val(),
-        repeatPassword : signUpReference.repeatPassword.val(),
-    };
-
-    var errors = signUpValidation(signUpInputs);
-
-    if (errors.length === 0) {
-        signUp(signUpInputs);
-    } else {
-        renderErrors("sign-up", errors);
+    function showLoggedIn() {
+        showLoggedInElements.show();
+        showLoggedOutElements.hide();
     }
-});
-
-function clearSignUp() {
-    signUpReference.firstName.val("");
-    signUpReference.lastName.val("");
-    signUpReference.email.val("");
-    signUpReference.username.val("");
-    signUpReference.password.val("");
-    signUpReference.repeatPassword.val("");
-}
-
-/**
-* Log in
-*/
-var logInReference = {
-    email : $("#log-in-email"),
-    password : $("#log-in-password"),
-};
-
-var logInButton = $("#log-in-button").on("click", function(event) {
-    event.preventDefault();
-
-    var logInInputs = {
-        email : logInReference.email.val(),
-        password : logInReference.password.val(),
-    };
-
-    var errors = logInValidation(logInInputs);
-    if (errors.length === 0) {
-        logIn(logInInputs);
-    } else {
-        renderErrors("log-in", errors);
+    function showLoggedOut() {
+        showLoggedInElements.hide();
+        showLoggedOutElements.show();
     }
-});
+    showLoggedOut();
 
-function clearLogIn() {
-    logInReference.email.val("");
-    logInReference.password.val("");
-}
+    // Navigation
+    var navigation = $("#navigation");
+    var navigationSidebar = $("#nav-sidebar");
 
-/**
-* Log out
-*/
-var logOutButton = $(".log-out-button").on("click", function(event) {
-    event.preventDefault();
-    logOut();
-});
-
-/**
-* Dice game
-*/
-var diceGameGUI = {
-    sumDice : $("#sum-dice"),
-    bonusDice : $("#bonus-dice"),
-    gameOverMessage : $("#game-over-message"),
-    round : $("#game-round"),
-    score : $("#game-score"),
-    guess : $("#game-guess"),
-
-    newGameButton : $("#new-game-button"),
-    playRoundButton : $("#play-round-button"),
-
-    diceSize : 50,
-    diceSrc : [
-        "img/dice1.png",
-        "img/dice2.png",
-        "img/dice3.png",
-        "img/dice4.png",
-        "img/dice5.png",
-        "img/dice6.png",
-    ],
-}
-
-function resetGameGUI() {
-    diceGameGUI.score.html(0);
-    diceGameGUI.round.html(0);
-    diceGameGUI.guess.val("");
-    diceGameGUI.guess.attr("disabled", false);
-    diceGameGUI.sumDice.empty();
-    diceGameGUI.bonusDice.empty();
-    diceGameGUI.gameOverMessage.hide();
-    diceGameGUI.playRoundButton.attr("disabled", false);
-}
-
-diceGameGUI.newGameButton.on("click", function(event) {
-    event.preventDefault();
-
-    resetGameGUI();
-    newGame();
-});
-
-diceGameGUI.playRoundButton.on("click", function(event) {
-    event.preventDefault();
-
-    var guess = Number(diceGameGUI.guess.val());
-
-    var errors = gameValidation(guess);
-    if (errors.length === 0) {
-        renderErrors("game", false);
-        playRound(guess);
-    } else {
-        renderErrors("game", errors);
-    }
-});
-
-function stopGameGUI() {
-    diceGameGUI.guess.attr("disabled", true);
-    diceGameGUI.playRoundButton.attr("disabled", true);
-}
-
-function showGameOver() {
-    diceGameGUI.gameOverMessage.show();
-    stopGameGUI();
-}
-
-function createDice(number) {
-    var img = $("<img>");
-    img.attr("src", diceGameGUI.diceSrc[number-1]);
-    img.attr("width", diceGameGUI.diceSize);
-    img.attr("height", diceGameGUI.diceSize);
-    img.attr("alt", "Dice");
-
-    return img;
-}
-
-function renderGame(DiceGame) {
-    diceGameGUI.sumDice.empty();
-    diceGameGUI.bonusDice.empty();
-    var dice = DiceGame.getDice();
-    var bonus = DiceGame.getBonus();
-    var round = DiceGame.getRound();
-    var score = DiceGame.getScore();
-
-    for (var i = 0; i < dice.length; i++) {
-        diceGameGUI.sumDice.append(createDice(dice[i]));
-    }
-    if (bonus) {
-        diceGameGUI.bonusDice.append(createDice(bonus));
-    }
-    diceGameGUI.round.html(round);
-    diceGameGUI.score.html(score);
-}
-
-/**
-* Errors
-*/
-var errorsGUI = {
-    signUpErrorsPanel : $("#sign-up-errors-panel"),
-    logInErrorsPanel : $("#log-in-errors-panel"),
-    gameErrorsPanel : $("#game-errors-panel"),
-
-    signUpErrorsList : $("#sign-up-errors-list"),
-    logInErrorsList : $("#log-in-errors-list"),
-    gameErrorsList : $("#game-errors-list"),
-}
-
-function renderErrors(errorType, errors = true) {
-    switch (errorType) {
-        case "sign-up":
-            if (errors) {
-                var HTMLid = errorsGUI.signUpErrorsList.attr('id');
-                w3DisplayData(HTMLid, {"errors" : errors});
-                errorsGUI.signUpErrorsPanel.show();
-            } else {
-                errorsGUI.signUpErrorsPanel.hide();
-            }
-            break;
-        case "log-in":
-            if (errors) {
-                var HTMLid = errorsGUI.logInErrorsList.attr('id');
-                w3DisplayData(HTMLid, {"errors" : errors});
-                errorsGUI.logInErrorsPanel.show();
-            } else{
-                errorsGUI.logInErrorsPanel.hide();
-            }
-            break;
-        case "game":
-            if (errors) {
-                var HTMLid = errorsGUI.gameErrorsList.attr('id');
-                w3DisplayData(HTMLid, {"errors" : errors});
-                errorsGUI.gameErrorsPanel.show();
-            } else {
-                errorsGUI.gameErrorsPanel.hide();
-            }
-            break;
-        default:
-            console.log("Hide all errors" );
-            errorsGUI.signUpErrorsPanel.hide();
-            errorsGUI.logInErrorsPanel.hide();
-            errorsGUI.gameErrorsPanel.hide();
-    }
-}
-
-/**
-* Close panels
-*/
-var closePanel = $(".close-panel").on("click", function(event) {
-    event.preventDefault();
-
-    var closeElement = $(this).attr("data-close");
-    var closeElement = $(closeElement);
-    closeElement.hide();
-});
-
-/**
-* Show info messages
-*/
-function showInfo(data) {
-    var modal = $("#show-info-modal");
-    var modalHeader = $("#show-info-modal__header");
-    var modalTitle = $("#show-info-modal__title");
-    var modalContent = $("#show-info-modal__content");
-    var modalFooter = $("#show-info-modal__footer");
-
-    var title = data.from;
-    console.log(title);
-    switch (title) {
-        case "createAccount":
-            modalTitle.html("Create account information");
-            break;
-        case "logIn":
-            modalTitle.html("Log in information");
-            break;
-        case "signOut":
-            modalTitle.html("Sign out information");
-            break;
-        case "addScore":
-            modalTitle.html("Add score information");
-            break;
-        default:
-            return;
-    }
-
-    if (data.status === 200) {
-        modalHeader.css({"background-color": "green", "color": "white"});
-        modalFooter.css({"background-color": "green", "color": "white"});
-    } else {
-        modalHeader.css({"background-color": "red", "color": "white"});
-        modalFooter.css({"background-color": "red", "color": "white"});
-    }
-    w3DisplayData("show-info-modal__content", data);
-
-    modal.show();
-
-    setTimeout(function() {
-        modal.fadeOut();
-    }, 2000);
-}
-
-/**
-* Smooth scroll
-*
-* The following code was adapted from a post:
-* Add smooth scrolling to page anchors
-* at:
-* https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_eff_animate_smoothscroll
-* Accessed: 2017-04-30
-*/
-$(".smooth").on('click', function(event) {
-
-    // Make sure this.hash has a value before overriding default behavior
-    if (this.hash !== "") {
-        // Prevent default anchor click behavior
+    $("#open-nav-sidebar").on("click", function(event) {
         event.preventDefault();
+        openNav();
+    });
+    $("#close-nav-sidebar").on("click", function(event) {
+        event.preventDefault();
+        closeNav();
+    });
+    navigationSidebar.on("click", function(event) {
+        closeNav();
+    })
 
-        // Store hash
-        var hash = this.hash;
+    function openNav() {
+        navigation.hide();
+        navigationSidebar.show();
+    }
+    function closeNav() {
+        navigation.show();
+        navigationSidebar.hide();
+    }
 
-        // Using jQuery's animate() method to add smooth page scroll
-        // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-        $('html, body').animate({
-            scrollTop: $(hash).offset().top - 50
-        }, 800, function(){
+    // Open sections
+    $(".open-section").on("click", function(event) {
+        event.preventDefault();
+        var openSection = $(this).attr("data-open");
+        var openSection = $(openSection);
+        openSection.slideToggle();
+    });
 
-            // Add hash (#) to URL when done scrolling (default click behavior)
-            window.location.hash = hash;
+    // Panels
+    $(".close-panel").on("click", function(event) {
+        event.preventDefault();
+        var closeElement = $(this).attr("data-close");
+        var closeElement = $(closeElement);
+        closeElement.hide();
+    });
+
+    // Sign up
+    var signUpInputs = {
+        firstName: $("#sign-up-first-name"),
+        lastName: $("#sign-up-last-name"),
+        email: $("#sign-up-email"),
+        username: $("#sign-up-username"),
+        password: $("#sign-up-password"),
+        repeatPassword: $("#sign-up-repeat-password"),
+    };
+    var signUpForm = $("#sign-up-form");
+    signUpForm.on("submit", "input", function(event) {
+        event.preventDefault();
+        console.log(event);
+        var signUpValues = {};
+        Object.keys(signUpInputs).forEach(function(key) {
+            signUpValues[key] = signUpInputs[key].val();
         });
-    } // End if
-    closeNav();
-});
+        Logic.signUp(signUpValues);
+        this.reset();
+    });
+    signUpForm.on()
 
-/**
-* Show top highscores
-*/
-function renderTopScores(data) {
-    if (data != null) {
-        w3DisplayData("top-ten-table", data);
-    } else {
-        var dataEmpty = {
-            scores : [
-                {
-                    position: "-",
-                    username: "-",
-                    score: "-",
-                    addedAt: "-",
-                },
-            ],
-        };
-        w3DisplayData("top-ten-table", dataEmpty);
+    // Log in
+    var logInInputs = {
+        email : $("#log-in-email"),
+        password : $("#log-in-password"),
+    };
+    $("#log-in-form").on("submit", function(event) {
+        event.preventDefault();
+        var logInValues = {};
+        Object.keys(logInInputs).forEach(function(key) {
+            logInValues[key] = logInInputs[key].val();
+        });
+        Logic.logIn(logInValues);
+        this.reset();
+    });
+
+    // Log out
+    $(".log-out-button").on("click", function(event) {
+        event.preventDefault();
+        Logic.logOut();
+    });
+
+    // Game
+    var diceGameGUI = {
+        form: $("#game-form"),
+        gameOverMessage : $("#game-over-message"),
+        sumDice : $("#sum-dice"),
+        bonusDice : $("#bonus-dice"),
+        round : $("#game-round"),
+        score : $("#game-score"),
+        guess : $("#game-guess"),
+        diceSize : 50,
+        diceSrc : [
+            "img/dice1.png",
+            "img/dice2.png",
+            "img/dice3.png",
+            "img/dice4.png",
+            "img/dice5.png",
+            "img/dice6.png",
+        ],
+    };
+
+    $("#new-game-button").on("click", function(event) {
+        event.preventDefault();
+        Logic.newGame();
+    });
+
+    diceGameGUI.form.on("submit", function(event) {
+        event.preventDefault();
+        var guess = diceGameGUI.guess.val();
+        Logic.playRound(guess);
+        this.reset();
+    });
+
+    function stopGame(stop) {
+        if (typeof stop === "undefined") {
+            stop = true;
+        }
+        diceGameGUI.form.find("input, button").attr("disabled", stop);
     }
-}
+    stopGame();
 
-/**
-* Show user's scores
-*/
-function renderUserScores(data) {
-    if (data != null) {
-        w3DisplayData("user-scores-table", data);
-    } else {
-        var dataEmpty = {
-            scores : [
-                {
-                    position: "-",
-                    username: "-",
-                    score: "-",
-                    addedAt: "-",
-                },
-            ],
-        };
-        w3DisplayData("user-scores-table", dataEmpty);
+    function showGameOver(show) {
+        if (typeof show === "undefined") {
+            show = true;
+        }
+        if (show) {
+            diceGameGUI.gameOverMessage.show();
+        } else {
+            diceGameGUI.gameOverMessage.hide();
+        }
     }
-}
+    showGameOver(false);
 
-/**
-* Render profile
-*/
-function renderProfile(user) {
-    var firstName = $("#profile-first-name").val(user.info.firstName);
-    var lastName = $("#profile-last-name").val(user.info.lastName);
-    var email = $("#profile-email").val(user.info.email);
-    var username = $("#profile-username").val(user.info.username);
-    var session = $("#profile-session").val(user.info.session);
-}
+    function createDice(number) {
+        var img = $("<img>");
+        img.attr("src", diceGameGUI.diceSrc[number - 1]);
+        img.attr("width", diceGameGUI.diceSize);
+        img.attr("height", diceGameGUI.diceSize);
+        img.attr("alt", "Dice");
+        return img;
+    }
 
-/**
-* Clear profile
-*/
-function clearProfile() {
-    var firstName = $("#profile-first-name").val("");
-    var lastName = $("#profile-last-name").val("");
-    var email = $("#profile-email").val("");
-    var username = $("#profile-username").val("");
-    var session = $("#profile-session").val("");
-}
+    function renderGame(DiceGame) {
+        if (typeof DiceGame === "undefined") {
+            DiceGame = {
+                dice: [],
+                bonus: 0,
+                round: 0,
+                score: 0,
+            };
+        }
+        diceGameGUI.sumDice.empty();
+        diceGameGUI.bonusDice.empty();
+        var dice = DiceGame.dice;
+        var bonus = DiceGame.bonus;
+        var round = DiceGame.round;
+        var score = DiceGame.score;
+
+        for (var i = 0; i < dice.length; i++) {
+            diceGameGUI.sumDice.append(createDice(dice[i]));
+        }
+        if (bonus != 0) {
+            diceGameGUI.bonusDice.append(createDice(bonus));
+        }
+        diceGameGUI.round.html(round);
+        diceGameGUI.score.html(score);
+    }
+    renderGame();
+
+    // Errors
+    var errorsPanels = {
+        signUp: $("#sign-up-errors-panel"),
+        logIn: $("#log-in-errors-panel"),
+        game: $("#game-errors-panel"),
+    };
+    var errorsLists = {
+        signUp: $("#sign-up-errors-list"),
+        logIn: $("#log-in-errors-list"),
+        game: $("#game-errors-list"),
+    };
+
+    function renderErrors(errorType, errors) {
+        switch (errorType) {
+            case "sign-up":
+                if (errors) {
+                    var HTMLid = errorsLists.signUp.attr('id');
+                    w3DisplayData(HTMLid, {"errors" : errors});
+                    errorsPanels.signUp.show();
+                }
+                break;
+            case "log-in":
+                if (errors) {
+                    var HTMLid = errorsLists.logIn.attr('id');
+                    w3DisplayData(HTMLid, {"errors" : errors});
+                    errorsPanels.logIn.show();
+                }
+                break;
+            case "game":
+                if (errors) {
+                    var HTMLid = errorsLists.game.attr('id');
+                    w3DisplayData(HTMLid, {"errors" : errors});
+                    errorsPanels.game.show();
+                }
+                break;
+            default:
+                Object.keys(errorsPanels).forEach(function(key) {
+                    errorsPanels[key].hide();
+                });
+        }
+    }
+    renderErrors();
+
+    // Info messages
+    function showInfo(data) {
+        var modal = $("#show-info-modal");
+
+        if (typeof data === "undefined") {
+            modal.hide();
+            return;
+        }
+
+        var modalHeader = $("#show-info-modal__header");
+        var modalTitle = $("#show-info-modal__title");
+        var modalContent = $("#show-info-modal__content");
+        var modalFooter = $("#show-info-modal__footer");
+
+        var title = data.from;
+        switch (title) {
+            case "createAccount":
+                modalTitle.html("Create account information");
+                break;
+            case "logIn":
+                modalTitle.html("Log in information");
+                break;
+            case "signOut":
+                modalTitle.html("Sign out information");
+                break;
+            case "addScore":
+                modalTitle.html("Add score information");
+                break;
+            default:
+                modal.hide();
+                return;
+        }
+
+        if (data.status === 200) {
+            modalHeader.addClass("info-correct");
+            modalFooter.addClass("info-correct");
+        } else {
+            modalHeader.addClass("info-error");
+            modalFooter.addClass("info-error");
+        }
+        w3DisplayData("show-info-modal__content", data);
+
+        modal.show();
+
+        setTimeout(function() {
+            modal.fadeOut();
+        }, 2000);
+    }
+    showInfo();
+
+    /**
+    * Smooth scroll
+    *
+    * The following code was adapted from a post:
+    * Add smooth scrolling to page anchors
+    * at:
+    * https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_eff_animate_smoothscroll
+    * Accessed: 2017-04-30
+    */
+    $(".smooth").on('click', function(event) {
+
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+            // Prevent default anchor click behavior
+            event.preventDefault();
+
+            // Store hash
+            var hash = this.hash;
+
+            // Using jQuery's animate() method to add smooth page scroll
+            // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top - 50
+            }, 800, function(){
+
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+            });
+        } // End if
+    });
+
+    // Top scores
+    function renderTopScores(data) {
+        if (typeof data !== "undefined") {
+            w3DisplayData("top-ten-table", data);
+        } else {
+            var dataEmpty = {
+                scores : [
+                    {
+                        position: "-",
+                        username: "-",
+                        score: "-",
+                        addedAt: "-",
+                    },
+                ],
+            };
+            w3DisplayData("top-ten-table", dataEmpty);
+        }
+    }
+    renderTopScores();
+
+    // User's scores
+    function renderUserScores(data) {
+        if (typeof data !== "undefined") {
+            w3DisplayData("user-scores-table", data);
+        } else {
+            var dataEmpty = {
+                scores : [
+                    {
+                        position: "-",
+                        username: "-",
+                        score: "-",
+                        addedAt: "-",
+                    },
+                ],
+            };
+            w3DisplayData("user-scores-table", dataEmpty);
+        }
+    }
+    renderUserScores();
+
+    // Profile
+    var profileForm = $("#profile-form");
+    var profileInputs = {
+        firstName: $("#profile-first-name"),
+        lastName: $("#profile-last-name"),
+        email: $("#profile-email"),
+        username: $("#profile-username"),
+        session: $("#profile-session"),
+    };
+
+    function renderProfile(user) {
+        if (typeof user !== "undefined") {
+            Object.keys(profileInputs).forEach(function(key) {
+                profileInputs[key].val(user[key]);
+            });
+        } else {
+            profileForm[0].reset();
+        }
+    }
+    renderProfile();
+
+    return {
+        showLoggedIn: showLoggedIn,
+        showLoggedOut: showLoggedOut,
+        renderGame: renderGame,
+        renderErrors: renderErrors,
+        showInfo: showInfo,
+        renderTopScores: renderTopScores,
+        renderUserScores: renderUserScores,
+        renderProfile: renderProfile,
+    };
+})();

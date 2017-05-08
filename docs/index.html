@@ -97,7 +97,7 @@
                             <li w3-repeat="errors">{{}}</li>
                         </ul>
                     </div>
-                    <form class="w3-container">
+                    <form id="sign-up-form" class="w3-container">
                         <p>
                             <label for="sign-up-first-name" class="w3-text-grey">First Name</label>
                             <input id="sign-up-first-name" class="w3-input w3-border" type="text" required="required">
@@ -145,7 +145,7 @@
                             <li w3-repeat="errors">{{}}</li>
                         </ul>
                     </div>
-                    <form class="w3-container">
+                    <form id="log-in-form" class="w3-container">
                         <p>
                             <label for="log-in-email" class="w3-text-grey">Email</label>
                             <input id="log-in-email" class="w3-input w3-border" type="email" required="required">
@@ -161,6 +161,58 @@
                 </div>
             </div>
         </section><!-- /log-in-section -->
+
+        <!-- Instructions section -->
+        <section id="instructions-section" class="w3-container w3-padding">
+            <h2 class="open-section" data-open="#instructions-content">Game instructions <span class="w3-small">&#9660;</span></h2>
+            <div id="instructions-content" class="w3-responsive">
+                <p>The game consists of 4 dice.</p>
+                <p>You should try to guess the sum
+                    of the first 3 dice before throwing them all. If your guess
+                    turns out to be lower than or equal (&lt;&#61;) to the right answer,
+                    your score will be incremented by the guessed number
+                    multiplied by the fourth dice.</p>
+                <p>You have 10 rounds to increase your score.</p>
+            </div>
+        </section><!-- /instructions-section -->
+
+        <!-- Game section -->
+        <section id="game-section" class="w3-container w3-padding">
+            <h2 class="open-section" data-open="#game-content">Play <span class="w3-small">&#9660;</span></h2>
+            <div id="game-content">
+                <p>
+                    <button type="button" id="new-game-button" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
+                </p>
+                <div class="game-info w3-panel w3-border">
+                    <p>Round: <span id="game-round"></span></p>
+                    <p>Score: <span id="game-score"></span></p>
+                    <p>Sum:</p>
+                    <div id="sum-dice"></div>
+                    <p>Bonus:</p>
+                    <div id="bonus-dice" class="w3-margin-bottom"></div>
+                </div>
+                <form id="game-form" class="w3-panel w3-border">
+                    <div id="game-over-message" class="w3-container w3-red w3-display-container w3-margin-top">
+                        <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#game-over-message">&times;</span>
+                        <h3>Game Over</h3>
+                    </div>
+                    <div id="game-errors-panel" class="w3-margin-top w3-container w3-red w3-display-container">
+                        <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#game-errors-panel">&times;</span>
+                        <h3>Errors</h3>
+                        <ul id="game-errors-list">
+                            <li w3-repeat="errors">{{}}</li>
+                        </ul>
+                    </div>
+                    <p>
+                        <label class="w3-text-grey">Guess</label>
+                        <input id="game-guess" class="w3-input w3-border" type="number" disabled="disabled">
+                    </p>
+                    <p>
+                        <button type="submit" id="play-round-button" name="playRoundButton" class="w3-btn w3-padding w3-theme-d5">Play round</button>
+                    </p>
+                </form>
+            </div>
+        </section><!-- /game-section -->
 
         <!-- Top ten section -->
         <section id="top-ten-section" class="show-logged-in w3-container w3-padding">
@@ -212,48 +264,6 @@
             </div>
         </section><!-- /user-scores-section -->
 
-        <!-- Game section -->
-        <section id="game-section" class="show-logged-in w3-container w3-padding">
-            <h2>Play</h2>
-            <p>
-                <button type="button" id="new-game-button" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
-                <div id="game-over-message" class="w3-container w3-red w3-display-container">
-                    <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#game-over-message">&times;</span>
-                    <h3>Game Over</h3>
-                </div>
-            </p>
-            <div class="game-info w3-panel w3-border">
-                <p>Round: <span id="game-round"></span></p>
-                <p>Score: <span id="game-score"></span></p>
-            </div>
-            <div id="game-errors-panel" class="w3-container w3-red w3-display-container">
-                <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#game-errors-panel">&times;</span>
-                <h3>Errors</h3>
-                <ul id="game-errors-list">
-                    <li w3-repeat="errors">{{}}</li>
-                </ul>
-            </div>
-            <form class="game-board w3-panel w3-border">
-                <p>
-                    <label class="w3-text-grey">Guess</label>
-                    <input id="game-guess" class="w3-input w3-border" type="number" disabled="disabled">
-                </p>
-                <div class="w3-panel w3-border">
-                    <p>
-                        <label class="w3-text-grey">Sum</label>
-                        <div id="sum-dice"></div>
-                    </p>
-                    <p>
-                        <label class="w3-text-grey">Bonus</label>
-                        <div id="bonus-dice"></div>
-                    </p>
-                </div>
-                <p>
-                    <button type="submit" id="play-round-button" name="playRoundButton" class="w3-btn w3-padding w3-theme-d5">Play round</button>
-                </p>
-            </form>
-        </section><!-- /game-section -->
-
         <!-- Profile section -->
         <section id="profile-section" class="show-logged-in w3-container w3-padding">
             <div class="w3-card-4">
@@ -261,7 +271,7 @@
                     <h2 class="open-section" data-open="#profile-content">Profile <span class="w3-small">&#9660;</span></h2>
                 </div>
                 <div id="profile-content">
-                    <form id="profile-info" class="w3-container">
+                    <form id="profile-form" class="w3-container">
                         <p>
                             <label for="profile-first-name" class="w3-text-grey">First Name</label>
                             <input id="profile-first-name" class="w3-input w3-border" type="text" disabled="disabled">
@@ -299,14 +309,16 @@
 
     <div id="show-info-modal" class="w3-modal w3-animate-opacity">
         <div class="w3-modal-content w3-card-4">
-            <header id="show-info-modal__header" class="w3-container">
+            <header id="show-info-modal__header" class="w3-container w3-green">
                 <span class="close-panel w3-button w3-large w3-display-topright" data-close="#show-info-modal">&times;</span>
                 <h2 id="show-info-modal__title">Server info</h2>
             </header>
             <div id="show-info-modal__content" class="w3-container">
                 <p w3-repeat="info">{{}}</p>
             </div>
-            <footer id="show-info-modal__footer" class="w3-container w3-green"></footer>
+            <footer id="show-info-modal__footer" class="w3-container w3-green">
+                <p>Dice Game</p>
+            </footer>
         </div>
     </div>
 
