@@ -1,53 +1,51 @@
-var UserInfo = function() {
-    this.firstName = "";
-    this.lastName = "";
-    this.email = "";
-    this.username = "";
-    this.session = "";
-}
-
-var User = function() {
-    this.serverURL = "http://193.10.30.163/";
-    this.signUpURL = "users";
-    this.logInURL = "users/login";
-    this.logOutURL = "users/logout";
-    this.scoresURL = "scores";
-
-    this.info = new UserInfo();
-
-    this.getInfo = function() {
-        return this.info;
+var Server = (function() {
+    // User
+    var User = function() {
+        this._firstName = "";
+        this._lastName = "";
+        this._email = "";
+        this._username = "";
+        this._session = "";
+    };
+    User.prototype.getInfo = function() {
+        return {
+            firstName: this._firstName,
+            lastName: this._lastName,
+            email: this._email,
+            user: this._username,
+            session: this._session,
+        };
     };
 
-    /**
-     * Create a new account
-     */
-    this.createAccount = function(signUpInputs, callback, that = this) {
-        var name = "createAccount";
+    // Server
+    var info = {
+        serverURL: "http://193.10.30.163/",
+        signUpURL: "users",
+        logInURL: "users/login",
+        logOutURL: "users/logout",
+        scoresURL: "scores",
+    };
+
+    // Create new account
+    function createAccount(signUpValues, callback) {
+        var that = this;
         var request = new XMLHttpRequest();
-        request.open("POST", this.serverURL+this.signUpURL, true);
+        request.open("POST", info.serverURL+info.signUpURL, true);
         request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify(signUpInputs));
+        request.send(JSON.stringify(signUpValues));
 
         request.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    console.log("Account created");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
-                        from: name,
+                        from: that.name,
                         status: this.status,
                         info: ["Account created"],
                     };
                     callback(data);
                     return;
                 }
-
                 if (this.status == 400) {
-                    console.log("Something is wrong with the request");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -56,12 +54,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 415) {
-                    errors.signUpErrors.push("The Content-Type header is wrong");
-                    console.log("The Content-Type header is wrong");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -70,29 +63,18 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 422) {
-                    console.log("The server cannot create the user as requested due to validation errors/conflicts");
                     var requestErrors = JSON.parse(this.responseText);
-
                     var errors = [];
                     if (requestErrors.emailTaken) {
                         errors.push("There already exists a user with the given email");
-                        console.log("There already exists a user with the given email");
                     }
-
                     if (requestErrors.usernameTaken) {
                         errors.push("There already exists a user with the given username");
-                        console.log("There already exists a user with the given username");
                     }
-
                     if (requestErrors.passwordEmpty) {
                         errors.push("The empty string is not allowed as password");
-                        console.log("The empty string is not allowed as password");
                     }
-
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -103,13 +85,11 @@ var User = function() {
                 }
             }
         };
-    };
+    }
 
-    /**
-     * Log in user
-     */
-    this.logIn = function(logInInputs, callback, that = this) {
-        var name = "logIn";
+    // Log in
+    function logIn(logInInputs, callback) {
+        var that = this;
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.logInURL, true);
         request.setRequestHeader("Content-Type", "application/json");
@@ -118,9 +98,6 @@ var User = function() {
         request.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    console.log("User logged in");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     that.info = JSON.parse(this.responseText);
                     var data = {
                         from: name,
@@ -130,11 +107,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 400) {
-                    console.log("Something is wrong with the request sent to the server");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -143,24 +116,15 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 401) {
-                    console.log("No account with the given email and password were found");
                     var requestErrors = JSON.parse(this.responseText);
-
                     var errors = [];
                     if (requestErrors.wrongEmail) {
                         errors.push("The email is wrong");
-                        console.log("The email is wrong");
                     }
-
                     if (requestErrors.wrongPassword) {
                         errors.push("The password is wrong");
-                        console.log("The password is wrong");
                     }
-
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -169,11 +133,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 415) {
-                    console.log("The Content-Type header is wrong");
-                    console.log("Status code: ", request.status);
-                    console.log("Body: ", request.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -184,14 +144,11 @@ var User = function() {
                 }
             }
         };
-    };
+    }
 
-    /**
-     * Sign out
-     * Log out
-     */
-    this.signOut = function(callback, that = this) {
-        var name = "signOut";
+    // Sign out / Log out
+    function signOut(callback, that = this) {
+        var that = this;
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.logOutURL, true);
         request.setRequestHeader("Content-Type", "application/xml");
@@ -200,10 +157,6 @@ var User = function() {
         request.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    console.log("User logged out");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
-
                     that.info = new UserInfo();
                     var data = {
                         from: name,
@@ -213,11 +166,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 400) {
-                    console.log("Something is wrong with the request sent to the server");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -226,11 +175,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 415) {
-                    console.log("The Content-Type header is wrong");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -241,13 +186,10 @@ var User = function() {
                 }
             }
         };
-    };
+    }
 
-    /**
-     * Add user score
-     */
-    this.addScore = function(score, callback) {
-        var name = "addScore";
+    // Add user score
+    function addScore(score, callback) {
         var request = new XMLHttpRequest();
         request.open("POST", this.serverURL+this.scoresURL+"/"+this.info.username, true);
         request.setRequestHeader("Content-Type", "application/xml");
@@ -256,9 +198,6 @@ var User = function() {
         request.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    console.log("The score has been added to your account");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -267,11 +206,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 400) {
-                    console.log("The score has been added to the account");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -280,11 +215,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 401) {
-                    console.log("The session id passed and the request is no longer valid");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -293,11 +224,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 404) {
-                    console.log("There does not exist a user with the given"+this.info.username);
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -306,11 +233,7 @@ var User = function() {
                     callback(data);
                     return;
                 }
-
                 if (this.status == 415) {
-                    console.log("The Content-Type header is wrong");
-                    console.log("Status code: ", this.status);
-                    console.log("Body: ", this.responseText);
                     var data = {
                         from: name,
                         status: this.status,
@@ -321,23 +244,19 @@ var User = function() {
                 }
             }
         };
-    };
+    }
 
-    /**
-     * Get top 10 high scores
-     */
-    this.getTopScores = function(callback) {
+    // Get top highscores
+    function getTopScores(callback) {
         var script = document.createElement("script");
         script.src = this.serverURL+this.scoresURL+"?callback="+callback+"&session="+this.info.session;
         document.head.appendChild(script);
     };
 
-    /**
-     * Get user's scores
-     */
-    this.getUserScores = function(callback) {
+    // Get user's scores
+    function getUserScores(callback) {
         var script = document.createElement("script");
         script.src = this.serverURL+this.scoresURL+"/"+this.info.username+"?callback="+callback+"&session="+this.info.session;
         document.head.appendChild(script);
     };
-};
+})();
