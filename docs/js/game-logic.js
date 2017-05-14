@@ -1,6 +1,15 @@
 var DiceGame = function (numDice, numRounds) {
-    this._numDice = numDice || 3;
-    this._numRounds = numRounds || 10;
+    if (typeof numDice === "undefined") {
+        this._numDice = 3;
+    } else {
+        this._numDice = numDice
+    }
+
+    if (typeof numRounds === "undefined") {
+        this._numRounds = 10;
+    } else {
+        this._numRounds = numRounds;
+    }
     this._score = 0;
     this._round = 0;
     this._sum = 0;
