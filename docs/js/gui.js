@@ -1,4 +1,4 @@
-var GUI = (function() {
+;(function() {
     var showLoggedInElements = $(".show-logged-in");
     var showLoggedOutElements = $(".show-logged-out");
 
@@ -62,32 +62,43 @@ var GUI = (function() {
         password: $("#sign-up-password"),
         repeatPassword: $("#sign-up-repeat-password"),
     };
+    var signUpButton = $("#sign-up-button").attr("disabled", true);
     var signUpForm = $("#sign-up-form");
-    signUpForm.on("submit", "input", function(event) {
+    signUpForm.on("change", function(event) {
         event.preventDefault();
-        console.log(event);
         var signUpValues = {};
         Object.keys(signUpInputs).forEach(function(key) {
             signUpValues[key] = signUpInputs[key].val();
         });
-        Logic.signUp(signUpValues);
+        $.publish("GUI.signUp.change", signUpValues);
+    });
+    signUpForm.on("submit",function(event) {
+        event.preventDefault();
+        $.publish("GUI.signUp.submit", signUpValues);
         this.reset();
     });
-    signUpForm.on()
+
+    $.subscribe("Validation.signUp", function(_, info) {
+        if (info.errors.length !== 0) {
+            renderErrors("sign-up", info);
+        } else {
+            signUpButton.attr("disabled", false);
+        }
+    });
 
     // Log in
     var logInInputs = {
         email : $("#log-in-email"),
         password : $("#log-in-password"),
     };
-    $("#log-in-form").on("submit", function(event) {
+    var logInButton = $("#log-in-button").attr("disabled", true);
+    var logInForm = $("#log-in-form");
+    logInForm.on("change", function(event) {
         event.preventDefault();
         var logInValues = {};
         Object.keys(logInInputs).forEach(function(key) {
             logInValues[key] = logInInputs[key].val();
         });
-        Logic.logIn(logInValues);
-        this.reset();
     });
 
     // Log out
@@ -196,26 +207,30 @@ var GUI = (function() {
         game: $("#game-errors-list"),
     };
 
-    function renderErrors(errorType, errors) {
+    function renderErrors(errorType, info) {
+        if (typeof info === "undefined") {
+            info = {errors: []};
+        }
+        var errors = info.errors;
         switch (errorType) {
             case "sign-up":
                 if (errors) {
                     var HTMLid = errorsLists.signUp.attr('id');
-                    w3DisplayData(HTMLid, {"errors" : errors});
+                    w3DisplayData(HTMLid, info);
                     errorsPanels.signUp.show();
                 }
                 break;
             case "log-in":
                 if (errors) {
                     var HTMLid = errorsLists.logIn.attr('id');
-                    w3DisplayData(HTMLid, {"errors" : errors});
+                    w3DisplayData(HTMLid, info);
                     errorsPanels.logIn.show();
                 }
                 break;
             case "game":
                 if (errors) {
                     var HTMLid = errorsLists.game.attr('id');
-                    w3DisplayData(HTMLid, {"errors" : errors});
+                    w3DisplayData(HTMLid, info);
                     errorsPanels.game.show();
                 }
                 break;
