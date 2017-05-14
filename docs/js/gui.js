@@ -1,4 +1,4 @@
-;(function() {
+;(function($) {
     var showLoggedInElements = $(".show-logged-in");
     var showLoggedOutElements = $(".show-logged-out");
 
@@ -53,6 +53,15 @@
         closeElement.hide();
     });
 
+    // Get form values fot sign up and log in
+    function getFormValues(formInputs) {
+        var formValues = {};
+        Object.keys(formInputs).forEach(function(key) {
+            formValues[key] = formInputs[key].val();
+        });
+        return formValues;
+    }
+
     // Sign up
     var signUpInputs = {
         firstName: $("#sign-up-first-name"),
@@ -62,27 +71,20 @@
         password: $("#sign-up-password"),
         repeatPassword: $("#sign-up-repeat-password"),
     };
-    var signUpButton = $("#sign-up-button").attr("disabled", true);
     var signUpForm = $("#sign-up-form");
-    signUpForm.on("change", function(event) {
-        event.preventDefault();
-        var signUpValues = {};
-        Object.keys(signUpInputs).forEach(function(key) {
-            signUpValues[key] = signUpInputs[key].val();
-        });
-        $.publish("GUI.signUp.change", signUpValues);
-    });
+    var signUpValues = {};
     signUpForm.on("submit",function(event) {
         event.preventDefault();
+        signUpValues = getFormValues(signUpInputs);
         $.publish("GUI.signUp.submit", signUpValues);
-        this.reset();
     });
 
     $.subscribe("Validation.signUp", function(_, info) {
         if (info.errors.length !== 0) {
             renderErrors("sign-up", info);
         } else {
-            signUpButton.attr("disabled", false);
+            renderErrors("sign-up", false);
+            signUpForm[0].reset();
         }
     });
 
@@ -91,25 +93,33 @@
         email : $("#log-in-email"),
         password : $("#log-in-password"),
     };
-    var logInButton = $("#log-in-button").attr("disabled", true);
     var logInForm = $("#log-in-form");
-    logInForm.on("change", function(event) {
+    var logInValues = {};
+    logInForm.on("submit", function(event) {
         event.preventDefault();
-        var logInValues = {};
-        Object.keys(logInInputs).forEach(function(key) {
-            logInValues[key] = logInInputs[key].val();
-        });
+        logInValues = getFormValues(logInInputs);
+        $.publish("GUI.logIn.submit", logInValues);
+    });
+
+    $.subscribe("Validation.logIn", function(_, info) {
+        if (info.errors.length !== 0) {
+            renderErrors("log-in", info);
+        } else {
+            renderErrors("log-in", false);
+            logInForm[0].reset()
+        }
     });
 
     // Log out
     $(".log-out-button").on("click", function(event) {
         event.preventDefault();
-        Logic.logOut();
+        $.publish("GUI.logOut");
     });
 
     // Game
     var diceGameGUI = {
         form: $("#game-form"),
+        playRound: $("#play-round-button"),
         gameOverMessage : $("#game-over-message"),
         sumDice : $("#sum-dice"),
         bonusDice : $("#bonus-dice"),
@@ -129,14 +139,34 @@
 
     $("#new-game-button").on("click", function(event) {
         event.preventDefault();
-        Logic.newGame();
+        $.publish("GUI.game.new");
     });
 
     diceGameGUI.form.on("submit", function(event) {
         event.preventDefault();
-        var guess = diceGameGUI.guess.val();
-        Logic.playRound(guess);
+        $.publish("GUI.game.submit", diceGameGUI.guess.val());
         this.reset();
+    });
+
+    $.subscribe("Validation.game", function(_, info) {
+        if (info.errors.length !== 0) {
+            renderErrors("game", info);
+        } else {
+            renderErrors("game", false);
+            $.publish("GUI.game.playRound", diceGameGUI.guess.val());
+            diceGameGUI.form[0].reset();
+        }
+    });
+
+    $.subscribe("Game.modify", function(_, gameData) {
+        renderGame(gameData);
+        if (gameData.finished) {
+            stopGame();
+            showGameOver();
+        } else {
+            stopGame(false);
+            showGameOver(false);
+        }
     });
 
     function stopGame(stop) {
@@ -168,9 +198,9 @@
         return img;
     }
 
-    function renderGame(DiceGame) {
-        if (typeof DiceGame === "undefined") {
-            DiceGame = {
+    function renderGame(gameData) {
+        if (typeof gameData === "undefined") {
+            gameData = {
                 dice: [],
                 bonus: 0,
                 round: 0,
@@ -179,10 +209,10 @@
         }
         diceGameGUI.sumDice.empty();
         diceGameGUI.bonusDice.empty();
-        var dice = DiceGame.dice;
-        var bonus = DiceGame.bonus;
-        var round = DiceGame.round;
-        var score = DiceGame.score;
+        var dice = gameData.dice;
+        var bonus = gameData.bonus;
+        var round = gameData.round;
+        var score = gameData.score;
 
         for (var i = 0; i < dice.length; i++) {
             diceGameGUI.sumDice.append(createDice(dice[i]));
@@ -218,6 +248,8 @@
                     var HTMLid = errorsLists.signUp.attr('id');
                     w3DisplayData(HTMLid, info);
                     errorsPanels.signUp.show();
+                } else {
+                    errorsPanels.signUp.hide();
                 }
                 break;
             case "log-in":
@@ -225,6 +257,8 @@
                     var HTMLid = errorsLists.logIn.attr('id');
                     w3DisplayData(HTMLid, info);
                     errorsPanels.logIn.show();
+                } else {
+                    errorsPanels.logIn.hide();
                 }
                 break;
             case "game":
@@ -232,6 +266,8 @@
                     var HTMLid = errorsLists.game.attr('id');
                     w3DisplayData(HTMLid, info);
                     errorsPanels.game.show();
+                } else {
+                    errorsPanels.game.hide();
                 }
                 break;
             default:
@@ -394,4 +430,4 @@
         renderUserScores: renderUserScores,
         renderProfile: renderProfile,
     };
-})();
+})(jQuery);

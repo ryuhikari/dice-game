@@ -1,5 +1,11 @@
-;(function() {
+;(function($) {
     // Game
+
+    $.subscribe("GUI.game.submit", function(_, guess) {
+        var errors = gameValidation(guess);
+        $.publish("Validation.game", errors);
+    });
+
     function gameValidation(guess) {
         var errors = [];
 
@@ -15,10 +21,18 @@
             errors.push("Guess out of range");
         }
 
-        return errors;
+        return {
+            errors: errors,
+        };
     }
 
     // Log in
+
+    $.subscribe("GUI.logIn.submit", function(_, logInValues) {
+        var errors = logInValidation(logInValues);
+        $.publish("Validation.logIn", errors);
+    });
+
     /*
     * Validate email
     *
@@ -58,12 +72,14 @@
             errors.push("The password must be at least 3 characters long");
         }
 
-        return errors;
+        return {
+            errors: errors,
+        };
     }
 
     // Sign up
 
-    $.subscribe("GUI.signUp.change", function(event, signUpValues) {
+    $.subscribe("GUI.signUp.submit", function(_, signUpValues) {
         var errors = signUpValidation(signUpValues);
         $.publish("Validation.signUp", errors);
     });
@@ -146,4 +162,4 @@
             errors: errors,
         };
     }
-})();
+})(jQuery);
