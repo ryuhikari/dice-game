@@ -39,12 +39,13 @@ DiceGame.prototype.play = function(guess) {
     if (this.isFinished()) {
         return this.getData();
     }
-console.log(guess);
+
     if (typeof guess === "undefined") {
         this._guess = this._numDice;
     } else {
         this._guess = guess;
     }
+    
     this._dice = [];
     for (var i = 0; i < this._numDice; i++) {
         var dice = Math.floor((Math.random() * 6) + 1);

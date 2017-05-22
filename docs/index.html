@@ -211,6 +211,26 @@
                         <button type="submit" id="play-round-button" name="playRoundButton" class="w3-btn w3-padding w3-theme-d5">Play round</button>
                     </p>
                 </form>
+                <table id="game-rounds-table" class="w3-table-all w3-hoverable w3-centered">
+                    <thead>
+                        <tr class="w3-light-grey">
+                            <th>Round</th>
+                            <th>Guess</th>
+                            <th>Sum</th>
+                            <th>Bonus</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="game-rounds-repeat">
+                        <tr w3-repeat="gameRounds">
+                            <td>{{round}}</td>
+                            <td>{{guess}}</td>
+                            <td>{{sum}}</td>
+                            <td>{{bonus}}</td>
+                            <td>{{score}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section><!-- /game-section -->
 
@@ -309,14 +329,14 @@
 
     <div id="show-info-modal" class="w3-modal w3-animate-opacity">
         <div class="w3-modal-content w3-card-4">
-            <header id="show-info-modal__header" class="w3-container w3-green">
+            <header id="show-info-modal__header" class="w3-container">
                 <span class="close-panel w3-button w3-large w3-display-topright" data-close="#show-info-modal">&times;</span>
                 <h2 id="show-info-modal__title">Server info</h2>
             </header>
             <div id="show-info-modal__content" class="w3-container">
                 <p w3-repeat="info">{{}}</p>
             </div>
-            <footer id="show-info-modal__footer" class="w3-container w3-green">
+            <footer id="show-info-modal__footer" class="w3-container">
                 <p>Dice Game</p>
             </footer>
         </div>
@@ -329,14 +349,13 @@
     <script src="js/w3/w3data.js" charset="utf-8"></script>
 
     <!-- Game scripts -->
+    <script src="js/events.js" charset="utf-8"></script>
     <script src="js/pubsub.js" charset="utf-8"></script>
+    <script src="js/pubsub2.js" charset="utf-8"></script>
     <script src="js/game-logic.js" charset="utf-8"></script>
     <script src="js/server-logic.js" charset="utf-8"></script>
     <script src="js/validation-logic.js" charset="utf-8"></script>
     <script src="js/gui.js" charset="utf-8"></script>
     <script src="js/main.js" charset="utf-8"></script>
-
-    <!-- Module Test -->
-    <!-- <script src="js/module.js" charset="utf-8"></script> -->
 </body>
 </html>

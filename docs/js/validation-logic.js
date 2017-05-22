@@ -1,9 +1,9 @@
 ;(function($) {
     // Game
 
-    $.subscribe("GUI.game.submit", function(_, guess) {
+    PubSub.subscribe("GUI.game.submit", function(guess) {
         var errors = gameValidation(guess);
-        $.publish("Validation.game", errors);
+        PubSub.publish("Validation.game", errors, guess);
     });
 
     function gameValidation(guess) {
@@ -21,16 +21,18 @@
             errors.push("Guess out of range");
         }
 
-        return {
-            errors: errors,
-        };
+        if (errors.length !== 0) {
+            return errors;
+        } else {
+            return;
+        }
     }
 
     // Log in
 
-    $.subscribe("GUI.logIn.submit", function(_, logInValues) {
+    PubSub.subscribe("GUI.logIn.submit", function(logInValues) {
         var errors = logInValidation(logInValues);
-        $.publish("Validation.logIn", errors);
+        PubSub.publish("Validation.logIn", errors, logInValues);
     });
 
     /*
@@ -72,16 +74,18 @@
             errors.push("The password must be at least 3 characters long");
         }
 
-        return {
-            errors: errors,
-        };
+        if (errors.length !== 0) {
+            return errors;
+        } else {
+            return;
+        }
     }
 
     // Sign up
 
-    $.subscribe("GUI.signUp.submit", function(_, signUpValues) {
+    PubSub.subscribe("GUI.signUp.submit", function(signUpValues) {
         var errors = signUpValidation(signUpValues);
-        $.publish("Validation.signUp", errors);
+        PubSub.publish("Validation.signUp", errors, signUpValues);
     });
 
     /**
@@ -158,8 +162,10 @@
             errors.push("The password must be at least 3 characters long");
         }
 
-        return {
-            errors: errors,
-        };
+        if (errors.length !== 0) {
+            return errors;
+        } else {
+            return;
+        }
     }
 })(jQuery);

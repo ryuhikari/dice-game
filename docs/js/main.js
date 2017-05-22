@@ -1,12 +1,14 @@
 ;(function($) {
     var diceGame;
-    $.subscribe("GUI.game.new", function(_) {
+    PubSub.subscribe("GUI.game.new", function() {
         diceGame = new DiceGame();
-        $.publish("Game.modify", diceGame.getData());
+        var gameData = diceGame.getData();
+        PubSub.publish("Game.modify", gameData);
     });
 
-    $.subscribe("GUI.game.playRound", function(_, guess) {
+    PubSub.subscribe("GUI.game.playRound", function(guess) {
         diceGame.play(guess);
-        $.publish("Game.modify", diceGame.getData());
+        var gameData = diceGame.getData();
+        PubSub.publish("Game.modify", gameData);
     })
 })(jQuery);

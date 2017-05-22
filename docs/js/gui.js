@@ -53,7 +53,7 @@
         closeElement.hide();
     });
 
-    // Get form values fot sign up and log in
+    // Get form values for sign up and log in
     function getFormValues(formInputs) {
         var formValues = {};
         Object.keys(formInputs).forEach(function(key) {
@@ -63,6 +63,7 @@
     }
 
     // Sign up
+    var signUpForm = $("#sign-up-form");
     var signUpInputs = {
         firstName: $("#sign-up-first-name"),
         lastName: $("#sign-up-last-name"),
@@ -71,52 +72,74 @@
         password: $("#sign-up-password"),
         repeatPassword: $("#sign-up-repeat-password"),
     };
-    var signUpForm = $("#sign-up-form");
     var signUpValues = {};
-    signUpForm.on("submit",function(event) {
+
+    signUpForm.on("submit", function(event) {
         event.preventDefault();
         signUpValues = getFormValues(signUpInputs);
-        $.publish("GUI.signUp.submit", signUpValues);
+        PubSub.publish("GUI.signUp.submit", signUpValues);
     });
 
-    $.subscribe("Validation.signUp", function(_, info) {
-        if (info.errors.length !== 0) {
-            renderErrors("sign-up", info);
+    PubSub.subscribe("Validation.signUp", function(errors, signUpValues) {
+        if (errors) {
+            renderErrors(errors, "sign-up");
         } else {
-            renderErrors("sign-up", false);
+            renderErrors(undefined, "sign-up");
+        }
+    });
+
+    PubSub.subscribe("Server.signUp", function(errors, signUpValues) {
+        if (!errors) {
             signUpForm[0].reset();
+            $("#sign-up-content").slideUp();
+            fillLogInForm({email: signUpValues.email, password: signUpValues.password})
+            $("#up-button").click();
+            // location.href = "#top";
+            $("#log-in-content").slideDown();
         }
     });
 
     // Log in
+    var logInForm = $("#log-in-form");
     var logInInputs = {
         email : $("#log-in-email"),
         password : $("#log-in-password"),
     };
-    var logInForm = $("#log-in-form");
     var logInValues = {};
+
+    function fillLogInForm(logInValues) {
+        logInInputs.email.val(logInValues.email);
+        logInInputs.password.val(logInValues.password);
+    }
+
     logInForm.on("submit", function(event) {
         event.preventDefault();
         logInValues = getFormValues(logInInputs);
-        $.publish("GUI.logIn.submit", logInValues);
+        PubSub.publish("GUI.logIn.submit", logInValues);
     });
 
-    $.subscribe("Validation.logIn", function(_, info) {
-        if (info.errors.length !== 0) {
-            renderErrors("log-in", info);
+    PubSub.subscribe("Validation.logIn", function(errors, logInValues) {
+        if (errors) {
+            renderErrors(errors, "log-in");
         } else {
-            renderErrors("log-in", false);
-            logInForm[0].reset()
+            renderErrors(undefined, "log-in");
+        }
+    });
+
+    PubSub.subscribe("Server.logIn", function(errors, logInValues) {
+        if (!errors) {
+            logInForm[0].reset();
         }
     });
 
     // Log out
     $(".log-out-button").on("click", function(event) {
         event.preventDefault();
-        $.publish("GUI.logOut");
+        PubSub.publish("GUI.logOut");
     });
 
     // Game
+    var gameRounds = [];
     var diceGameGUI = {
         form: $("#game-form"),
         playRound: $("#play-round-button"),
@@ -126,6 +149,7 @@
         round : $("#game-round"),
         score : $("#game-score"),
         guess : $("#game-guess"),
+        roundsTable: $('#game-rounds-table'),
         diceSize : 50,
         diceSrc : [
             "img/dice1.png",
@@ -139,26 +163,32 @@
 
     $("#new-game-button").on("click", function(event) {
         event.preventDefault();
-        $.publish("GUI.game.new");
+        PubSub.publish("GUI.game.new");
     });
 
     diceGameGUI.form.on("submit", function(event) {
         event.preventDefault();
-        $.publish("GUI.game.submit", diceGameGUI.guess.val());
+        var guess = diceGameGUI.guess.val();
+        PubSub.publish("GUI.game.submit", guess);
         this.reset();
     });
 
-    $.subscribe("Validation.game", function(_, info) {
-        if (info.errors.length !== 0) {
-            renderErrors("game", info);
+    PubSub.subscribe("Validation.game", function(errors) {
+        if (errors) {
+            renderErrors(errors, "game");
         } else {
-            renderErrors("game", false);
-            $.publish("GUI.game.playRound", diceGameGUI.guess.val());
+            renderErrors(undefined, "game");
+            var guess = diceGameGUI.guess.val();
+            PubSub.publish("GUI.game.playRound", guess);
             diceGameGUI.form[0].reset();
         }
     });
 
-    $.subscribe("Game.modify", function(_, gameData) {
+    PubSub.subscribe("Game.modify", function(gameData) {
+        if (gameData.round !== 0) {
+            gameRounds.unshift(gameData);
+        }
+
         renderGame(gameData);
         if (gameData.finished) {
             stopGame();
@@ -222,6 +252,13 @@
         }
         diceGameGUI.round.html(round);
         diceGameGUI.score.html(score);
+
+        if (gameRounds.length !== 0) {
+            diceGameGUI.roundsTable.show();
+            w3DisplayData('game-rounds-repeat', {gameRounds: gameRounds});
+        } else {
+            diceGameGUI.roundsTable.hide();
+        }
     }
     renderGame();
 
@@ -237,16 +274,18 @@
         game: $("#game-errors-list"),
     };
 
-    function renderErrors(errorType, info) {
-        if (typeof info === "undefined") {
-            info = {errors: []};
+    function renderErrors(errors, errorType) {
+        if (!errorType) {
+            Object.keys(errorsPanels).forEach(function(key) {
+                errorsPanels[key].hide();
+            });
+            return;
         }
-        var errors = info.errors;
         switch (errorType) {
             case "sign-up":
                 if (errors) {
                     var HTMLid = errorsLists.signUp.attr('id');
-                    w3DisplayData(HTMLid, info);
+                    w3DisplayData(HTMLid, {errors: errors});
                     errorsPanels.signUp.show();
                 } else {
                     errorsPanels.signUp.hide();
@@ -255,7 +294,7 @@
             case "log-in":
                 if (errors) {
                     var HTMLid = errorsLists.logIn.attr('id');
-                    w3DisplayData(HTMLid, info);
+                    w3DisplayData(HTMLid, {errors: errors});
                     errorsPanels.logIn.show();
                 } else {
                     errorsPanels.logIn.hide();
@@ -264,7 +303,7 @@
             case "game":
                 if (errors) {
                     var HTMLid = errorsLists.game.attr('id');
-                    w3DisplayData(HTMLid, info);
+                    w3DisplayData(HTMLid, {errors: errors});
                     errorsPanels.game.show();
                 } else {
                     errorsPanels.game.hide();
@@ -279,23 +318,23 @@
     renderErrors();
 
     // Info messages
-    function showInfo(data) {
-        var modal = $("#show-info-modal");
-
-        if (typeof data === "undefined") {
-            modal.hide();
-            return;
+    PubSub.subscribe("Server.signUp", function (errors, signUpValues) {
+        if (errors) {
+            showInfo(errors, 'signUp', undefined);
+        } else {
+            showInfo(undefined, 'signUp', 'Account created successfully. Now please log in.');
         }
-
+    });
+    function showInfo(errors, type, data) {
+        var modal = $("#show-info-modal");
         var modalHeader = $("#show-info-modal__header");
         var modalTitle = $("#show-info-modal__title");
         var modalContent = $("#show-info-modal__content");
         var modalFooter = $("#show-info-modal__footer");
 
-        var title = data.from;
-        switch (title) {
-            case "createAccount":
-                modalTitle.html("Create account information");
+        switch (type) {
+            case "signUp":
+                modalTitle.html("Sign up information");
                 break;
             case "logIn":
                 modalTitle.html("Log in information");
@@ -311,20 +350,19 @@
                 return;
         }
 
-        if (data.status === 200) {
-            modalHeader.addClass("info-correct");
-            modalFooter.addClass("info-correct");
-        } else {
+        if (errors) {
+            w3DisplayData("show-info-modal__content", {info: errors});
+
             modalHeader.addClass("info-error");
             modalFooter.addClass("info-error");
+        } else {
+            w3DisplayData("show-info-modal__content", {info: [data]});
+
+            modalHeader.addClass("info-success");
+            modalFooter.addClass("info-success");
         }
-        w3DisplayData("show-info-modal__content", data);
 
         modal.show();
-
-        setTimeout(function() {
-            modal.fadeOut();
-        }, 2000);
     }
     showInfo();
 

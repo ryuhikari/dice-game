@@ -60,11 +60,11 @@
 
 /* Info
 ============================================================================= */
-.info-correct {
+.info-success {
     color: white;
-    background-color: green,
+    background-color: green;
 }
 .info-error {
-    color: white,inherit;
+    color: white;
     background-color: red;
 }

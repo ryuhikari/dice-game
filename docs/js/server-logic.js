@@ -1,23 +1,33 @@
-var Server = (function() {
-    // User
-    var User = function() {
-        this._firstName = "";
-        this._lastName = "";
-        this._email = "";
-        this._username = "";
-        this._session = "";
-    };
-    User.prototype.getInfo = function() {
-        return {
-            firstName: this._firstName,
-            lastName: this._lastName,
-            email: this._email,
-            user: this._username,
-            session: this._session,
-        };
-    };
+// $.ajax({
+// method: "GET"
+// url: "path/to/the/file.json",
+// contentType: "application/json",
+// dataFormat: "json",
+// success: function(response){ },
+// data: '{"the": "data"}'
+// })
 
-    // Server
+// User
+var User = function() {
+    this._firstName = "";
+    this._lastName = "";
+    this._email = "";
+    this._username = "";
+    this._session = "";
+};
+User.prototype.getInfo = function() {
+    return {
+        firstName: this._firstName,
+        lastName: this._lastName,
+        email: this._email,
+        user: this._username,
+        session: this._session,
+    };
+};
+
+// Server
+(function($) {
+    // Server info
     var info = {
         serverURL: "http://193.10.30.163/",
         signUpURL: "users",
@@ -27,64 +37,41 @@ var Server = (function() {
     };
 
     // Create new account
-    function createAccount(signUpValues, callback) {
-        var that = this;
-        var request = new XMLHttpRequest();
-        request.open("POST", info.serverURL+info.signUpURL, true);
-        request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify(signUpValues));
-
-        request.onreadystatechange = function() {
-            if (this.readyState == 4) {
-                if (this.status == 200) {
-                    var data = {
-                        from: that.name,
-                        status: this.status,
-                        info: ["Account created"],
-                    };
-                    callback(data);
-                    return;
-                }
-                if (this.status == 400) {
-                    var data = {
-                        from: name,
-                        status: this.status,
-                        info: ["Something is wrong with the request"],
-                    };
-                    callback(data);
-                    return;
-                }
-                if (this.status == 415) {
-                    var data = {
-                        from: name,
-                        status: this.status,
-                        info: ["The Content-Type header is wrong"],
-                    };
-                    callback(data);
-                    return;
-                }
-                if (this.status == 422) {
-                    var requestErrors = JSON.parse(this.responseText);
+    PubSub.subscribe("Validation.signUp", function(errors, signUpValues) {
+        if (!errors) {
+            signUp(signUpValues);
+        }
+    });
+    function signUp(signUpValues) {
+        console.log(signUpValues);
+        $.ajax({
+            method: "POST",
+            url: info.serverURL + info.signUpURL,
+            contentType: "application/json",
+            dataFormat: "json",
+            data: JSON.stringify(signUpValues),
+            success: function(response) {
+                PubSub.publish("Server.signUp", undefined, signUpValues);
+            },
+            error: function(response, textStatus, errorThrown) {
+                PubSub.publish("Server.signUp", [errorThrown], signUpValues);
+            },
+            statusCode: {
+                422: function(response, textStatus, errorThrown) {
+                    var responseJSON = response.responseJSON;
                     var errors = [];
-                    if (requestErrors.emailTaken) {
-                        errors.push("There already exists a user with the given email");
+                    if (responseJSON["emailTaken"]) {
+                        errors.push("Email is already in use");
+                    } else if (responseJSON["usernameTaken"]) {
+                        errors.push("Username is already in use");
+                    } else if (responseJSON["passwordEmpty"]) {
+                        errors.push("Password is empty");
                     }
-                    if (requestErrors.usernameTaken) {
-                        errors.push("There already exists a user with the given username");
-                    }
-                    if (requestErrors.passwordEmpty) {
-                        errors.push("The empty string is not allowed as password");
-                    }
-                    var data = {
-                        from: name,
-                        status: this.status,
-                        info: errors,
-                    };
-                    callback(data);
-                    return;
+
+                    PubSub.publish("Server.signUp", errors, signUpValues);
                 }
             }
-        };
+        });
     }
 
     // Log in
@@ -259,4 +246,4 @@ var Server = (function() {
         script.src = this.serverURL+this.scoresURL+"/"+this.info.username+"?callback="+callback+"&session="+this.info.session;
         document.head.appendChild(script);
     };
-})();
+})(jQuery);
