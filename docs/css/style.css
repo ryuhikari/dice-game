@@ -48,6 +48,12 @@
 #bonus-dice {
     height: 50px;
 }
+.correct-guess {
+    background-color: #90EE90;
+}
+.wrong-guess {
+    background-color: #F08080;
+}
 
 /* Errors
 ============================================================================= */

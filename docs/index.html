@@ -183,12 +183,13 @@
                 <p>
                     <button type="button" id="new-game-button" name="playButton" class="w3-btn w3-padding w3-theme-d5">New game</button>
                 </p>
-                <div class="game-info w3-panel w3-border">
-                    <p>Round: <span id="game-round"></span></p>
-                    <p>Score: <span id="game-score"></span></p>
-                    <p>Sum:</p>
+                <div id="game-info" class="w3-panel w3-border">
+                    <p>Total score: <span id="game-score">0</span></p>
+                    <p>Round: <span id="game-round">0</span></p>
+                    <p>Guess: <span id="game-last-guess">0</span></p>
+                    <p>Sum: <span id="sum-value">0</span></p>
                     <div id="sum-dice"></div>
-                    <p>Bonus:</p>
+                    <p>Bonus: <span id="bonus-value">0</span></p>
                     <div id="bonus-dice" class="w3-margin-bottom"></div>
                 </div>
                 <form id="game-form" class="w3-panel w3-border">

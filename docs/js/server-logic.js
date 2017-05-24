@@ -149,7 +149,6 @@
                         break;
                     default:
                         var scores = response.data.scores;
-                        console.log(scores);
                         PubSub.publish("Server.topScores", undefined, scores);
                 }
 
@@ -184,7 +183,6 @@
                         break;
                     default:
                         var scores = response.data.scores;
-                        console.log(scores);
                         scores.forEach(function(score) {
                             score.username = userInfo.username;
                         });

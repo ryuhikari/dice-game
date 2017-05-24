@@ -151,14 +151,18 @@
     // Game
     var gameRounds = [];
     var diceGameGUI = {
+        gameInfo: $("#game-info"),
         form: $("#game-form"),
         playRound: $("#play-round-button"),
         gameOverMessage : $("#game-over-message"),
         sumDice : $("#sum-dice"),
+        sumValue : $("#sum-value"),
         bonusDice : $("#bonus-dice"),
+        bonusValue : $("#bonus-value"),
         round : $("#game-round"),
         score : $("#game-score"),
         guess : $("#game-guess"),
+        lastGuess : $("#game-last-guess"),
         roundsTable: $('#game-rounds-table'),
         diceSize : 50,
         diceSrc : [
@@ -242,17 +246,21 @@
         if (typeof gameData === "undefined") {
             gameData = {
                 dice: [],
+                sum: 0,
                 bonus: 0,
                 round: 0,
                 score: 0,
+                guess: 0,
             };
         }
         diceGameGUI.sumDice.empty();
         diceGameGUI.bonusDice.empty();
+        var guess = gameData.guess;
         var dice = gameData.dice;
         var bonus = gameData.bonus;
         var round = gameData.round;
         var score = gameData.score;
+        var sum = gameData.sum;
 
         for (var i = 0; i < dice.length; i++) {
             diceGameGUI.sumDice.append(createDice(dice[i]));
@@ -261,13 +269,28 @@
             diceGameGUI.bonusDice.append(createDice(bonus));
         }
         diceGameGUI.round.html(round);
+        diceGameGUI.lastGuess.html(guess);
         diceGameGUI.score.html(score);
+        diceGameGUI.sumValue.html(sum);
+        diceGameGUI.bonusValue.html(bonus);
 
-        if (gameRounds.length !== 0) {
+        if (round > 0) {
+            if (guess <= sum) {
+                diceGameGUI.gameInfo.addClass("correct-guess");
+                diceGameGUI.gameInfo.removeClass("wrong-guess");
+            } else {
+                diceGameGUI.gameInfo.removeClass("correct-guess");
+                diceGameGUI.gameInfo.addClass("wrong-guess");
+            }
             diceGameGUI.roundsTable.show();
             w3DisplayData('game-rounds-repeat', {gameRounds: gameRounds});
         } else {
             diceGameGUI.roundsTable.hide();
+        }
+
+        if (gameData.finished) {
+            diceGameGUI.gameInfo.removeClass("correct-guess");
+            diceGameGUI.gameInfo.removeClass("wrong-guess");
         }
     }
     renderGame();
@@ -432,7 +455,7 @@
 
     // Scores
     function prepareScores(scores) {
-        var displayScores = scores.sort(function(a, b) {
+        scores.sort(function(a, b) {
             if (a.score > b.score) {
                 return -1;
             }
@@ -441,12 +464,12 @@
             }
             return 0;
         });
-        displayScores.forEach(function(score, index) {
+        scores.forEach(function(score, index) {
             var date = moment(score.addedAt * 1000);
             score.addedAt = date.format("YYYY-MM-DD");
             score.position = index + 1;
         });
-        return displayScores;
+        return scores;
     }
 
     // Top scores
@@ -459,10 +482,10 @@
         }
     });
     function renderTopScores(scores) {
-        if (typeof scores !== "undefined") {
-            var displayScores = prepareScores(scores);
+        if (typeof scores !== "undefined" && scores.length > 0) {
+            scores = prepareScores(scores);
             $("#top-ten-table").show();
-            w3DisplayData("top-ten-repeat", {scores: displayScores});
+            w3DisplayData("top-ten-repeat", {scores: scores});
         } else {
             $("#top-ten-table").hide();
         }
@@ -479,10 +502,10 @@
         }
     });
     function renderUserScores(scores) {
-        if (typeof scores !== "undefined") {
-            var displayScores = prepareScores(scores);
+        if (typeof scores !== "undefined" && scores.length > 0) {
+            scores = prepareScores(scores);
             $("#user-scores-table").show();
-            w3DisplayData("user-scores-repeat", {scores: displayScores});
+            w3DisplayData("user-scores-repeat", {scores: scores});
         } else {
             $("#user-scores-table").hide();
         }

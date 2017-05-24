@@ -47,6 +47,7 @@ DiceGame.prototype.play = function(guess) {
     }
 
     this._dice = [];
+    this._sum = 0;
     for (var i = 0; i < this._numDice; i++) {
         var dice = Math.floor((Math.random() * 6) + 1);
         this._dice.push(dice);
