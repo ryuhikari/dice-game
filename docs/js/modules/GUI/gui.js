@@ -274,6 +274,11 @@
         diceGameGUI.sumValue.html(sum);
         diceGameGUI.bonusValue.html(bonus);
 
+        if (round === 0) {
+            diceGameGUI.gameInfo.removeClass("correct-guess");
+            diceGameGUI.gameInfo.removeClass("wrong-guess");
+        }
+
         if (round > 0) {
             if (guess <= sum) {
                 diceGameGUI.gameInfo.addClass("correct-guess");
@@ -286,11 +291,6 @@
             w3DisplayData('game-rounds-repeat', {gameRounds: gameRounds});
         } else {
             diceGameGUI.roundsTable.hide();
-        }
-
-        if (gameData.finished) {
-            diceGameGUI.gameInfo.removeClass("correct-guess");
-            diceGameGUI.gameInfo.removeClass("wrong-guess");
         }
     }
     renderGame();
