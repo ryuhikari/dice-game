@@ -15,6 +15,9 @@
         }
     });
     function signUp(signUpValues) {
+        if (!navigator.onLine) {
+            return PubSub.publish("Server.signUp", ['No internet connection'], signUpValues);
+        }
         $.ajax({
             method: "POST",
             url: info.serverURL + info.signUpURL,
@@ -51,6 +54,9 @@
         }
     });
     function logIn(logInValues, callback) {
+        if (!navigator.onLine) {
+            return PubSub.publish("Server.logIn", ['No internet connection'], logInValues);
+        }
         $.ajax({
             method: "POST",
             url: info.serverURL + info.logInURL,
@@ -83,6 +89,9 @@
         logOut(userInfo);
     });
     function logOut(userInfo) {
+        if (!navigator.onLine) {
+            return PubSub.publish("Server.logOut", ['No internet connection'], userInfo);
+        }
         $.ajax({
             method: "POST",
             url: info.serverURL + info.logOutURL,
@@ -105,6 +114,9 @@
         addUserScore(score, userInfo);
     });
     function addUserScore(score, userInfo) {
+        if (!navigator.onLine) {
+            return PubSub.publish("Server.addUserScore", ['No internet connection'], userInfo);
+        }
         $.ajax({
             method: "POST",
             url: info.serverURL + info.scoresURL + "/" + userInfo.username,
@@ -128,6 +140,9 @@
         getTopScores(userInfo);
     });
     var getTopScores = function(userInfo) {
+        if (!navigator.onLine) {
+            return PubSub.publish("Server.topScores", ['No internet connection'], userInfo);
+        }
         $.ajax({
             method: "GET",
             url: info.serverURL + info.scoresURL,
@@ -162,6 +177,9 @@
         getUserScores(userInfo);
     });
     var getUserScores = function(userInfo) {
+        if (!navigator.onLine) {
+            return PubSub.publish("Server.userScores", ['No internet connection'], userInfo);
+        }
         $.ajax({
             method: "GET",
             url: info.serverURL + info.scoresURL + "/" + userInfo.username,
