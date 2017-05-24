@@ -1,4 +1,4 @@
-var DiceGame = function (numDice, numRounds) {
+;var DiceGame = function (numDice, numRounds) {
     if (typeof numDice === "undefined") {
         this._numDice = 3;
     } else {
@@ -45,7 +45,7 @@ DiceGame.prototype.play = function(guess) {
     } else {
         this._guess = guess;
     }
-    
+
     this._dice = [];
     for (var i = 0; i < this._numDice; i++) {
         var dice = Math.floor((Math.random() * 6) + 1);

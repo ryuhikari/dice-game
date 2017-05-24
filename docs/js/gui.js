@@ -2,6 +2,9 @@
     var showLoggedInElements = $(".show-logged-in");
     var showLoggedOutElements = $(".show-logged-out");
 
+    PubSub.subscribe("Main.logIn", function(userInfo) {
+        showLoggedIn();
+    });
     function showLoggedIn() {
         showLoggedInElements.show();
         showLoggedOutElements.hide();
@@ -129,6 +132,7 @@
     PubSub.subscribe("Server.logIn", function(errors, logInValues) {
         if (!errors) {
             logInForm[0].reset();
+            showLoggedIn();
         }
     });
 
@@ -136,6 +140,12 @@
     $(".log-out-button").on("click", function(event) {
         event.preventDefault();
         PubSub.publish("GUI.logOut");
+    });
+
+    PubSub.subscribe("Server.logOut", function(errors, response) {
+        if (!errors) {
+            location.reload();
+        }
     });
 
     // Game
@@ -325,6 +335,23 @@
             showInfo(undefined, 'signUp', 'Account created successfully. Now please log in.');
         }
     });
+    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
+        if (errors) {
+            showInfo(errors, 'logIn', undefined);
+        } else {
+            showInfo(undefined, 'logIn', 'Logged in successfully. Enjoy!.');
+        }
+    });
+    PubSub.subscribe("Server.topScores", function (errors, userInfo) {
+        if (errors) {
+            showInfo(errors, 'topScores', undefined);
+        }
+    });
+    PubSub.subscribe("Server.userScores", function (errors, userInfo) {
+        if (errors) {
+            showInfo(errors, 'userScores', undefined);
+        }
+    });
     function showInfo(errors, type, data) {
         var modal = $("#show-info-modal");
         var modalHeader = $("#show-info-modal__header");
@@ -345,6 +372,12 @@
             case "addScore":
                 modalTitle.html("Add score information");
                 break;
+            case "topScores":
+                modalTitle.html("Get Top scores information");
+                break;
+            case "userScores":
+                modalTitle.html("Get User's scores information");
+                break;
             default:
                 modal.hide();
                 return;
@@ -358,8 +391,8 @@
         } else {
             w3DisplayData("show-info-modal__content", {info: [data]});
 
-            modalHeader.addClass("info-success");
-            modalFooter.addClass("info-success");
+            modalHeader.removeClass("info-error");
+            modalFooter.removeClass("info-error");
         }
 
         modal.show();
@@ -397,47 +430,77 @@
         } // End if
     });
 
+    // Scores
+    function prepareScores(scores) {
+        var displayScores = scores.sort(function(a, b) {
+            if (a.score > b.score) {
+                return -1;
+            }
+            if (a.score < b.score) {
+                return 1;
+            }
+            return 0;
+        });
+        displayScores.forEach(function(score, index) {
+            var date = moment(score.addedAt * 1000);
+            score.addedAt = date.format("YYYY-MM-DD");
+            score.position = index + 1;
+        });
+        return displayScores;
+    }
+
     // Top scores
-    function renderTopScores(data) {
-        if (typeof data !== "undefined") {
-            w3DisplayData("top-ten-table", data);
+    PubSub.subscribe("Main.topScores", function(scores) {
+        renderTopScores(scores);
+    });
+    PubSub.subscribe("Server.topScores", function (errors, scores) {
+        if (!errors) {
+            renderTopScores(scores);
+        }
+    });
+    function renderTopScores(scores) {
+        if (typeof scores !== "undefined") {
+            var displayScores = prepareScores(scores);
+            $("#top-ten-table").show();
+            w3DisplayData("top-ten-repeat", {scores: displayScores});
         } else {
-            var dataEmpty = {
-                scores : [
-                    {
-                        position: "-",
-                        username: "-",
-                        score: "-",
-                        addedAt: "-",
-                    },
-                ],
-            };
-            w3DisplayData("top-ten-table", dataEmpty);
+            $("#top-ten-table").hide();
         }
     }
     renderTopScores();
 
     // User's scores
-    function renderUserScores(data) {
-        if (typeof data !== "undefined") {
-            w3DisplayData("user-scores-table", data);
+    PubSub.subscribe("Main.userScores", function(scores) {
+        renderUserScores(scores);
+    });
+    PubSub.subscribe("Server.userScores", function (errors, scores) {
+        if (!errors) {
+            renderUserScores(scores);
+        }
+    });
+    function renderUserScores(scores) {
+        if (typeof scores !== "undefined") {
+            var displayScores = prepareScores(scores);
+            $("#user-scores-table").show();
+            w3DisplayData("user-scores-repeat", {scores: displayScores});
         } else {
-            var dataEmpty = {
-                scores : [
-                    {
-                        position: "-",
-                        username: "-",
-                        score: "-",
-                        addedAt: "-",
-                    },
-                ],
-            };
-            w3DisplayData("user-scores-table", dataEmpty);
+            $("#user-scores-table").hide();
         }
     }
     renderUserScores();
 
     // Profile
+    PubSub.subscribe("Main.logIn", function(userInfo) {
+        renderProfile(userInfo);
+    });
+    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
+        if (errors) {
+            renderProfile();
+        } else {
+            renderProfile(userInfo);
+        }
+    });
+
     var profileForm = $("#profile-form");
     var profileInputs = {
         firstName: $("#profile-first-name"),

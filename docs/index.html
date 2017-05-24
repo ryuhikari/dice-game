@@ -238,7 +238,7 @@
         <section id="top-ten-section" class="show-logged-in w3-container w3-padding">
             <h2 class="open-section" data-open="#top-ten-content">Top 10 highscores <span class="w3-small">&#9660;</span></h2>
             <div id="top-ten-content" class="w3-responsive">
-                <table class="w3-table-all w3-hoverable w3-centered">
+                <table id="top-ten-table" class="w3-table-all w3-hoverable w3-centered">
                     <thead>
                         <tr class="w3-light-grey">
                             <th>#</th>
@@ -247,7 +247,7 @@
                             <th>Date</th>
                         </tr>
                     </thead>
-                    <tbody id="top-ten-table">
+                    <tbody id="top-ten-repeat">
                         <tr w3-repeat="scores">
                             <td>{{position}}</td>
                             <td>{{username}}</td>
@@ -263,7 +263,7 @@
         <section id="user-scores-section" class="show-logged-in w3-container w3-padding">
             <h2 class="open-section" data-open="#user-scores-content">User's highscores <span class="w3-small">&#9660;</span></h2>
             <div id="user-scores-content" class="w3-responsive">
-                <table class="w3-table-all w3-hoverable w3-centered">
+                <table id="user-scores-table" class="w3-table-all w3-hoverable w3-centered">
                     <thead>
                         <tr class="w3-light-grey">
                             <th>#</th>
@@ -272,7 +272,7 @@
                             <th>Date</th>
                         </tr>
                     </thead>
-                    <tbody id="user-scores-table">
+                    <tbody id="user-scores-repeat">
                         <tr w3-repeat="scores">
                             <td>{{position}}</td>
                             <td>{{username}}</td>
@@ -329,14 +329,14 @@
 
     <div id="show-info-modal" class="w3-modal w3-animate-opacity">
         <div class="w3-modal-content w3-card-4">
-            <header id="show-info-modal__header" class="w3-container">
+            <header id="show-info-modal__header" class="w3-container w3-green">
                 <span class="close-panel w3-button w3-large w3-display-topright" data-close="#show-info-modal">&times;</span>
                 <h2 id="show-info-modal__title">Server info</h2>
             </header>
             <div id="show-info-modal__content" class="w3-container">
                 <p w3-repeat="info">{{}}</p>
             </div>
-            <footer id="show-info-modal__footer" class="w3-container">
+            <footer id="show-info-modal__footer" class="w3-container w3-green">
                 <p>Dice Game</p>
             </footer>
         </div>
@@ -347,6 +347,9 @@
 
     <!-- W3 Data -->
     <script src="js/w3/w3data.js" charset="utf-8"></script>
+
+    <!-- Moment -->
+    <script src="js/moment.min.js" charset="utf-8"></script>
 
     <!-- Game scripts -->
     <script src="js/pubsub.js" charset="utf-8"></script>

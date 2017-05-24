@@ -60,11 +60,7 @@
 
 /* Info
 ============================================================================= */
-.info-success {
-    color: white;
-    background-color: green;
-}
 .info-error {
-    color: white;
-    background-color: red;
+    color: white !important;
+    background-color: red !important;
 }
