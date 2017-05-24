@@ -1,179 +1,171 @@
-/**
- * Validate game inputs
- * =============================================================================
- */
-function gameValidation(guess) {
-    var errors = [];
+;(function($) {
+    // Game
 
-    if (guess === null) {
-        errors.push("Guess is empty");
-        console.log("Guess is empty");
-    }
+    PubSub.subscribe("GUI.game.submit", function(guess) {
+        var errors = gameValidation(guess);
+        PubSub.publish("Validation.game", errors, guess);
+    });
 
-    if (isNaN(guess)) {
-        errors.push("Guess is not a number");
-        console.log("Guess is not a number");
-    }
+    function gameValidation(guess) {
+        var errors = [];
 
-    if (guess < 3 || guess > 18) {
-        errors.push("Guess out of range");
-        console.log("Guess out of range");
-    }
+        if (guess === null) {
+            errors.push("Guess is empty");
+        }
 
-    return errors;
-}
+        if (isNaN(guess)) {
+            errors.push("Guess is not a number");
+        }
 
-/**
- * Validate log in inputs
- * =============================================================================
- */
-/**
+        if (guess < 3 || guess > 18) {
+            errors.push("Guess out of range");
+        }
 
-* Validate email
-*
-* The following code was adapted from a post:
-* Email validation
-* at:
-* http://www.w3resource.com/javascript/form/email-validation.php
-* Accessed: 2017-05-01
-*/
-
-/**
- * Check that it is a valid email
- */
-function validateEmail(email) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-        return true;
-    }
-    return false;
-}
-
-/**
- * Log in validation
- */
-function logInValidation(logInInputs) {
-    var email = logInInputs.email;
-    var password = logInInputs.password;
-    var errors = [];
-
-    // Email
-    if (email === null || email === "") {
-        errors.push("The email is empty");
-        console.log("The email is empty");
-    }
-
-    if (!validateEmail(email)) {
-        errors.push("The email is not correct");
-        console.log("The email is not correct");
-    }
-
-    // Password
-    if (password.length === 0) {
-        errors.push("The password is empty");
-        console.log("The password is empty");
-    }
-
-    if (password.length < 3) {
-        errors.push("The password must be at least 3 characters long");
-        console.log("The password must be at least 3 characters long");
-    }
-
-    return errors;
-}
-
-/**
- * Validate sign up inputs
- * =============================================================================
- */
-
- /**
-  * Check that string only contains letters
-  */
-function checkOnlyLetters(phrase) {
-    for (var i = 0; i < phrase.length; i++) {
-        if (phrase.toUpperCase() === phrase.toLowerCase()) {
-            return false;
+        if (errors.length !== 0) {
+            return errors;
+        } else {
+            return;
         }
     }
-    return true;
-}
 
-/**
- * Sign up validation
- */
-function signUpValidation(signUpInputs) {
-    var firstName = signUpInputs.firstName;
-    var lastName = signUpInputs.lastName;
-    var email = signUpInputs.email;
-    var username = signUpInputs.username;
-    var password = signUpInputs.password;
-    var repeatPassword = signUpInputs.repeatPassword;
-    var errors = [];
+    // Log in
 
-    // First Name
-    if (firstName === null || firstName === "") {
-        errors.push("The First Name is empty");
-        console.log("The First Name is empty");
+    PubSub.subscribe("GUI.logIn.submit", function(logInValues) {
+        var errors = logInValidation(logInValues);
+        PubSub.publish("Validation.logIn", errors, logInValues);
+    });
+
+    /*
+    * Validate email
+    *
+    * The following code was adapted from a post:
+    * Email validation
+    * at:
+    * http://www.w3resource.com/javascript/form/email-validation.php
+    * Accessed: 2017-05-01
+    */
+    function validateEmail(email) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            return true;
+        }
+        return false;
     }
 
-    if (!checkOnlyLetters(firstName)) {
-        errors.push("The First Name can contain only letters");
-        console.log("The First Name can contain only letters");
+    function logInValidation(logInInputs) {
+        var email = logInInputs.email;
+        var password = logInInputs.password;
+        var errors = [];
+
+        // Email
+        if (email === null || email === "") {
+            errors.push("The email is empty");
+        }
+
+        if (!validateEmail(email)) {
+            errors.push("The email is not correct");
+        }
+
+        // Password
+        if (password.length === 0) {
+            errors.push("The password is empty");
+        }
+
+        if (password.length < 3) {
+            errors.push("The password must be at least 3 characters long");
+        }
+
+        if (errors.length !== 0) {
+            return errors;
+        } else {
+            return;
+        }
     }
 
-    // Last Name
-    if (lastName === null || lastName === "") {
-        errors.push("The Last Name is empty")
-        console.log("The Last Name is empty");
+    // Sign up
+
+    PubSub.subscribe("GUI.signUp.submit", function(signUpValues) {
+        var errors = signUpValidation(signUpValues);
+        PubSub.publish("Validation.signUp", errors, signUpValues);
+    });
+
+    /**
+     * Check that string only contains letters
+     */
+    function checkOnlyLetters(phrase) {
+        for (var i = 0; i < phrase.length; i++) {
+            if (phrase.toUpperCase() === phrase.toLowerCase()) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    if (!checkOnlyLetters(lastName)) {
-        errors.push("The Last Name can contain only letters")
-        console.log("The Last Name can contain only letters");
-    }
+    function signUpValidation(signUpInputs) {
+        var firstName = signUpInputs.firstName;
+        var lastName = signUpInputs.lastName;
+        var email = signUpInputs.email;
+        var username = signUpInputs.username;
+        var password = signUpInputs.password;
+        var repeatPassword = signUpInputs.repeatPassword;
+        var errors = [];
 
-    // Email
-    if (email === null || email === "") {
-        errors.push("The email is empty");
-        console.log("The email is empty");
-    }
+        // First Name
+        if (firstName === null || firstName === "") {
+            errors.push("The First Name is empty");
+        }
 
-    if (!validateEmail(email)) {
-        errors.push("The email is not correct");
-        console.log("The email is not correct");
-    }
+        if (!checkOnlyLetters(firstName)) {
+            errors.push("The First Name can contain only letters");
+        }
 
-    // Username
-    if (username.length < 3) {
-        errors.push("The username must be at least 3 characters long");
-        console.log("The username must be at least 3 characters long");
-    }
+        // Last Name
+        if (lastName === null || lastName === "") {
+            errors.push("The Last Name is empty")
+        }
 
-    if (/\W/.test(username)) {
-        errors.push("The username can contain only letters (a-z, A-Z), digits (0-9) and underscores (_)");
-        console.log("The username can contain only letters (a-z, A-Z), digits (0-9) and underscores (_)");
-    }
+        if (!checkOnlyLetters(lastName)) {
+            errors.push("The Last Name can contain only letters")
+        }
 
-    // Password
-    if (password.length === 0) {
-        errors.push("The password is empty");
-        console.log("The password is empty");
-    }
+        // Email
+        if (email === null || email === "") {
+            errors.push("The email is empty");
+        }
 
-    if (repeatPassword.length === 0) {
-        errors.push("The repeated password is empty");
-        console.log("The repeated password is empty");
-    }
+        if (!validateEmail(email)) {
+            errors.push("The email is not correct");
+        }
 
-    if (password !== repeatPassword) {
-        errors.push("Passwords do not match");
-        console.log("Passwords do not match");
-    }
+        // Username
+        if (username.length < 3) {
+            errors.push("The username must be at least 3 characters long");
+        }
 
-    if (password.length < 3) {
-        errors.push("The password must be at least 3 characters long");
-        console.log("The password must be at least 3 characters long");
-    }
+        if (/\W/.test(username)) {
+            errors.push("The username can contain only letters (a-z, A-Z), digits (0-9) and underscores (_)");
+        }
 
-    return errors;
-}
+        // Password
+        if (password.length === 0) {
+            errors.push("The password is empty");
+        }
+
+        if (repeatPassword.length === 0) {
+            errors.push("The repeated password is empty");
+        }
+
+        if (password !== repeatPassword) {
+            errors.push("Passwords do not match");
+        }
+
+        if (password.length < 3) {
+            errors.push("The password must be at least 3 characters long");
+        }
+
+        if (errors.length !== 0) {
+            return errors;
+        } else {
+            return;
+        }
+    }
+})(jQuery);
