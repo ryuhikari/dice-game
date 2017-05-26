@@ -1,10 +1,11 @@
 ;var GUI = (function($) {
+
+
+    // Log in and Log out elements
+    // -------------------------------------------------------------------------
     var showLoggedInElements = $(".show-logged-in");
     var showLoggedOutElements = $(".show-logged-out");
 
-    PubSub.subscribe("Main.logIn", function(userInfo) {
-        showLoggedIn();
-    });
     function showLoggedIn() {
         showLoggedInElements.show();
         showLoggedOutElements.hide();
@@ -15,9 +16,23 @@
     }
     showLoggedOut();
 
+    PubSub.subscribe("Main.logIn", function(userInfo) {
+        showLoggedIn();
+    });
+
     // Navigation
+    // -------------------------------------------------------------------------
     var navigation = $("#navigation");
     var navigationSidebar = $("#nav-sidebar");
+
+    function openNav() {
+        navigation.hide();
+        navigationSidebar.show();
+    }
+    function closeNav() {
+        navigation.show();
+        navigationSidebar.hide();
+    }
 
     $("#open-nav-sidebar").on("click", function(event) {
         event.preventDefault();
@@ -31,16 +46,8 @@
         closeNav();
     })
 
-    function openNav() {
-        navigation.hide();
-        navigationSidebar.show();
-    }
-    function closeNav() {
-        navigation.show();
-        navigationSidebar.hide();
-    }
-
     // Open sections
+    // -------------------------------------------------------------------------
     $(".open-section").on("click", function(event) {
         event.preventDefault();
         var openSection = $(this).attr("data-open");
@@ -49,12 +56,16 @@
     });
 
     // Panels
+    // -------------------------------------------------------------------------
     $(".close-panel").on("click", function(event) {
         event.preventDefault();
         var closeElement = $(this).attr("data-close");
         var closeElement = $(closeElement);
         closeElement.hide();
     });
+
+    // Forms
+    // -------------------------------------------------------------------------
 
     // Get form values for sign up and log in
     function getFormValues(formInputs) {
@@ -66,6 +77,7 @@
     }
 
     // Sign up
+    // -------------------------------------------------------------------------
     var signUpForm = $("#sign-up-form");
     var signUpInputs = {
         firstName: $("#sign-up-first-name"),
@@ -95,14 +107,17 @@
         if (!errors) {
             signUpForm[0].reset();
             $("#sign-up-content").slideUp();
-            fillLogInForm({email: signUpValues.email, password: signUpValues.password})
+            fillLogInForm({
+                email: signUpValues.email,
+                password: signUpValues.password
+            });
             $("#up-button").click();
-            // location.href = "#top";
             $("#log-in-content").slideDown();
         }
     });
 
     // Log in
+    // -------------------------------------------------------------------------
     var logInForm = $("#log-in-form");
     var logInInputs = {
         email : $("#log-in-email"),
@@ -137,6 +152,7 @@
     });
 
     // Log out
+    // -------------------------------------------------------------------------
     $(".log-out-button").on("click", function(event) {
         event.preventDefault();
         PubSub.publish("GUI.logOut");
@@ -149,9 +165,10 @@
     });
 
     // Game
-    var gameRounds = [];
+    // -------------------------------------------------------------------------
     var diceGameGUI = {
         gameInfo: $("#game-info"),
+        newGameButton: $("#new-game-button"),
         form: $("#game-form"),
         playRound: $("#play-round-button"),
         gameOverMessage : $("#game-over-message"),
@@ -174,44 +191,7 @@
             "img/dice6.png",
         ],
     };
-
-    $("#new-game-button").on("click", function(event) {
-        event.preventDefault();
-        PubSub.publish("GUI.game.new");
-    });
-
-    diceGameGUI.form.on("submit", function(event) {
-        event.preventDefault();
-        var guess = diceGameGUI.guess.val();
-        PubSub.publish("GUI.game.submit", guess);
-        this.reset();
-    });
-
-    PubSub.subscribe("Validation.game", function(errors) {
-        if (errors) {
-            renderErrors(errors, "game");
-        } else {
-            renderErrors(undefined, "game");
-            var guess = diceGameGUI.guess.val();
-            PubSub.publish("GUI.game.playRound", guess);
-            diceGameGUI.form[0].reset();
-        }
-    });
-
-    PubSub.subscribe("Game.modify", function(gameData) {
-        if (gameData.round !== 0) {
-            gameRounds.unshift(gameData);
-        }
-
-        renderGame(gameData);
-        if (gameData.finished) {
-            stopGame();
-            showGameOver();
-        } else {
-            stopGame(false);
-            showGameOver(false);
-        }
-    });
+    var gameRounds = [];
 
     function stopGame(stop) {
         if (typeof stop === "undefined") {
@@ -295,7 +275,46 @@
     }
     renderGame();
 
+    diceGameGUI.newGameButton.on("click", function(event) {
+        event.preventDefault();
+        PubSub.publish("GUI.game.new");
+    });
+
+    diceGameGUI.form.on("submit", function(event) {
+        event.preventDefault();
+        var guess = diceGameGUI.guess.val();
+        PubSub.publish("GUI.game.submit", guess);
+        this.reset();
+    });
+
+    PubSub.subscribe("Validation.game", function(errors) {
+        if (errors) {
+            renderErrors(errors, "game");
+        } else {
+            renderErrors(undefined, "game");
+            var guess = diceGameGUI.guess.val();
+            PubSub.publish("GUI.game.playRound", guess);
+            diceGameGUI.form[0].reset();
+        }
+    });
+
+    PubSub.subscribe("Game.modify", function(gameData) {
+        if (gameData.round !== 0) {
+            gameRounds.unshift(gameData);
+        }
+
+        renderGame(gameData);
+        if (gameData.finished) {
+            stopGame();
+            showGameOver();
+        } else {
+            stopGame(false);
+            showGameOver(false);
+        }
+    });
+
     // Errors
+    // -------------------------------------------------------------------------
     var errorsPanels = {
         signUp: $("#sign-up-errors-panel"),
         logIn: $("#log-in-errors-panel"),
@@ -351,30 +370,7 @@
     renderErrors();
 
     // Info messages
-    PubSub.subscribe("Server.signUp", function (errors, signUpValues) {
-        if (errors) {
-            showInfo(errors, 'signUp', undefined);
-        } else {
-            showInfo(undefined, 'signUp', 'Account created successfully. Now please log in.');
-        }
-    });
-    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'logIn', undefined);
-        } else {
-            showInfo(undefined, 'logIn', 'Logged in successfully. Enjoy!.');
-        }
-    });
-    PubSub.subscribe("Server.topScores", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'topScores', undefined);
-        }
-    });
-    PubSub.subscribe("Server.userScores", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'userScores', undefined);
-        }
-    });
+    // -------------------------------------------------------------------------
     function showInfo(errors, type, data) {
         var modal = $("#show-info-modal");
         var modalHeader = $("#show-info-modal__header");
@@ -422,9 +418,35 @@
     }
     showInfo();
 
+    PubSub.subscribe("Server.signUp", function (errors, signUpValues) {
+        if (errors) {
+            showInfo(errors, 'signUp', undefined);
+        } else {
+            showInfo(undefined, 'signUp', 'Account created successfully. Now please log in.');
+        }
+    });
+    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
+        if (errors) {
+            showInfo(errors, 'logIn', undefined);
+        } else {
+            showInfo(undefined, 'logIn', 'Logged in successfully. Enjoy!.');
+        }
+    });
+    PubSub.subscribe("Server.topScores", function (errors, userInfo) {
+        if (errors) {
+            showInfo(errors, 'topScores', undefined);
+        }
+    });
+    PubSub.subscribe("Server.userScores", function (errors, userInfo) {
+        if (errors) {
+            showInfo(errors, 'userScores', undefined);
+        }
+    });
+
+
+    // Smooth scroll
+    // -------------------------------------------------------------------------
     /**
-    * Smooth scroll
-    *
     * The following code was adapted from a post:
     * Add smooth scrolling to page anchors
     * at:
@@ -454,6 +476,7 @@
     });
 
     // Scores
+    // -------------------------------------------------------------------------
     function prepareScores(scores) {
         scores.sort(function(a, b) {
             if (a.score > b.score) {
@@ -473,14 +496,7 @@
     }
 
     // Top scores
-    PubSub.subscribe("Main.topScores", function(scores) {
-        renderTopScores(scores);
-    });
-    PubSub.subscribe("Server.topScores", function (errors, scores) {
-        if (!errors) {
-            renderTopScores(scores);
-        }
-    });
+    // -------------------------------------------------------------------------
     function renderTopScores(scores) {
         if (typeof scores !== "undefined" && scores.length > 0) {
             scores = prepareScores(scores);
@@ -492,15 +508,17 @@
     }
     renderTopScores();
 
-    // User's scores
-    PubSub.subscribe("Main.userScores", function(scores) {
-        renderUserScores(scores);
+    PubSub.subscribe("Main.topScores", function(scores) {
+        renderTopScores(scores);
     });
-    PubSub.subscribe("Server.userScores", function (errors, scores) {
+    PubSub.subscribe("Server.topScores", function (errors, scores) {
         if (!errors) {
-            renderUserScores(scores);
+            renderTopScores(scores);
         }
     });
+
+    // User's scores
+    // -------------------------------------------------------------------------
     function renderUserScores(scores) {
         if (typeof scores !== "undefined" && scores.length > 0) {
             scores = prepareScores(scores);
@@ -512,18 +530,17 @@
     }
     renderUserScores();
 
-    // Profile
-    PubSub.subscribe("Main.logIn", function(userInfo) {
-        renderProfile(userInfo);
+    PubSub.subscribe("Main.userScores", function(scores) {
+        renderUserScores(scores);
     });
-    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
-        if (errors) {
-            renderProfile();
-        } else {
-            renderProfile(userInfo);
+    PubSub.subscribe("Server.userScores", function (errors, scores) {
+        if (!errors) {
+            renderUserScores(scores);
         }
     });
 
+    // Profile
+    // -------------------------------------------------------------------------
     var profileForm = $("#profile-form");
     var profileInputs = {
         firstName: $("#profile-first-name"),
@@ -544,14 +561,18 @@
     }
     renderProfile();
 
+    PubSub.subscribe("Main.logIn", function(userInfo) {
+        renderProfile(userInfo);
+    });
+    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
+        if (errors) {
+            renderProfile();
+        } else {
+            renderProfile(userInfo);
+        }
+    });
+
     return {
-        showLoggedIn: showLoggedIn,
-        showLoggedOut: showLoggedOut,
-        renderGame: renderGame,
-        renderErrors: renderErrors,
-        showInfo: showInfo,
-        renderTopScores: renderTopScores,
-        renderUserScores: renderUserScores,
-        renderProfile: renderProfile,
+        
     };
 })(jQuery);
