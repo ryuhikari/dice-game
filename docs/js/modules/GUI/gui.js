@@ -1,4 +1,4 @@
-;(function($) {
+;var GUI = (function($) {
     var showLoggedInElements = $(".show-logged-in");
     var showLoggedOutElements = $(".show-logged-out");
 

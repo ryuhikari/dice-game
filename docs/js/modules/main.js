@@ -1,4 +1,4 @@
-;(function($) {
+;var Main = (function($) {
     var diceGame;
     var user;
 

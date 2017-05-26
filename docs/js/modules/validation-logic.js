@@ -1,4 +1,20 @@
-;(function($) {
+;var Validation = (function($) {
+
+    function isEmpty(input) {
+        if (/.+/.test(input)) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    function isOnlyLetters(input) {
+        if (/[a-zA-Z]/.test(input)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
     // Game
 
     PubSub.subscribe("GUI.game.submit", function(guess) {
@@ -7,17 +23,18 @@
     });
 
     function gameValidation(guess) {
+        guess = guess.trim();
         var errors = [];
 
-        if (guess === null) {
+        if (isEmpty(guess)) {
             errors.push("Guess is empty");
         }
 
-        if (isNaN(guess)) {
+        if (/\D/.test(guess)) {
             errors.push("Guess is not a number");
         }
 
-        if (guess < 3 || guess > 18) {
+        if (! /^([3-9]|1[0-8])$/.test(guess)) {
             errors.push("Guess out of range");
         }
 
@@ -44,7 +61,7 @@
     * http://www.w3resource.com/javascript/form/email-validation.php
     * Accessed: 2017-05-01
     */
-    function validateEmail(email) {
+    function isValidEmail(email) {
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             return true;
         }
@@ -57,20 +74,22 @@
         var errors = [];
 
         // Email
-        if (email === null || email === "") {
+        email = email.trim();
+
+        if (isEmpty(email)) {
             errors.push("The email is empty");
         }
 
-        if (!validateEmail(email)) {
+        if (!isValidEmail(email)) {
             errors.push("The email is not correct");
         }
 
         // Password
-        if (password.length === 0) {
+        if (isEmpty(password)) {
             errors.push("The password is empty");
         }
 
-        if (password.length < 3) {
+        if (! /.{3,}/.test(password)) {
             errors.push("The password must be at least 3 characters long");
         }
 
@@ -88,18 +107,6 @@
         PubSub.publish("Validation.signUp", errors, signUpValues);
     });
 
-    /**
-     * Check that string only contains letters
-     */
-    function checkOnlyLetters(phrase) {
-        for (var i = 0; i < phrase.length; i++) {
-            if (phrase.toUpperCase() === phrase.toLowerCase()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     function signUpValidation(signUpInputs) {
         var firstName = signUpInputs.firstName;
         var lastName = signUpInputs.lastName;
@@ -110,47 +117,54 @@
         var errors = [];
 
         // First Name
-        if (firstName === null || firstName === "") {
+        firstName = firstName.trim();
+
+        if (isEmpty(firstName)) {
             errors.push("The First Name is empty");
         }
 
-        if (!checkOnlyLetters(firstName)) {
+        if (isOnlyLetters(firstName)) {
             errors.push("The First Name can contain only letters");
         }
 
         // Last Name
-        if (lastName === null || lastName === "") {
+        lastName = lastName.trim();
+        if (isEmpty(lastName)) {
             errors.push("The Last Name is empty")
         }
 
-        if (!checkOnlyLetters(lastName)) {
+        if (isOnlyLetters(lastName)) {
             errors.push("The Last Name can contain only letters")
         }
 
         // Email
-        if (email === null || email === "") {
+        email = email.trim();
+
+        if (isEmpty(email)) {
             errors.push("The email is empty");
         }
 
-        if (!validateEmail(email)) {
+        if (!isValidateEmail(email)) {
             errors.push("The email is not correct");
         }
 
         // Username
-        if (username.length < 3) {
+        username = username.trim();
+
+        if (! /.{3,}/.test(username)) {
             errors.push("The username must be at least 3 characters long");
         }
 
-        if (/\W/.test(username)) {
+        if (isOnlyLetters(username)) {
             errors.push("The username can contain only letters (a-z, A-Z), digits (0-9) and underscores (_)");
         }
 
         // Password
-        if (password.length === 0) {
+        if (isEmpty(password)) {
             errors.push("The password is empty");
         }
 
-        if (repeatPassword.length === 0) {
+        if (isEmpty(repeatPassword)) {
             errors.push("The repeated password is empty");
         }
 
@@ -158,7 +172,7 @@
             errors.push("Passwords do not match");
         }
 
-        if (password.length < 3) {
+        if (! /.{3,}/.test(password)) {
             errors.push("The password must be at least 3 characters long");
         }
 

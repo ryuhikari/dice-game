@@ -1,4 +1,4 @@
-;(function($) {
+;var Server = (function($) {
     // Server info
     var info = {
         serverURL: "http://193.10.30.163/",
