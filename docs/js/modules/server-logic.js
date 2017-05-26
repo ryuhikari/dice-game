@@ -1,5 +1,6 @@
 ;var Server = (function($) {
     // Server info
+    // -------------------------------------------------------------------------
     var info = {
         serverURL: "http://193.10.30.163/",
         signUpURL: "users",
@@ -8,15 +9,11 @@
         scoresURL: "scores",
     };
 
-    // Create new account
-    PubSub.subscribe("Validation.signUp", function(errors, signUpValues) {
-        if (!errors) {
-            signUp(signUpValues);
-        }
-    });
-    function signUp(signUpValues) {
+    // Sign Up - Create new account
+    // -------------------------------------------------------------------------
+    function signUp(signUpValues, callback) {
         if (!navigator.onLine) {
-            return PubSub.publish("Server.signUp", ['No internet connection'], signUpValues);
+            return callback(['No internet connection'], undefined);
         }
         $.ajax({
             method: "POST",
@@ -24,10 +21,10 @@
             contentType: "application/json",
             data: JSON.stringify(signUpValues),
             success: function(response) {
-                PubSub.publish("Server.signUp", undefined, signUpValues);
+                return callback(undefined, signUpValues);
             },
             error: function(response, textStatus, errorThrown) {
-                PubSub.publish("Server.signUp", [errorThrown], signUpValues);
+                return callback([errorThrown], signUpValues);
             },
             statusCode: {
                 422: function(response, textStatus, errorThrown) {
@@ -41,21 +38,17 @@
                         errors.push("Password is empty");
                     }
 
-                    PubSub.publish("Server.signUp", errors, signUpValues);
+                    return callback(errors, signUpValues);
                 }
             }
         });
     }
 
     // Log in
-    PubSub.subscribe("Validation.logIn", function(errors, logInValues) {
-        if (!errors) {
-            logIn(logInValues);
-        }
-    });
+    // -------------------------------------------------------------------------
     function logIn(logInValues, callback) {
         if (!navigator.onLine) {
-            return PubSub.publish("Server.logIn", ['No internet connection'], logInValues);
+            return callback(['No internet connection'], logInValues);
         }
         $.ajax({
             method: "POST",
@@ -63,10 +56,10 @@
             contentType: "application/json",
             data: JSON.stringify(logInValues),
             success: function(response) {
-                PubSub.publish("Server.logIn", undefined, response);
+                return callback(undefined, response);
             },
             error: function(response, textStatus, errorThrown) {
-                PubSub.publish("Server.logIn", [errorThrown], logInValues);
+                return callback([errorThrown], logInValues);
             },
             statusCode: {
                 401: function(response, textStatus, errorThrown) {
@@ -78,19 +71,17 @@
                         errors.push("Password is worng");
                     }
 
-                    PubSub.publish("Server.logIn", errors, logInValues);
+                    return callback(errors, logInValues);
                 }
             }
         });
     }
 
-    // Sign out / Log out
-    PubSub.subscribe("Main.logOut", function(userInfo) {
-        logOut(userInfo);
-    });
-    function logOut(userInfo) {
+    // Log out - Sign out
+    // -------------------------------------------------------------------------
+    function logOut(userInfo, callback) {
         if (!navigator.onLine) {
-            return PubSub.publish("Server.logOut", ['No internet connection'], userInfo);
+            return callback(['No internet connection'], userInfo);
         }
         $.ajax({
             method: "POST",
@@ -101,21 +92,19 @@
                             <session>' + userInfo.session + '</session> \
                         </data>',
             success: function(response) {
-                PubSub.publish("Server.logOut", undefined, response);
+                return callback(undefined, response);
             },
             error: function(response, textStatus, errorThrown) {
-                PubSub.publish("Server.logOut", [errorThrown], userInfo);
+                return callback([errorThrown], userInfo);
             }
         });
     }
 
     // Add user score
-    PubSub.subscribe("Main.addUserScore", function(score, userInfo) {
-        addUserScore(score, userInfo);
-    });
-    function addUserScore(score, userInfo) {
+    // -------------------------------------------------------------------------
+    function addUserScore(score, userInfo, callback) {
         if (!navigator.onLine) {
-            return PubSub.publish("Server.addUserScore", ['No internet connection'], userInfo);
+            return callback(['No internet connection'], userInfo);
         }
         $.ajax({
             method: "POST",
@@ -127,21 +116,19 @@
                             <score>' + score + '</score> \
                         </data>',
             success: function(response) {
-                PubSub.publish("Server.addUserScore", undefined, response);
+                return callback(undefined, response);
             },
             error: function(response, textStatus, errorThrown) {
-                PubSub.publish("Server.addUserScore", [errorThrown], userInfo);
+                return callback([errorThrown], userInfo);
             }
         });
     }
 
     // Get top scores
-    PubSub.subscribe("Main.getTopScores", function(userInfo) {
-        getTopScores(userInfo);
-    });
+    // -------------------------------------------------------------------------
     var getTopScores = function(userInfo) {
         if (!navigator.onLine) {
-            return PubSub.publish("Server.topScores", ['No internet connection'], userInfo);
+            return callback(['No internet connection'], userInfo);
         }
         $.ajax({
             method: "GET",
@@ -156,29 +143,25 @@
                 switch (status) {
                     case 400:
                         var errors = ['Something is wrong with the request sent to the server'];
-                        PubSub.publish("Server.topScores", errors, userInfo);
+                        return callback(errors, userInfo);
                         break;
                     case 401:
                         var errors = ['The session id passed in the request is no longer valid'];
-                        PubSub.publish("Server.topScores", errors, userInfo);
+                        return callback(errors, userInfo);
                         break;
                     default:
                         var scores = response.data.scores;
-                        PubSub.publish("Server.topScores", undefined, scores);
+                        return callback(undefined, scores);
                 }
-
             },
         });
     }
 
-
     // Get user's scores
-    PubSub.subscribe("Main.getUserScores", function(userInfo) {
-        getUserScores(userInfo);
-    });
-    var getUserScores = function(userInfo) {
+    // -------------------------------------------------------------------------
+    var getUserScores = function(userInfo, callback) {
         if (!navigator.onLine) {
-            return PubSub.publish("Server.userScores", ['No internet connection'], userInfo);
+            return callback(['No internet connection'], userInfo);
         }
         $.ajax({
             method: "GET",
@@ -193,21 +176,29 @@
                 switch (status) {
                     case 400:
                         var errors = ['Something is wrong with the request sent to the server'];
-                        PubSub.publish("Server.userScores", errors, userInfo);
+                        return callback(errors, userInfo);
                         break;
                     case 401:
                         var errors = ['The session id passed in the request is no longer valid'];
-                        PubSub.publish("Server.userScores", errors, userInfo);
+                        return callback(errors, userInfo);
                         break;
                     default:
                         var scores = response.data.scores;
                         scores.forEach(function(score) {
                             score.username = userInfo.username;
                         });
-                        PubSub.publish("Server.userScores", undefined, scores);
+                        return callback(undefined, scores);
                 }
-
             },
         });
     }
+
+    return {
+        signUp: signUp,
+        logIn: logIn,
+        logOut: logOut,
+        addUserScore: addUserScore,
+        getTopScores: getTopScores,
+        getUserScores: getUserScores
+    };
 })(jQuery);

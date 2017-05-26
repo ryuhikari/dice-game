@@ -163,4 +163,10 @@
             return;
         }
     }
+
+    return {
+        validateLogIn: validateLogIn,
+        validateSignUp: validateSignUp,
+        validateGame: validateGame
+    };
 })(jQuery);
