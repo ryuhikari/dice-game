@@ -1,6 +1,4 @@
 ;var GUI = (function($) {
-
-
     // Log in and Log out elements
     // -------------------------------------------------------------------------
     var showLoggedInElements = $(".show-logged-in");
@@ -14,11 +12,6 @@
         showLoggedInElements.hide();
         showLoggedOutElements.show();
     }
-    showLoggedOut();
-
-    PubSub.subscribe("Main.logIn", function(userInfo) {
-        showLoggedIn();
-    });
 
     // Navigation
     // -------------------------------------------------------------------------
@@ -48,11 +41,43 @@
 
     // Open sections
     // -------------------------------------------------------------------------
+    var sections = {
+        signUp: "#sign-up-section",
+        logIn: "#log-in-section",
+        instruction: "#instruction-section",
+        game: "#game-section",
+        profile: "#profile-section"
+    };
+    function slideSection(section, dir) {
+        if (sections[section]) {
+            var targetSectionString = $(sections[section]).find(".open-section").attr("data-open");;
+        } else {
+            var targetSectionString = $(section).attr("data-open");
+        }
+        var targetSection = $(targetSectionString);
+        switch (dir) {
+            case "up":
+                targetSection.slideUp();
+                break;
+            case "down":
+                targetSection.slideDown();
+                break;
+            default:
+                targetSection.slideToggle();
+        }
+    }
+    function goTo(section) {
+        if (sections[section]) {
+            $(sections[section])[0].scrollIntoView();
+            window.scrollBy(0, 50);
+        } else {
+            $("#top")[0].scrollIntoView();
+        }
+    }
+
     $(".open-section").on("click", function(event) {
         event.preventDefault();
-        var openSection = $(this).attr("data-open");
-        var openSection = $(openSection);
-        openSection.slideToggle();
+        slideSection($(this));
     });
 
     // Panels
@@ -87,34 +112,6 @@
         password: $("#sign-up-password"),
         repeatPassword: $("#sign-up-repeat-password"),
     };
-    var signUpValues = {};
-
-    signUpForm.on("submit", function(event) {
-        event.preventDefault();
-        signUpValues = getFormValues(signUpInputs);
-        PubSub.publish("GUI.signUp.submit", signUpValues);
-    });
-
-    PubSub.subscribe("Validation.signUp", function(errors, signUpValues) {
-        if (errors) {
-            renderErrors(errors, "sign-up");
-        } else {
-            renderErrors(undefined, "sign-up");
-        }
-    });
-
-    PubSub.subscribe("Server.signUp", function(errors, signUpValues) {
-        if (!errors) {
-            signUpForm[0].reset();
-            $("#sign-up-content").slideUp();
-            fillLogInForm({
-                email: signUpValues.email,
-                password: signUpValues.password
-            });
-            $("#up-button").click();
-            $("#log-in-content").slideDown();
-        }
-    });
 
     // Log in
     // -------------------------------------------------------------------------
@@ -123,45 +120,18 @@
         email : $("#log-in-email"),
         password : $("#log-in-password"),
     };
-    var logInValues = {};
 
     function fillLogInForm(logInValues) {
         logInInputs.email.val(logInValues.email);
         logInInputs.password.val(logInValues.password);
     }
 
-    logInForm.on("submit", function(event) {
-        event.preventDefault();
-        logInValues = getFormValues(logInInputs);
-        PubSub.publish("GUI.logIn.submit", logInValues);
-    });
-
-    PubSub.subscribe("Validation.logIn", function(errors, logInValues) {
-        if (errors) {
-            renderErrors(errors, "log-in");
-        } else {
-            renderErrors(undefined, "log-in");
-        }
-    });
-
-    PubSub.subscribe("Server.logIn", function(errors, logInValues) {
-        if (!errors) {
-            logInForm[0].reset();
-            showLoggedIn();
-        }
-    });
-
     // Log out
     // -------------------------------------------------------------------------
-    $(".log-out-button").on("click", function(event) {
+    var logOutButton = $(".log-out-button");
+    logOutButton.on("click", function(event) {
         event.preventDefault();
         PubSub.publish("GUI.logOut");
-    });
-
-    PubSub.subscribe("Server.logOut", function(errors, response) {
-        if (!errors) {
-            location.reload();
-        }
     });
 
     // Game
@@ -169,6 +139,7 @@
     var diceGameGUI = {
         gameInfo: $("#game-info"),
         newGameButton: $("#new-game-button"),
+        uploadScoreButton: $("#upload-score-button"),
         form: $("#game-form"),
         playRound: $("#play-round-button"),
         gameOverMessage : $("#game-over-message"),
@@ -191,7 +162,6 @@
             "img/dice6.png",
         ],
     };
-    var gameRounds = [];
 
     function stopGame(stop) {
         if (typeof stop === "undefined") {
@@ -199,7 +169,6 @@
         }
         diceGameGUI.form.find("input, button").attr("disabled", stop);
     }
-    stopGame();
 
     function showGameOver(show) {
         if (typeof show === "undefined") {
@@ -222,25 +191,27 @@
         return img;
     }
 
-    function renderGame(gameData) {
-        if (typeof gameData === "undefined") {
-            gameData = {
-                dice: [],
-                sum: 0,
-                bonus: 0,
-                round: 0,
-                score: 0,
-                guess: 0,
-            };
+    function renderGame(gameRounds) {
+        if (typeof gameRounds === "undefined") {
+            gameRounds = [
+                {
+                    dice: [],
+                    sum: 0,
+                    bonus: 0,
+                    round: 0,
+                    score: 0,
+                    guess: 0,
+                }
+            ];
         }
         diceGameGUI.sumDice.empty();
         diceGameGUI.bonusDice.empty();
-        var guess = gameData.guess;
-        var dice = gameData.dice;
-        var bonus = gameData.bonus;
-        var round = gameData.round;
-        var score = gameData.score;
-        var sum = gameData.sum;
+        var guess = gameRounds[0].guess;
+        var dice = gameRounds[0].dice;
+        var bonus = gameRounds[0].bonus;
+        var round = gameRounds[0].round;
+        var score = gameRounds[0].score;
+        var sum = gameRounds[0].sum;
 
         for (var i = 0; i < dice.length; i++) {
             diceGameGUI.sumDice.append(createDice(dice[i]));
@@ -273,45 +244,6 @@
             diceGameGUI.roundsTable.hide();
         }
     }
-    renderGame();
-
-    diceGameGUI.newGameButton.on("click", function(event) {
-        event.preventDefault();
-        PubSub.publish("GUI.game.new");
-    });
-
-    diceGameGUI.form.on("submit", function(event) {
-        event.preventDefault();
-        var guess = diceGameGUI.guess.val();
-        PubSub.publish("GUI.game.submit", guess);
-        this.reset();
-    });
-
-    PubSub.subscribe("Validation.game", function(errors) {
-        if (errors) {
-            renderErrors(errors, "game");
-        } else {
-            renderErrors(undefined, "game");
-            var guess = diceGameGUI.guess.val();
-            PubSub.publish("GUI.game.playRound", guess);
-            diceGameGUI.form[0].reset();
-        }
-    });
-
-    PubSub.subscribe("Game.modify", function(gameData) {
-        if (gameData.round !== 0) {
-            gameRounds.unshift(gameData);
-        }
-
-        renderGame(gameData);
-        if (gameData.finished) {
-            stopGame();
-            showGameOver();
-        } else {
-            stopGame(false);
-            showGameOver(false);
-        }
-    });
 
     // Errors
     // -------------------------------------------------------------------------
@@ -334,7 +266,7 @@
             return;
         }
         switch (errorType) {
-            case "sign-up":
+            case "signUp":
                 if (errors) {
                     var HTMLid = errorsLists.signUp.attr('id');
                     w3DisplayData(HTMLid, {errors: errors});
@@ -343,7 +275,7 @@
                     errorsPanels.signUp.hide();
                 }
                 break;
-            case "log-in":
+            case "logIn":
                 if (errors) {
                     var HTMLid = errorsLists.logIn.attr('id');
                     w3DisplayData(HTMLid, {errors: errors});
@@ -371,7 +303,7 @@
 
     // Info messages
     // -------------------------------------------------------------------------
-    function showInfo(errors, type, data) {
+    function showInfo(type, data, isError) {
         var modal = $("#show-info-modal");
         var modalHeader = $("#show-info-modal__header");
         var modalTitle = $("#show-info-modal__title");
@@ -385,7 +317,7 @@
             case "logIn":
                 modalTitle.html("Log in information");
                 break;
-            case "signOut":
+            case "logOut":
                 modalTitle.html("Sign out information");
                 break;
             case "addScore":
@@ -397,52 +329,26 @@
             case "userScores":
                 modalTitle.html("Get User's scores information");
                 break;
+            case "game":
+                modalTitle.html("Game information");
+                break;
             default:
                 modal.hide();
                 return;
         }
 
-        if (errors) {
-            w3DisplayData("show-info-modal__content", {info: errors});
-
+        if (isError) {
             modalHeader.addClass("info-error");
             modalFooter.addClass("info-error");
         } else {
-            w3DisplayData("show-info-modal__content", {info: [data]});
-
             modalHeader.removeClass("info-error");
             modalFooter.removeClass("info-error");
         }
 
+        w3DisplayData("show-info-modal__content", {info: [data]});
         modal.show();
     }
     showInfo();
-
-    PubSub.subscribe("Server.signUp", function (errors, signUpValues) {
-        if (errors) {
-            showInfo(errors, 'signUp', undefined);
-        } else {
-            showInfo(undefined, 'signUp', 'Account created successfully. Now please log in.');
-        }
-    });
-    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'logIn', undefined);
-        } else {
-            showInfo(undefined, 'logIn', 'Logged in successfully. Enjoy!.');
-        }
-    });
-    PubSub.subscribe("Server.topScores", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'topScores', undefined);
-        }
-    });
-    PubSub.subscribe("Server.userScores", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'userScores', undefined);
-        }
-    });
-
 
     // Smooth scroll
     // -------------------------------------------------------------------------
@@ -508,15 +414,6 @@
     }
     renderTopScores();
 
-    PubSub.subscribe("Main.topScores", function(scores) {
-        renderTopScores(scores);
-    });
-    PubSub.subscribe("Server.topScores", function (errors, scores) {
-        if (!errors) {
-            renderTopScores(scores);
-        }
-    });
-
     // User's scores
     // -------------------------------------------------------------------------
     function renderUserScores(scores) {
@@ -529,15 +426,6 @@
         }
     }
     renderUserScores();
-
-    PubSub.subscribe("Main.userScores", function(scores) {
-        renderUserScores(scores);
-    });
-    PubSub.subscribe("Server.userScores", function (errors, scores) {
-        if (!errors) {
-            renderUserScores(scores);
-        }
-    });
 
     // Profile
     // -------------------------------------------------------------------------
@@ -561,18 +449,37 @@
     }
     renderProfile();
 
-    PubSub.subscribe("Main.logIn", function(userInfo) {
-        renderProfile(userInfo);
-    });
-    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
-        if (errors) {
-            renderProfile();
-        } else {
-            renderProfile(userInfo);
-        }
-    });
-
     return {
-        
+        showLoggedIn,
+        showLoggedOut,
+
+        sections,
+        slideSection,
+        goTo,
+
+        getFormValues,
+
+        signUpForm,
+        signUpInputs,
+
+        logInForm,
+        logInInputs,
+        fillLogInForm,
+
+        logOutButton,
+
+        diceGameGUI,
+        renderGame,
+        stopGame,
+        showGameOver,
+
+        renderErrors,
+
+        showInfo,
+
+        renderTopScores,
+        renderUserScores,
+
+        renderProfile
     };
 })(jQuery);

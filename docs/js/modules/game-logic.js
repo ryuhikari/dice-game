@@ -19,6 +19,16 @@
     this._finished = false;
 }
 
+DiceGame.prototype.setRound = function(round) {
+    if (round >= this._numRounds) {
+        this._round = this._numRounds;
+        this._finished = true;
+    } else {
+        this._round = round;
+        this._finished = false;
+    }
+}
+
 DiceGame.prototype.getData = function() {
     return {
         score: this._score,
