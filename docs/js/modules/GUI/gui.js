@@ -1,6 +1,4 @@
 ;var GUI = (function($) {
-
-
     // Log in and Log out elements
     // -------------------------------------------------------------------------
     var showLoggedInElements = $(".show-logged-in");
@@ -14,11 +12,8 @@
         showLoggedInElements.hide();
         showLoggedOutElements.show();
     }
-    showLoggedOut();
 
-    PubSub.subscribe("Main.logIn", function(userInfo) {
-        showLoggedIn();
-    });
+    showLoggedOut();
 
     // Navigation
     // -------------------------------------------------------------------------
@@ -87,34 +82,6 @@
         password: $("#sign-up-password"),
         repeatPassword: $("#sign-up-repeat-password"),
     };
-    var signUpValues = {};
-
-    signUpForm.on("submit", function(event) {
-        event.preventDefault();
-        signUpValues = getFormValues(signUpInputs);
-        PubSub.publish("GUI.signUp.submit", signUpValues);
-    });
-
-    PubSub.subscribe("Validation.signUp", function(errors, signUpValues) {
-        if (errors) {
-            renderErrors(errors, "sign-up");
-        } else {
-            renderErrors(undefined, "sign-up");
-        }
-    });
-
-    PubSub.subscribe("Server.signUp", function(errors, signUpValues) {
-        if (!errors) {
-            signUpForm[0].reset();
-            $("#sign-up-content").slideUp();
-            fillLogInForm({
-                email: signUpValues.email,
-                password: signUpValues.password
-            });
-            $("#up-button").click();
-            $("#log-in-content").slideDown();
-        }
-    });
 
     // Log in
     // -------------------------------------------------------------------------
@@ -123,45 +90,19 @@
         email : $("#log-in-email"),
         password : $("#log-in-password"),
     };
-    var logInValues = {};
+
 
     function fillLogInForm(logInValues) {
         logInInputs.email.val(logInValues.email);
         logInInputs.password.val(logInValues.password);
     }
 
-    logInForm.on("submit", function(event) {
-        event.preventDefault();
-        logInValues = getFormValues(logInInputs);
-        PubSub.publish("GUI.logIn.submit", logInValues);
-    });
-
-    PubSub.subscribe("Validation.logIn", function(errors, logInValues) {
-        if (errors) {
-            renderErrors(errors, "log-in");
-        } else {
-            renderErrors(undefined, "log-in");
-        }
-    });
-
-    PubSub.subscribe("Server.logIn", function(errors, logInValues) {
-        if (!errors) {
-            logInForm[0].reset();
-            showLoggedIn();
-        }
-    });
-
     // Log out
     // -------------------------------------------------------------------------
-    $(".log-out-button").on("click", function(event) {
+    var logOutButton = $(".log-out-button");
+    logOutButton.on("click", function(event) {
         event.preventDefault();
         PubSub.publish("GUI.logOut");
-    });
-
-    PubSub.subscribe("Server.logOut", function(errors, response) {
-        if (!errors) {
-            location.reload();
-        }
     });
 
     // Game
@@ -275,44 +216,6 @@
     }
     renderGame();
 
-    diceGameGUI.newGameButton.on("click", function(event) {
-        event.preventDefault();
-        PubSub.publish("GUI.game.new");
-    });
-
-    diceGameGUI.form.on("submit", function(event) {
-        event.preventDefault();
-        var guess = diceGameGUI.guess.val();
-        PubSub.publish("GUI.game.submit", guess);
-        this.reset();
-    });
-
-    PubSub.subscribe("Validation.game", function(errors) {
-        if (errors) {
-            renderErrors(errors, "game");
-        } else {
-            renderErrors(undefined, "game");
-            var guess = diceGameGUI.guess.val();
-            PubSub.publish("GUI.game.playRound", guess);
-            diceGameGUI.form[0].reset();
-        }
-    });
-
-    PubSub.subscribe("Game.modify", function(gameData) {
-        if (gameData.round !== 0) {
-            gameRounds.unshift(gameData);
-        }
-
-        renderGame(gameData);
-        if (gameData.finished) {
-            stopGame();
-            showGameOver();
-        } else {
-            stopGame(false);
-            showGameOver(false);
-        }
-    });
-
     // Errors
     // -------------------------------------------------------------------------
     var errorsPanels = {
@@ -418,32 +321,6 @@
     }
     showInfo();
 
-    PubSub.subscribe("Server.signUp", function (errors, signUpValues) {
-        if (errors) {
-            showInfo(errors, 'signUp', undefined);
-        } else {
-            showInfo(undefined, 'signUp', 'Account created successfully. Now please log in.');
-        }
-    });
-    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'logIn', undefined);
-        } else {
-            showInfo(undefined, 'logIn', 'Logged in successfully. Enjoy!.');
-        }
-    });
-    PubSub.subscribe("Server.topScores", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'topScores', undefined);
-        }
-    });
-    PubSub.subscribe("Server.userScores", function (errors, userInfo) {
-        if (errors) {
-            showInfo(errors, 'userScores', undefined);
-        }
-    });
-
-
     // Smooth scroll
     // -------------------------------------------------------------------------
     /**
@@ -508,15 +385,6 @@
     }
     renderTopScores();
 
-    PubSub.subscribe("Main.topScores", function(scores) {
-        renderTopScores(scores);
-    });
-    PubSub.subscribe("Server.topScores", function (errors, scores) {
-        if (!errors) {
-            renderTopScores(scores);
-        }
-    });
-
     // User's scores
     // -------------------------------------------------------------------------
     function renderUserScores(scores) {
@@ -529,15 +397,6 @@
         }
     }
     renderUserScores();
-
-    PubSub.subscribe("Main.userScores", function(scores) {
-        renderUserScores(scores);
-    });
-    PubSub.subscribe("Server.userScores", function (errors, scores) {
-        if (!errors) {
-            renderUserScores(scores);
-        }
-    });
 
     // Profile
     // -------------------------------------------------------------------------
@@ -561,18 +420,29 @@
     }
     renderProfile();
 
-    PubSub.subscribe("Main.logIn", function(userInfo) {
-        renderProfile(userInfo);
-    });
-    PubSub.subscribe("Server.logIn", function (errors, userInfo) {
-        if (errors) {
-            renderProfile();
-        } else {
-            renderProfile(userInfo);
-        }
-    });
-
     return {
-        
+        showLoggedInElements,
+        showLoggedOutElements,
+
+        signUpForm,
+        signUpInputs,
+
+        logInForm,
+        logInInputs,
+        fillLogInForm,
+
+        logOutButton,
+
+        diceGameGUI,
+        renderGame,
+
+        renderErrors,
+
+        showInfo,
+
+        renderTopScores,
+        renderUserScores,
+
+        renderProfile
     };
 })(jQuery);
