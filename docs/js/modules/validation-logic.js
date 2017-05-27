@@ -3,25 +3,13 @@
     // Utility functions
     // -------------------------------------------------------------------------
     function isEmpty(input) {
-        if (/.+/.test(input)) {
-            return false;
-        } else {
-            return true;
-        }
+        return  !/.+/gi.test(input);
     }
     function isOnlyLetters(input) {
-        if (/^[a-zA-Z]+$/.test(input)) {
-            return true;
-        } else {
-            return false;
-        }
+        return /^[a-zA-Z]+$/gi.test(input);
     }
     function isOnlyCharacters(input) {
-        if (/^\w+$/.test(input)) {
-            return true;
-        } else {
-            return false;
-        }
+        return /^\w+$/gi.test(input);
     }
 
     /**
@@ -71,13 +59,15 @@
         var errors = [];
         name = name.trim();
 
-        if (isEmpty(firstName)) {
+        if (isEmpty(name)) {
             errors.push(type + " is empty");
         }
 
-        if (isOnlyLetters(firstName)) {
-            errors.push(type + "can contain only letters");
+        if (!isOnlyLetters(name)) {
+            errors.push(type + " can contain only letters");
         }
+
+        return errors;
     }
     function validateUsername(username) {
         var errors = [];
@@ -87,7 +77,7 @@
             errors.push("Username is empty");
         }
 
-        if (isOnlyCharacters(username)) {
+        if (!isOnlyCharacters(username)) {
             errors.push("Username can contain only letters (a-Z), digits (0-9) and underscore (_)");
         }
 
@@ -126,8 +116,8 @@
         var password = logInInputs.password;
         var errors = [];
 
-        errors.push(validateEmail(email));
-        errors.push(validatePassword(password));
+        errors = errors.concat(validateEmail(email));
+        errors = errors.concat(validatePassword(password));
 
         if (errors.length !== 0) {
             return errors;
@@ -147,14 +137,14 @@
         var repeatPassword = signUpInputs.repeatPassword;
         var errors = [];
 
-        errors.push(validateName(firstName, "First name"));
-        errors.push(validateName(lastName, "Last name"));
-        errors.push(validateEmail(email));
-        errors.push(validateUsername(username));
-        errors.push(validatePassword(password));
+        errors = errors.concat(validateName(firstName, "First name"));
+        errors = errors.concat(validateName(lastName, "Last name"));
+        errors = errors.concat(validateEmail(email));
+        errors = errors.concat(validateUsername(username));
+        errors = errors.concat(validatePassword(password));
 
-        if (password === repeatPassword) {
-            errors.push("Passowords do not match");
+        if (password !== repeatPassword) {
+            errors.push("Passwords do not match");
         }
 
         if (errors.length !== 0) {

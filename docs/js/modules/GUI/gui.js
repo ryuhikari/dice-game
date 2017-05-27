@@ -13,8 +13,6 @@
         showLoggedOutElements.show();
     }
 
-    showLoggedOut();
-
     // Navigation
     // -------------------------------------------------------------------------
     var navigation = $("#navigation");
@@ -43,11 +41,43 @@
 
     // Open sections
     // -------------------------------------------------------------------------
+    var sections = {
+        signUp: "#sign-up-section",
+        logIn: "#log-in-section",
+        instruction: "#instruction-section",
+        game: "#game-section",
+        profile: "#profile-section"
+    };
+    function slideSection(section, dir) {
+        if (sections[section]) {
+            var targetSectionString = $(sections[section]).find(".open-section").attr("data-open");;
+        } else {
+            var targetSectionString = $(section).attr("data-open");
+        }
+        var targetSection = $(targetSectionString);
+        switch (dir) {
+            case "up":
+                targetSection.slideUp();
+                break;
+            case "down":
+                targetSection.slideDown();
+                break;
+            default:
+                targetSection.slideToggle();
+        }
+    }
+    function goTo(section) {
+        if (sections[section]) {
+            $(sections[section])[0].scrollIntoView();
+            window.scrollBy(0, 50);
+        } else {
+            $("#top")[0].scrollIntoView();
+        }
+    }
+
     $(".open-section").on("click", function(event) {
         event.preventDefault();
-        var openSection = $(this).attr("data-open");
-        var openSection = $(openSection);
-        openSection.slideToggle();
+        slideSection($(this));
     });
 
     // Panels
@@ -91,7 +121,6 @@
         password : $("#log-in-password"),
     };
 
-
     function fillLogInForm(logInValues) {
         logInInputs.email.val(logInValues.email);
         logInInputs.password.val(logInValues.password);
@@ -110,6 +139,7 @@
     var diceGameGUI = {
         gameInfo: $("#game-info"),
         newGameButton: $("#new-game-button"),
+        uploadScoreButton: $("#upload-score-button"),
         form: $("#game-form"),
         playRound: $("#play-round-button"),
         gameOverMessage : $("#game-over-message"),
@@ -132,7 +162,6 @@
             "img/dice6.png",
         ],
     };
-    var gameRounds = [];
 
     function stopGame(stop) {
         if (typeof stop === "undefined") {
@@ -140,7 +169,6 @@
         }
         diceGameGUI.form.find("input, button").attr("disabled", stop);
     }
-    stopGame();
 
     function showGameOver(show) {
         if (typeof show === "undefined") {
@@ -163,25 +191,27 @@
         return img;
     }
 
-    function renderGame(gameData) {
-        if (typeof gameData === "undefined") {
-            gameData = {
-                dice: [],
-                sum: 0,
-                bonus: 0,
-                round: 0,
-                score: 0,
-                guess: 0,
-            };
+    function renderGame(gameRounds) {
+        if (typeof gameRounds === "undefined") {
+            gameRounds = [
+                {
+                    dice: [],
+                    sum: 0,
+                    bonus: 0,
+                    round: 0,
+                    score: 0,
+                    guess: 0,
+                }
+            ];
         }
         diceGameGUI.sumDice.empty();
         diceGameGUI.bonusDice.empty();
-        var guess = gameData.guess;
-        var dice = gameData.dice;
-        var bonus = gameData.bonus;
-        var round = gameData.round;
-        var score = gameData.score;
-        var sum = gameData.sum;
+        var guess = gameRounds[0].guess;
+        var dice = gameRounds[0].dice;
+        var bonus = gameRounds[0].bonus;
+        var round = gameRounds[0].round;
+        var score = gameRounds[0].score;
+        var sum = gameRounds[0].sum;
 
         for (var i = 0; i < dice.length; i++) {
             diceGameGUI.sumDice.append(createDice(dice[i]));
@@ -214,7 +244,6 @@
             diceGameGUI.roundsTable.hide();
         }
     }
-    renderGame();
 
     // Errors
     // -------------------------------------------------------------------------
@@ -237,7 +266,7 @@
             return;
         }
         switch (errorType) {
-            case "sign-up":
+            case "signUp":
                 if (errors) {
                     var HTMLid = errorsLists.signUp.attr('id');
                     w3DisplayData(HTMLid, {errors: errors});
@@ -246,7 +275,7 @@
                     errorsPanels.signUp.hide();
                 }
                 break;
-            case "log-in":
+            case "logIn":
                 if (errors) {
                     var HTMLid = errorsLists.logIn.attr('id');
                     w3DisplayData(HTMLid, {errors: errors});
@@ -274,7 +303,7 @@
 
     // Info messages
     // -------------------------------------------------------------------------
-    function showInfo(errors, type, data) {
+    function showInfo(type, data, isError) {
         var modal = $("#show-info-modal");
         var modalHeader = $("#show-info-modal__header");
         var modalTitle = $("#show-info-modal__title");
@@ -288,7 +317,7 @@
             case "logIn":
                 modalTitle.html("Log in information");
                 break;
-            case "signOut":
+            case "logOut":
                 modalTitle.html("Sign out information");
                 break;
             case "addScore":
@@ -300,23 +329,23 @@
             case "userScores":
                 modalTitle.html("Get User's scores information");
                 break;
+            case "game":
+                modalTitle.html("Game information");
+                break;
             default:
                 modal.hide();
                 return;
         }
 
-        if (errors) {
-            w3DisplayData("show-info-modal__content", {info: errors});
-
+        if (isError) {
             modalHeader.addClass("info-error");
             modalFooter.addClass("info-error");
         } else {
-            w3DisplayData("show-info-modal__content", {info: [data]});
-
             modalHeader.removeClass("info-error");
             modalFooter.removeClass("info-error");
         }
 
+        w3DisplayData("show-info-modal__content", {info: [data]});
         modal.show();
     }
     showInfo();
@@ -421,8 +450,14 @@
     renderProfile();
 
     return {
-        showLoggedInElements,
-        showLoggedOutElements,
+        showLoggedIn,
+        showLoggedOut,
+
+        sections,
+        slideSection,
+        goTo,
+
+        getFormValues,
 
         signUpForm,
         signUpInputs,
@@ -435,6 +470,8 @@
 
         diceGameGUI,
         renderGame,
+        stopGame,
+        showGameOver,
 
         renderErrors,
 

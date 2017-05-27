@@ -13,7 +13,7 @@
     // -------------------------------------------------------------------------
     function signUp(signUpValues, callback) {
         if (!navigator.onLine) {
-            return callback(['No internet connection'], undefined);
+            return callback(['No internet connection'], 400, undefined);
         }
         $.ajax({
             method: "POST",
@@ -21,10 +21,10 @@
             contentType: "application/json",
             data: JSON.stringify(signUpValues),
             success: function(response) {
-                return callback(undefined, signUpValues);
+                return callback(undefined, response.status, signUpValues);
             },
             error: function(response, textStatus, errorThrown) {
-                return callback([errorThrown], signUpValues);
+                return callback([errorThrown], response.status, signUpValues);
             },
             statusCode: {
                 422: function(response, textStatus, errorThrown) {
@@ -38,7 +38,7 @@
                         errors.push("Password is empty");
                     }
 
-                    return callback(errors, signUpValues);
+                    return callback(errors, response.status, signUpValues);
                 }
             }
         });
@@ -48,7 +48,7 @@
     // -------------------------------------------------------------------------
     function logIn(logInValues, callback) {
         if (!navigator.onLine) {
-            return callback(['No internet connection'], logInValues);
+            return callback(['No internet connection'], 400, logInValues);
         }
         $.ajax({
             method: "POST",
@@ -56,10 +56,10 @@
             contentType: "application/json",
             data: JSON.stringify(logInValues),
             success: function(response) {
-                return callback(undefined, response);
+                return callback(undefined, response.status, response);
             },
             error: function(response, textStatus, errorThrown) {
-                return callback([errorThrown], logInValues);
+                return callback([errorThrown], response.status, logInValues);
             },
             statusCode: {
                 401: function(response, textStatus, errorThrown) {
@@ -71,7 +71,7 @@
                         errors.push("Password is worng");
                     }
 
-                    return callback(errors, logInValues);
+                    return callback(errors, response.status, logInValues);
                 }
             }
         });
@@ -81,7 +81,7 @@
     // -------------------------------------------------------------------------
     function logOut(userInfo, callback) {
         if (!navigator.onLine) {
-            return callback(['No internet connection'], userInfo);
+            return callback(['No internet connection'], 400, userInfo);
         }
         $.ajax({
             method: "POST",
@@ -92,10 +92,10 @@
                             <session>' + userInfo.session + '</session> \
                         </data>',
             success: function(response) {
-                return callback(undefined, response);
+                return callback(undefined, response.status, response);
             },
             error: function(response, textStatus, errorThrown) {
-                return callback([errorThrown], userInfo);
+                return callback([errorThrown], response.status, userInfo);
             }
         });
     }
@@ -104,7 +104,7 @@
     // -------------------------------------------------------------------------
     function addUserScore(score, userInfo, callback) {
         if (!navigator.onLine) {
-            return callback(['No internet connection'], userInfo);
+            return callback(['No internet connection'], 400, userInfo);
         }
         $.ajax({
             method: "POST",
@@ -116,19 +116,19 @@
                             <score>' + score + '</score> \
                         </data>',
             success: function(response) {
-                return callback(undefined, response);
+                return callback(undefined, response.status, response);
             },
             error: function(response, textStatus, errorThrown) {
-                return callback([errorThrown], userInfo);
+                return callback([errorThrown], response.status, userInfo);
             }
         });
     }
 
     // Get top scores
     // -------------------------------------------------------------------------
-    var getTopScores = function(userInfo) {
+    var getTopScores = function(userInfo, callback) {
         if (!navigator.onLine) {
-            return callback(['No internet connection'], userInfo);
+            return callback(['No internet connection'], 400, userInfo);
         }
         $.ajax({
             method: "GET",
@@ -143,15 +143,15 @@
                 switch (status) {
                     case 400:
                         var errors = ['Something is wrong with the request sent to the server'];
-                        return callback(errors, userInfo);
+                        return callback(errors, status, userInfo);
                         break;
                     case 401:
                         var errors = ['The session id passed in the request is no longer valid'];
-                        return callback(errors, userInfo);
+                        return callback(errors, status, userInfo);
                         break;
                     default:
                         var scores = response.data.scores;
-                        return callback(undefined, scores);
+                        return callback(undefined, status, scores);
                 }
             },
         });
@@ -176,18 +176,18 @@
                 switch (status) {
                     case 400:
                         var errors = ['Something is wrong with the request sent to the server'];
-                        return callback(errors, userInfo);
+                        return callback(errors, status, userInfo);
                         break;
                     case 401:
                         var errors = ['The session id passed in the request is no longer valid'];
-                        return callback(errors, userInfo);
+                        return callback(errors, status, userInfo);
                         break;
                     default:
                         var scores = response.data.scores;
                         scores.forEach(function(score) {
                             score.username = userInfo.username;
                         });
-                        return callback(undefined, scores);
+                        return callback(undefined, status, scores);
                 }
             },
         });
