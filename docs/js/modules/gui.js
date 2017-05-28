@@ -188,7 +188,7 @@
     }
 
     function renderGame(gameRounds) {
-        if (typeof gameRounds === "undefined") {
+        if (typeof gameRounds === "undefined" || gameRounds.length === 0) {
             gameRounds = [
                 {
                     dice: [],

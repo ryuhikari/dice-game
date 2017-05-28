@@ -1,5 +1,8 @@
 /* Navigation
 ============================================================================= */
+#navigation {
+    overflow: visible;
+}
 #nav-sidebar {
     width: 100%;
     display: none;

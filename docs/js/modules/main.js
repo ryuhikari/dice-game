@@ -122,7 +122,11 @@
 
     function processTopScores(errors, status, scores) {
         if (errors) {
-            GUI.showInfo("topScores", errors, true);
+            if (status === 401) {
+                GUI.showInfo("topScores", ['Session has expired. Please log out and log in again.'], true);
+            } else {
+                GUI.showInfo("topScores", errors, true);
+            }
             GUI.renderTopScores(topScores);
         } else {
             localStorage.topScores = JSON.stringify(scores);
@@ -132,7 +136,11 @@
 
     function processUserScores(errors, status, scores) {
         if (errors) {
-            GUI.showInfo("userScores", errors, true);
+            if (status === 401) {
+                GUI.showInfo("userScores", ['Session has expired. Please log out and log in again.'], true);
+            } else {
+                GUI.showInfo("userScores", errors, true);
+            }
             GUI.renderUserScores(userScores);
         } else {
             localStorage.userScores = JSON.stringify(scores);

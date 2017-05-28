@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dice Game</title>
+
+    <!-- Info -->
+    <meta name="description" content="Project Work for Web Development with JavaScript and DOM at Jönköping University 2017">
+    <meta name='robots' content='noindex,nofollow'>
 
     <!-- for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Dice Game">
     <meta name="theme-color" content="#519430">
-    <link rel="icon" href="img/logo.png">
+    <link rel="icon" type="image/png" sizes="266x266"  href="img/logo.png">
 
     <!-- for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -59,29 +64,42 @@
 
         <!-- Navigation -->
         <nav id="navigation" class="w3-bar w3-card-2 w3-theme-d2 w3-top w3-xlarge">
-            <div class="">
-                <!-- Navigation links -->
-                <a id="page-title-nav" href="#top" class="smooth w3-bar-item w3-button">Dice Game</a>
+            <!-- Navigation links -->
+            <a id="page-title-nav" href="#top" class="smooth w3-bar-item w3-button">Dice Game</a>
 
-                <!-- Show Logged in links -->
-                <div class="show-logged-in">
-                    <a href="#user-scores-section" class="smooth w3-bar-item w3-button w3-hide-small">My scores</a>
-                    <a href="#top-ten-section" class="smooth w3-bar-item w3-button w3-hide-small">Top 10 scores</a>
-                    <a href="#instructions-section" class="smooth w3-bar-item w3-button w3-hide-small">Instructions</a>
-                    <a href="#game-section" class="smooth w3-bar-item w3-button w3-hide-small">Play</a>
-                    <a href="#" class="log-out-button smooth w3-bar-item w3-button w3-hide-small w3-right">Log out</a>
-                    <a href="#profile-section" class="smooth w3-bar-item w3-button w3-hide-small w3-right">Profile</a>
+            <!-- Show Logged in links -->
+            <div class="show-logged-in w3-hide-small">
+                <div class="w3-dropdown-hover">
+                    <button class="w3-button">Scores <span class="w3-small">&#9660;</span></button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="#top-ten-section" class="smooth w3-bar-item w3-button">Top 10 scores</a>
+                        <a href="#user-scores-section" class="smooth w3-bar-item w3-button">My scores</a>
+                    </div>
                 </div>
-
-                <!-- Show Logged out links -->
-                <div class="show-logged-out">
-                    <a href="#sign-up-section" class="smooth w3-bar-item w3-button w3-hide-small w3-right">Sign up</a>
-                    <a href="#log-in-section" class="smooth w3-bar-item w3-button w3-hide-small w3-right">Log in</a>
+                <div class="w3-dropdown-hover">
+                    <button class="w3-button">Game <span class="w3-small">&#9660;</span></button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="#instruction-section" class="smooth w3-bar-item w3-button">Instructions</a>
+                        <a href="#game-section" class="smooth w3-bar-item w3-button">Play</a>
+                    </div>
                 </div>
-
-                <!-- Open navigation sidebar -->
-                <a href="#" id="open-nav-sidebar" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium">&#9776;</a>
+                <div class="w3-dropdown-hover w3-right">
+                    <button class="w3-button">Settings <span class="w3-small">&#9660;</span></button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="#profile-section" class="smooth w3-bar-item w3-button">Profile</a>
+                        <a href="#" class="log-out-button smooth w3-bar-item w3-button">Log out</a>
+                    </div>
+                </div>
             </div>
+
+            <!-- Show Logged out links -->
+            <div class="show-logged-out w3-hide-small">
+                <a href="#sign-up-section" class="smooth w3-bar-item w3-button w3-hide-small w3-right">Sign up</a>
+                <a href="#log-in-section" class="smooth w3-bar-item w3-button w3-hide-small w3-right">Log in</a>
+            </div>
+
+            <!-- Open navigation sidebar -->
+            <a href="#" id="open-nav-sidebar" class="w3-bar-item w3-button w3-right w3-hide-medium w3-hide-large">&#9776;</a>
         </nav>
     </header>
 
@@ -342,7 +360,7 @@
     <div id="show-info-modal" class="w3-modal w3-animate-opacity">
         <div class="w3-modal-content w3-card-4">
             <header id="show-info-modal__header" class="w3-container w3-green">
-                <span class="close-panel w3-button w3-large w3-display-topright" data-close="#show-info-modal">&times;</span>
+                <span class="close-panel w3-button w3-xlarge w3-display-topright" data-close="#show-info-modal">&times;</span>
                 <h2 id="show-info-modal__title">Server info</h2>
             </header>
             <div id="show-info-modal__content" class="w3-container">
