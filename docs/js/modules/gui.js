@@ -129,10 +129,6 @@
     // Log out
     // -------------------------------------------------------------------------
     var logOutButton = $(".log-out-button");
-    logOutButton.on("click", function(event) {
-        event.preventDefault();
-        PubSub.publish("GUI.logOut");
-    });
 
     // Game
     // -------------------------------------------------------------------------

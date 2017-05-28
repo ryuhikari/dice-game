@@ -93,10 +93,12 @@
             GUI.renderUserScores();
             GUI.renderProfile();
             GUI.showLoggedOut();
+            localStorage.clear();
+            localStorage.gameRounds = JSON.stringify(gameRounds);
+            localStorage.scoreUploaded = JSON.stringify(scoreUploaded);
             user = {};
             topScores = [];
             userScores = [];
-            localStorage.clear();
         }
     }
 
