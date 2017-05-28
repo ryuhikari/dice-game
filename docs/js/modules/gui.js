@@ -17,6 +17,7 @@
     // -------------------------------------------------------------------------
     var navigation = $("#navigation");
     var navigationSidebar = $("#nav-sidebar");
+    var navigationSidebarLinks = $("#nav-sidebar a");
 
     function openNav() {
         navigation.hide();
@@ -35,7 +36,7 @@
         event.preventDefault();
         closeNav();
     });
-    navigationSidebar.on("click", function(event) {
+    navigationSidebarLinks.on("click", function(event) {
         closeNav();
     })
 

@@ -1,5 +1,29 @@
+/* Theme color
+============================================================================= */
+body {
+    font-family: 'Roboto', sans-serif;
+}
+.theme-color {
+    color:#fff !important;
+    background-color:#79c753 !important;
+}
+.theme-color-dark {
+    color:#fff !important;
+    background-color:#5da937 !important;
+}
+.theme-color-action {color:#fff !important;
+    background-color:#3a6a22 !important;
+}
+.theme-padding {
+    padding: 8px 16px!important
+}
+
 /* Navigation
 ============================================================================= */
+#navigation,
+#nav-sidebar {
+    font-size: 1.7rem;
+}
 #navigation {
     overflow: visible;
 }
@@ -7,12 +31,14 @@
     width: 100%;
     display: none;
 }
-
+#open-nav-sidebar,
+#close-nav-sidebar{
+    font-weight: bold;
+}
 #close-nav-sidebar {
     display: inline-block;
     width: auto;
 }
-
 #up-button {
     z-index: 999999;
     padding: 0;
@@ -21,10 +47,17 @@
     width: 50px;
     line-height: 50px;
     font-size: 15px!important;
+    font-weight: bold;
     position: fixed;
     bottom: 30px;
     right: 30px;
     opacity: .6;
+}
+
+/* Icons
+============================================================================= */
+.icon-arrow-down {
+    font-size: 0.8rem;
 }
 
 /* Title
@@ -33,13 +66,23 @@
 #page-title-nav {
     font-weight: bold;
 }
+#page-title {
+    font-size: 50px;
+}
+#page-logo {
+    display: inline-block;
+    height: 200px;
+    width: auto;
+}
 
 /* Sections
 ============================================================================= */
+section h2 {
+    font-weight: bold;
+}
 .open-section {
     cursor: pointer;
 }
-
 #sign-up-content,
 #profile-content {
     display: none;
@@ -51,6 +94,12 @@
 #bonus-dice {
     height: 50px;
 }
+#bonus-dice {
+    margin-bottom: 20px;
+}
+#game-over-message{
+    margin-top: 20px;
+}
 .correct-guess {
     background-color: #90EE90;
 }
@@ -60,9 +109,9 @@
 
 /* Scores
 ============================================================================= */
-.w3-responsive {
+.table-container {
     max-height: 500px;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 /* Errors
@@ -73,10 +122,32 @@
 #game-over-message {
     display: none;
 }
+#game-errors-panel {
+    margin-top: 20px;
+}
+.errors-panel {
+    background-color: #FF0000 !important;
+    color: #FFFFFF !important;
+}
+.close-panel {
+    font-size: 2rem;
+}
+
+/* Footer
+============================================================================= */
+footer {
+    margin-top: 20px;
+}
 
 /* Info
 ============================================================================= */
 .info-error {
-    color: white !important;
-    background-color: red !important;
+    color: #FFFFFF !important;
+    background-color: #FF0000 !important;
+}
+
+#show-info-modal header,
+#show-info-modal footer {
+    color: #FFFFFF;
+    background-color: #008000;
 }
