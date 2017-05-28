@@ -5,17 +5,17 @@ function w3DisplayData(id, data) {
     htmlObj = document.getElementById(id);
     htmlTemplate = w3InitTemplate(id, htmlObj);
     html = htmlTemplate.cloneNode(true);
-    arr = w3GetElementsByAttribute(html, "w3-repeat");
+    arr = w3GetElementsByAttribute(html, "data-repeat");
     l = arr.length;
     for (j = (l - 1); j >= 0; j -= 1) {
-        cc = arr[j].getAttribute("w3-repeat").split(" ");
+        cc = arr[j].getAttribute("data-repeat").split(" ");
         if (cc.length == 1) {
             repeat = cc[0];
         } else {
             repeatX = cc[0];
             repeat = cc[2];
         }
-        arr[j].removeAttribute("w3-repeat");
+        arr[j].removeAttribute("data-repeat");
         repeatObj = data[repeat];
         if (repeatObj && typeof repeatObj == "object" && repeatObj.length != "undefined") {
             i = 0;
@@ -30,7 +30,7 @@ function w3DisplayData(id, data) {
                 (i === repeatObj.length) ? arr[j].parentNode.replaceChild(rowClone, arr[j]) : arr[j].parentNode.insertBefore(rowClone, arr[j]);
             }
         } else {
-            console.log("w3-repeat must be an array. " + repeat + " is not an array.");
+            console.log("data-repeat must be an array. " + repeat + " is not an array.");
             continue;
         }
     }

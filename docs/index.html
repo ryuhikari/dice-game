@@ -104,7 +104,7 @@
                         <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#sign-up-errors-panel">&times;</span>
                         <h3>Errors</h3>
                         <ul id="sign-up-errors-list">
-                            <li w3-repeat="errors">{{}}</li>
+                            <li data-repeat="errors">{{}}</li>
                         </ul>
                     </div>
                     <form id="sign-up-form" class="w3-container">
@@ -152,7 +152,7 @@
                         <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#log-in-errors-panel">&times;</span>
                         <h3>Errors</h3>
                         <ul id="log-in-errors-list">
-                            <li w3-repeat="errors">{{}}</li>
+                            <li data-repeat="errors">{{}}</li>
                         </ul>
                     </div>
                     <form id="log-in-form" class="w3-container">
@@ -212,7 +212,7 @@
                         <span class="close-panel w3-button w3-red w3-large w3-display-topright" data-close="#game-errors-panel">&times;</span>
                         <h3>Errors</h3>
                         <ul id="game-errors-list">
-                            <li w3-repeat="errors">{{}}</li>
+                            <li data-repeat="errors">{{}}</li>
                         </ul>
                     </div>
                     <p>
@@ -234,7 +234,7 @@
                         </tr>
                     </thead>
                     <tbody id="game-rounds-repeat">
-                        <tr w3-repeat="gameRounds">
+                        <tr data-repeat="gameRounds">
                             <td>{{round}}</td>
                             <td>{{guess}}</td>
                             <td>{{sum}}</td>
@@ -260,7 +260,7 @@
                         </tr>
                     </thead>
                     <tbody id="top-ten-repeat">
-                        <tr w3-repeat="scores">
+                        <tr data-repeat="scores">
                             <td>{{position}}</td>
                             <td>{{username}}</td>
                             <td>{{score}}</td>
@@ -285,7 +285,7 @@
                         </tr>
                     </thead>
                     <tbody id="user-scores-repeat">
-                        <tr w3-repeat="scores">
+                        <tr data-repeat="scores">
                             <td>{{position}}</td>
                             <td>{{username}}</td>
                             <td>{{score}}</td>
@@ -346,7 +346,7 @@
                 <h2 id="show-info-modal__title">Server info</h2>
             </header>
             <div id="show-info-modal__content" class="w3-container">
-                <p w3-repeat="info">{{}}</p>
+                <p data-repeat="info">{{}}</p>
             </div>
             <footer id="show-info-modal__footer" class="w3-container w3-green">
                 <p>Dice Game</p>
@@ -363,14 +363,11 @@
     <!-- Moment -->
     <script src="js/libs/moment.min.js" charset="utf-8"></script>
 
-    <!-- PubSub -->
-    <script src="js/libs/pubsub.js" charset="utf-8"></script>
-
     <!-- Game modules -->
     <script src="js/modules/game-logic.js" charset="utf-8"></script>
     <script src="js/modules/server-logic.js" charset="utf-8"></script>
     <script src="js/modules/validation-logic.js" charset="utf-8"></script>
-    <script src="js/modules/GUI/gui.js" charset="utf-8"></script>
+    <script src="js/modules/gui.js" charset="utf-8"></script>
     <script src="js/modules/main.js" charset="utf-8"></script>
 </body>
 </html>
