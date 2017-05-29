@@ -1,4 +1,4 @@
-;var GUI = (function($) {
+var GUI = (function($) {
     // Log in and Log out elements
     // -------------------------------------------------------------------------
     var showLoggedInElements = $(".show-logged-in");
@@ -37,8 +37,9 @@
         closeNav();
     });
     navigationSidebarLinks.on("click", function(event) {
+        event.preventDefault();
         closeNav();
-    })
+    });
 
     // Open sections
     // -------------------------------------------------------------------------
@@ -50,21 +51,22 @@
         profile: "#profile-section"
     };
     function slideSection(section, dir) {
+        var targetSectionString;
         if (sections[section]) {
-            var targetSectionString = $(sections[section]).find(".open-section").attr("data-open");;
+            targetSectionString = $(sections[section]).find(".open-section").attr("data-open");
         } else {
-            var targetSectionString = $(section).attr("data-open");
+            targetSectionString = $(section).attr("data-open");
         }
         var targetSection = $(targetSectionString);
         switch (dir) {
             case "up":
-                targetSection.slideUp();
-                break;
+            targetSection.slideUp();
+            break;
             case "down":
-                targetSection.slideDown();
-                break;
+            targetSection.slideDown();
+            break;
             default:
-                targetSection.slideToggle();
+            targetSection.slideToggle();
         }
     }
     function goTo(section) {
@@ -85,8 +87,8 @@
     // -------------------------------------------------------------------------
     $(".close-panel").on("click", function(event) {
         event.preventDefault();
-        var closeElement = $(this).attr("data-close");
-        var closeElement = $(closeElement);
+        var closeElementId = $(this).attr("data-close");
+        var closeElement = $(closeElementId);
         closeElement.hide();
     });
 
@@ -111,7 +113,7 @@
         email: $("#sign-up-email"),
         username: $("#sign-up-username"),
         password: $("#sign-up-password"),
-        repeatPassword: $("#sign-up-repeat-password"),
+        repeatPassword: $("#sign-up-repeat-password")
     };
 
     // Log in
@@ -119,7 +121,7 @@
     var logInForm = $("#log-in-form");
     var logInInputs = {
         email : $("#log-in-email"),
-        password : $("#log-in-password"),
+        password : $("#log-in-password")
     };
 
     function fillLogInForm(logInValues) {
@@ -148,7 +150,7 @@
         score : $("#game-score"),
         guess : $("#game-guess"),
         lastGuess : $("#game-last-guess"),
-        roundsTable: $('#game-rounds-table'),
+        roundsTable: $("#game-rounds-table"),
         diceSize : 50,
         diceSrc : [
             "img/dice1.png",
@@ -156,8 +158,8 @@
             "img/dice3.png",
             "img/dice4.png",
             "img/dice5.png",
-            "img/dice6.png",
-        ],
+            "img/dice6.png"
+        ]
     };
 
     function stopGame(stop) {
@@ -197,7 +199,7 @@
                     bonus: 0,
                     round: 0,
                     score: 0,
-                    guess: 0,
+                    guess: 0
                 }
             ];
         }
@@ -213,7 +215,7 @@
         for (var i = 0; i < dice.length; i++) {
             diceGameGUI.sumDice.append(createDice(dice[i]));
         }
-        if (bonus != 0) {
+        if (bonus !== 0) {
             diceGameGUI.bonusDice.append(createDice(bonus));
         }
         diceGameGUI.round.html(round);
@@ -236,7 +238,7 @@
                 diceGameGUI.gameInfo.addClass("wrong-guess");
             }
             diceGameGUI.roundsTable.show();
-            w3DisplayData('game-rounds-repeat', {gameRounds: gameRounds});
+            w3DisplayData("game-rounds-repeat", {gameRounds: gameRounds});
         } else {
             diceGameGUI.roundsTable.hide();
         }
@@ -262,38 +264,39 @@
             });
             return;
         }
+        var HTMLid;
         switch (errorType) {
             case "signUp":
-                if (errors) {
-                    var HTMLid = errorsLists.signUp.attr('id');
-                    w3DisplayData(HTMLid, {errors: errors});
-                    errorsPanels.signUp.show();
-                } else {
-                    errorsPanels.signUp.hide();
-                }
-                break;
+            if (errors) {
+                HTMLid = errorsLists.signUp.attr("id");
+                w3DisplayData(HTMLid, {errors: errors});
+                errorsPanels.signUp.show();
+            } else {
+                errorsPanels.signUp.hide();
+            }
+            break;
             case "logIn":
-                if (errors) {
-                    var HTMLid = errorsLists.logIn.attr('id');
-                    w3DisplayData(HTMLid, {errors: errors});
-                    errorsPanels.logIn.show();
-                } else {
-                    errorsPanels.logIn.hide();
-                }
-                break;
+            if (errors) {
+                HTMLid = errorsLists.logIn.attr("id");
+                w3DisplayData(HTMLid, {errors: errors});
+                errorsPanels.logIn.show();
+            } else {
+                errorsPanels.logIn.hide();
+            }
+            break;
             case "game":
-                if (errors) {
-                    var HTMLid = errorsLists.game.attr('id');
-                    w3DisplayData(HTMLid, {errors: errors});
-                    errorsPanels.game.show();
-                } else {
-                    errorsPanels.game.hide();
-                }
-                break;
+            if (errors) {
+                HTMLid = errorsLists.game.attr("id");
+                w3DisplayData(HTMLid, {errors: errors});
+                errorsPanels.game.show();
+            } else {
+                errorsPanels.game.hide();
+            }
+            break;
             default:
-                Object.keys(errorsPanels).forEach(function(key) {
-                    errorsPanels[key].hide();
-                });
+            Object.keys(errorsPanels).forEach(function(key) {
+                errorsPanels[key].hide();
+            });
         }
     }
     renderErrors();
@@ -342,7 +345,7 @@
             modalFooter.removeClass("info-error");
         }
 
-        w3DisplayData("show-info-modal__content", {info: [data]});
+        w3DisplayData(modalContent.attr("id"), {info: [data]});
         modal.show();
     }
     showInfo();
@@ -356,7 +359,7 @@
     * https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_eff_animate_smoothscroll
     * Accessed: 2017-04-30
     */
-    $(".smooth").on('click', function(event) {
+    $(".smooth").on("click", function(event) {
 
         // Make sure this.hash has a value before overriding default behavior
         if (this.hash !== "") {
@@ -366,9 +369,9 @@
             // Store hash
             var hash = this.hash;
 
-            // Using jQuery's animate() method to add smooth page scroll
+            // Using jQuery"s animate() method to add smooth page scroll
             // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-            $('html, body').animate({
+            $("html, body").animate({
                 scrollTop: $(hash).offset().top - 50
             }, 800, function(){
 
@@ -411,7 +414,7 @@
     }
     renderTopScores();
 
-    // User's scores
+    // User"s scores
     // -------------------------------------------------------------------------
     function renderUserScores(scores) {
         if (typeof scores !== "undefined" && scores.length > 0) {
@@ -447,36 +450,36 @@
     renderProfile();
 
     return {
-        showLoggedIn,
-        showLoggedOut,
+        showLoggedIn: showLoggedIn,
+        showLoggedOut: showLoggedOut,
 
-        sections,
-        slideSection,
-        goTo,
+        sections: sections,
+        slideSection: slideSection,
+        goTo: goTo,
 
-        getFormValues,
+        getFormValues: getFormValues,
 
-        signUpForm,
-        signUpInputs,
+        signUpForm: signUpForm,
+        signUpInputs: signUpInputs,
 
-        logInForm,
-        logInInputs,
-        fillLogInForm,
+        logInForm: logInForm,
+        logInInputs: logInInputs,
+        fillLogInForm: fillLogInForm,
 
-        logOutButton,
+        logOutButton: logOutButton,
 
-        diceGameGUI,
-        renderGame,
-        stopGame,
-        showGameOver,
+        diceGameGUI: diceGameGUI,
+        renderGame: renderGame,
+        stopGame: stopGame,
+        showGameOver: showGameOver,
 
-        renderErrors,
+        renderErrors: renderErrors,
 
-        showInfo,
+        showInfo: showInfo,
 
-        renderTopScores,
-        renderUserScores,
+        renderTopScores: renderTopScores,
+        renderUserScores: renderUserScores,
 
-        renderProfile
+        renderProfile: renderProfile
     };
 })(jQuery);

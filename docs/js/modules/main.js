@@ -1,4 +1,4 @@
-;var Main = (function($) {
+var Main = (function($) {
     var diceGame = {};
     var gameRounds = [];
     var user = {};
@@ -24,7 +24,7 @@
         GUI.showLoggedIn();
         GUI.renderProfile(user);
         prepareScores();
-    };
+    }
 
     // Sign Up
     // -------------------------------------------------------------------------
@@ -132,7 +132,7 @@
             localStorage.topScores = JSON.stringify(scores);
             GUI.renderTopScores(scores);
         }
-    };
+    }
 
     function processUserScores(errors, status, scores) {
         if (errors) {
@@ -146,7 +146,7 @@
             localStorage.userScores = JSON.stringify(scores);
             GUI.renderUserScores(scores);
         }
-    };
+    }
 
     // Game
     // -------------------------------------------------------------------------
@@ -182,7 +182,7 @@
             localStorage.scoreUploaded = JSON.stringify(scoreUploaded);
             prepareScores();
         }
-    };
+    }
 
     function checkUploadScore() {
         if (!user.session) {
@@ -224,7 +224,7 @@
         } else {
             GUI.renderErrors(undefined, "game");
             GUI.diceGameGUI.form[0].reset();
-            diceGame.play(guess)
+            diceGame.play(guess);
             var round = diceGame.getData();
             gameRounds.unshift(round);
             localStorage.gameRounds = JSON.stringify(gameRounds);

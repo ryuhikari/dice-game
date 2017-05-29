@@ -1,8 +1,8 @@
-;var DiceGame = function (numDice, numRounds) {
+var DiceGame = function (numDice, numRounds) {
     if (typeof numDice === "undefined") {
         this._numDice = 3;
     } else {
-        this._numDice = numDice
+        this._numDice = numDice;
     }
 
     if (typeof numRounds === "undefined") {
@@ -17,7 +17,7 @@
     this._dice = [];
     this._guess = 0;
     this._finished = false;
-}
+};
 
 DiceGame.prototype.setRound = function(round) {
     if (round >= this._numRounds) {
@@ -27,7 +27,7 @@ DiceGame.prototype.setRound = function(round) {
         this._round = round;
         this._finished = false;
     }
-}
+};
 
 DiceGame.prototype.getData = function() {
     return {
@@ -39,11 +39,11 @@ DiceGame.prototype.getData = function() {
         guess: this._guess,
         finished: this._finished,
     };
-}
+};
 
 DiceGame.prototype.isFinished = function() {
     return this._finished;
-}
+};
 
 DiceGame.prototype.play = function(guess) {
     if (this.isFinished()) {
@@ -74,4 +74,4 @@ DiceGame.prototype.play = function(guess) {
         this._finished = true;
     }
     return this.getData();
-}
+};
