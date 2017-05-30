@@ -37,7 +37,7 @@ var Server = (function($) {
             url: info.serverURL + info.signUpURL,
             contentType: "application/json",
             data: JSON.stringify(signUpValues),
-            success: function(response) {
+            success: function(data, textStatus, response) {
                 return callback(undefined, response.status, signUpValues);
             },
             error: function(response, textStatus, errorThrown) {
@@ -78,8 +78,8 @@ var Server = (function($) {
             url: info.serverURL + info.logInURL,
             contentType: "application/json",
             data: JSON.stringify(logInValues),
-            success: function(response) {
-                return callback(undefined, response.status, response);
+            success: function(data, textStatus, response) {
+                return callback(undefined, response.status, data);
             },
             error: function(response, textStatus, errorThrown) {
                 return callback([errorThrown], response.status, logInValues);
@@ -117,7 +117,7 @@ var Server = (function($) {
             url: info.serverURL + info.logOutURL,
             contentType: "application/xml",
             data: "<?xml version=\"1.0\"?><data><session>" + userInfo.session + "</session></data>",
-            success: function(response) {
+            success: function(data, textStatus, response) {
                 return callback(undefined, response.status, response);
             },
             error: function(response, textStatus, errorThrown) {
@@ -144,7 +144,7 @@ var Server = (function($) {
             url: info.serverURL + info.scoresURL + "/" + userInfo.username,
             contentType: "application/xml",
             data: "<?xml version=\"1.0\"?><data><session>" + userInfo.session + "</session><score>" + score + "</score></data>",
-            success: function(response) {
+            success: function(data, status, response) {
                 return callback(undefined, response.status, response);
             },
             error: function(response, textStatus, errorThrown) {
@@ -173,8 +173,8 @@ var Server = (function($) {
                 session: userInfo.session,
             },
             jsonp: "callback",
-            success: function(response) {
-                var status = response.status;
+            success: function(data, textStatus, response) {
+                var status = data.status;
               	var errors;
                 switch (status) {
                     case 400:
@@ -186,7 +186,7 @@ var Server = (function($) {
                         callback(errors, status, userInfo);
                         break;
                     default:
-                        var scores = response.data.scores;
+                        var scores = data.data.scores;
                         return callback(undefined, status, scores);
                 }
             },
@@ -213,8 +213,8 @@ var Server = (function($) {
                 session: userInfo.session,
             },
             jsonp: "callback",
-            success: function(response) {
-                var status = response.status;
+            success: function(data, textStatus, response) {
+                var status = data.status;
               	var errors;
                 switch (status) {
                     case 400:
@@ -226,7 +226,7 @@ var Server = (function($) {
                         callback(errors, status, userInfo);
                         break;
                     default:
-                        var scores = response.data.scores;
+                        var scores = data.data.scores;
                         scores.forEach(function(score) {
                             score.username = userInfo.username;
                         });
