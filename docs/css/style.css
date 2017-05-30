@@ -99,6 +99,9 @@ section h2 {
 }
 #game-over-message{
     margin-top: 20px;
+    background-color: #FF0000;
+    color: #FFFFFF;
+    padding-bottom: 10px;
 }
 .correct-guess {
     background-color: #90EE90;

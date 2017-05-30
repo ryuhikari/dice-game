@@ -47,7 +47,7 @@ var Main = (function($) {
         signUpValues = GUI.getFormValues(GUI.signUpInputs);
         var errors = Validation.validateSignUp(signUpValues);
 
-        if (errors) {
+        if (errors.length !== 0) {
             GUI.renderErrors(errors, "signUp");
         } else {
             GUI.renderErrors(undefined, "signUp");
@@ -74,7 +74,7 @@ var Main = (function($) {
         logInValues = GUI.getFormValues(GUI.logInInputs);
         var errors = Validation.validateLogIn(logInValues);
 
-        if (errors) {
+        if (errors.length !== 0) {
             GUI.renderErrors(errors, "logIn");
         } else {
             GUI.renderErrors(undefined, "logIn");
@@ -219,7 +219,8 @@ var Main = (function($) {
         event.preventDefault();
         var guess = GUI.diceGameGUI.guess.val();
         var errors = Validation.validateGame(guess);
-        if (errors) {
+
+        if (errors.length !== 0) {
             GUI.renderErrors(errors, "game");
         } else {
             GUI.renderErrors(undefined, "game");
