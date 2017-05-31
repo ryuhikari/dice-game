@@ -538,8 +538,10 @@ var GUI = (function($) {
         // Green are applied  by default
         if (isError) {
             modalHeader.addClass("info-error");
+            modalFooter.addClass("info-error");
         } else {
             modalHeader.removeClass("info-error");
+            modalFooter.removeClass("info-error");
         }
 
         // Render the data on the modal and show it
