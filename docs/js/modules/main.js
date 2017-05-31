@@ -323,6 +323,7 @@ var Main = (function($) {
         localStorage.removeItem("gameRounds");
         scoreUploaded = false;
         localStorage.scoreUploaded = JSON.stringify(scoreUploaded);
+        GUI.showGameOver(false);
         GUI.stopGame(false);
         GUI.renderGame();
     });
